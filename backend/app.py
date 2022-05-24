@@ -108,6 +108,8 @@ def all_out():
     while True:
         time.sleep(1)
         data = (float(DogBit.recv()))
+        print(data)
+        DataRepository.insert_data(data, 1, 1)
         socketio.emit('B2F_temperatuur', {'temperatuur': data})
 
 

@@ -11,24 +11,7 @@ class DataRepository:
         return gegevens
 
     @staticmethod
-    def read_status_lampen():
-        sql = "SELECT * from lampen"
-        return Database.get_rows(sql)
-
-    @staticmethod
-    def read_status_lamp_by_id(id):
-        sql = "SELECT * from lampen WHERE id = %s"
-        params = [id]
-        return Database.get_one_row(sql, params)
-
-    @staticmethod
-    def update_status_lamp(id, status):
-        sql = "UPDATE lampen SET status = %s WHERE id = %s"
-        params = [status, id]
-        return Database.execute_sql(sql, params)
-
-    @staticmethod
-    def update_status_alle_lampen(status):
-        sql = "UPDATE lampen SET status = %s"
-        params = [status]
-        return Database.execute_sql(sql, params)
+    def insert_data(p_waarde, p_sensorid, p_activiteitid):
+        sql = 'INSERT INTO data (waarde, sensorid, activiteitid, tijdstip) VALUES (%s, %s, %s, current_time())'
+        params = [p_waarde, p_sensorid, p_activiteitid]
+        Database.execute_sql(sql, params)
