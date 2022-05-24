@@ -6,7 +6,7 @@ const listenToUI = function () {
 
 const listenToSocket = function () {
   socket.on("B2F_temperatuur", function (jsonObject) {
-    document.querySelector("c-temperatuur").innerhtml = jsonObject.temperatuur;
+    console.log(document.querySelector("c-temperatuur").innerhtml)
     });
 };
 
