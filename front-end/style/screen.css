@@ -1,13 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;900&display=swap');
+
 @-webkit-keyframes move-left {
   0% {
     -webkit-transform: none;
     transform: none;
   }
+
   65% {
     -webkit-transform: translateX(-80px);
     transform: translateX(-80px);
   }
+
   100% {
     -webkit-transform: translateX(-80px);
     transform: translateX(-80px);
@@ -19,74 +22,90 @@
     -webkit-transform: none;
     transform: none;
   }
+
   65% {
     -webkit-transform: translateX(-80px);
     transform: translateX(-80px);
   }
+
   100% {
     -webkit-transform: translateX(-80px);
     transform: translateX(-80px);
   }
 }
+
 @-webkit-keyframes move-right {
   0% {
     -webkit-transform: none;
     transform: none;
   }
+
   65% {
     -webkit-transform: translateX(80px);
     transform: translateX(80px);
   }
+
   100% {
     -webkit-transform: translateX(80px);
     transform: translateX(80px);
   }
 }
+
 @keyframes move-right {
   0% {
     -webkit-transform: none;
     transform: none;
   }
+
   65% {
     -webkit-transform: translateX(80px);
     transform: translateX(80px);
   }
+
   100% {
     -webkit-transform: translateX(80px);
     transform: translateX(80px);
   }
 }
+
 @-webkit-keyframes width-to-zero {
   0% {
     width: 50px;
   }
+
   100% {
     width: 11px;
   }
 }
+
 @keyframes width-to-zero {
   0% {
     width: 50px;
   }
+
   100% {
     width: 11px;
   }
 }
+
 @-webkit-keyframes move-up {
   100% {
     bottom: 100.75px;
   }
 }
+
 @keyframes move-up {
   100% {
     bottom: 100.75px;
   }
 }
+
 @-webkit-keyframes move-down {
   100% {
     top: 100.75px;
   }
 }
+
 @keyframes move-down {
   100% {
     top: 100.75px;
@@ -118,6 +137,12 @@ body {
   width: 100vw;
 }
 
+.c-thermometer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .c-power-btn {
   margin: auto;
   /* margin-top: 20px; */
@@ -139,9 +164,11 @@ body {
   width: 150px;
   transition: none;
 }
+
 .c-power-btn:hover {
   background: #414e56;
 }
+
 .c-power-btn:active {
   box-shadow: inset 0px 4px 10px 0px #2d363b;
   transition: background 0.14s ease-in;
@@ -151,6 +178,7 @@ body {
 .c-fancy-bulb {
   position: relative;
 }
+
 .c-fancy-bulb__streaks,
 .c-fancy-bulb__streaks:after,
 .c-fancy-bulb__streaks:before {
@@ -179,6 +207,7 @@ body {
   right: 217px;
   top: 89.5px;
 }
+
 .c-fancy-bulb__streaks--left:before,
 .c-fancy-bulb__streaks--left:after {
   left: 15px;
@@ -220,6 +249,7 @@ body {
   padding: 1em;
   margin: 0 0.5em;
 }
+
 .c-room__name {
   font-family: Roboto;
   font-size: 1.25em;
@@ -228,11 +258,12 @@ body {
   margin-bottom: 12px;
   color: #38434a;
 }
+
 .c-room__icon {
   margin-bottom: 20px;
 }
-.c-room__control {
-}
+
+.c-room__control {}
 
 .c-room--wait .c-fancy-bulb__light {
   opacity: 1;
@@ -263,6 +294,7 @@ body {
   -webkit-animation-delay: 0.14s;
   animation-delay: 0.14s;
 }
+
 .c-room--on .c-fancy-bulb__streaks--left:after {
   -webkit-animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
   animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
@@ -283,6 +315,7 @@ body {
   -webkit-animation-delay: 0.14s;
   animation-delay: 0.14s;
 }
+
 .c-room--on .c-fancy-bulb__streaks--right:after {
   -webkit-animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
   animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
@@ -293,6 +326,7 @@ body {
 .c-room--on .c-power-btn {
   background: #58c48d;
 }
+
 .c-room--on .c-power-btn:active {
   box-shadow: inset 0px 6px 8px -1px #41b77b;
 }

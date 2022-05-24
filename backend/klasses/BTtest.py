@@ -1,6 +1,6 @@
 from RPi import GPIO
 from SerCom import SerCom
-import os, time
+import time
 from BTconfig import BTconfig
 
 channel = "hci0"
@@ -13,17 +13,15 @@ DogBit = SerCom("rfcomm0")
 time.sleep(1)
 
 data = [0, 0, 0]
+
 while 1:
 	print("-")
 	
 	data[0] = (float(DogBit.recv()))
-	print(data)
 
-	if data is not None and 'temperatuur' in data:
-		print(data)
+	print(data[0])
 
-	elif data is None:
-		print("NULL")
+
 
 	time.sleep(1)
 	
