@@ -10,19 +10,20 @@ float temperatureC;
 byte LED = 2;
 const byte owTemp = 4;
 
-OneWire oneWire(owTemp); 
+OneWire oneWire(owTemp);
 DallasTemperature sensors(&oneWire);
 
 Adafruit_MPU6050 mpu;
 
-//const char* ssid = "ssid";
-//const char* pswd = "pswd";
+// const char* ssid = "ssid";
+// const char* pswd = "pswd";
 
 float testList[3] = {0, 0, 0};
 
 BluetoothSerial SerialBT;
 
-void setup() {
+void setup()
+{
   SerialBT.begin("DogBit-BD-1MCT1");
   pinMode(LED, OUTPUT);
   Serial.begin(115200);
@@ -37,9 +38,11 @@ void setup() {
   mpu.setFilterBandwidth(MPU6050_BAND_5_HZ);
 
   // Try to initialize!
-  if (!mpu.begin()) {
+  if (!mpu.begin())
+  {
     Serial.println("Failed to find MPU6050 chip");
-    while (1) {
+    while (1)
+    {
       delay(10);
     }
   }
@@ -48,30 +51,29 @@ void setup() {
 
   sensors.begin();
   Serial.println("Service started");
-  
-  
-//  WiFi.begin(ssid, pswd);
+
+  //  WiFi.begin(ssid, pswd);
 }
 
-void loop() {
+void loop()
+{
   sensors.requestTemperatures();
   temperatureC = sensors.getTempCByIndex(0);
-  Serial.println("test message");
   digitalWrite(LED, 1);
-  delay(150);
   testList[0] = temperatureC;
-  sendData(testList);
+  // sendData(testList);
   digitalWrite(LED, 0);
   getMPU();
 }
 
-void sendData(float pData[3]){
+void sendData(float pData[3])
+{
   SerialBT.println(String(pData[0]));
 }
 
-
-void getMPU () {
-/* Get new sensor events with the readings */
+void getMPU()
+{
+  /* Get new sensor events with the readings */
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
 
@@ -92,3 +94,5 @@ void getMPU () {
   Serial.print(g.gyro.z);
   Serial.println(" rad/s");
 }
+
+void
