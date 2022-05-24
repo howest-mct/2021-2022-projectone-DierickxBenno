@@ -9,6 +9,10 @@
 float temperatureC;
 byte LED = 2;
 const byte owTemp = 4;
+float hoek;
+bool tussenStap = 0;
+bool tussenStap2 = 0;
+int stappen = 0;
 
 OneWire oneWire(owTemp);
 DallasTemperature sensors(&oneWire);
@@ -57,13 +61,15 @@ void setup()
 
 void loop()
 {
-  sensors.requestTemperatures();
-  temperatureC = sensors.getTempCByIndex(0);
+  // sensors.requestTemperatures();
+  // temperatureC = sensors.getTempCByIndex(0);
   digitalWrite(LED, 1);
-  testList[0] = temperatureC;
+  delay(150);
+  // testList[0] = temperatureC;
   // sendData(testList);
   digitalWrite(LED, 0);
   getMPU();
+  delay(10);
 }
 
 void sendData(float pData[3])
@@ -77,22 +83,22 @@ void getMPU()
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
 
-  /* Print out the values */
-  Serial.print("Acceleration X: ");
-  Serial.print(a.acceleration.x);
-  Serial.print(", Y: ");
-  Serial.print(a.acceleration.y);
-  Serial.print(", Z: ");
-  Serial.print(a.acceleration.z);
-  Serial.println(" m/s^2");
+  hoek = g.gyro.y;
+  // code for step counter
+  if (hoek < 0.15)
+  {
+    tussenStap2 = 1;
+  }
 
-  Serial.print("Rotation X: ");
-  Serial.print(g.gyro.x);
-  Serial.print(", Y: ");
-  Serial.print(g.gyro.y);
-  Serial.print(", Z: ");
-  Serial.print(g.gyro.z);
-  Serial.println(" rad/s");
+  if (hoek > 0.15 && tussenStap2 == 1)
+  {
+    tussenStap2 = 2;
+    tussenStap = !tussenStap;
+    if (tussenStap)
+    {
+      stappen += 1;
+      Serial.println("stap genomen");
+      Serial.println(stappen);
+    }
+  }
 }
-
-void
