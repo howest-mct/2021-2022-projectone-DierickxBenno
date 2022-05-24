@@ -26,6 +26,10 @@ float testList[3] = {0, 0, 0};
 
 BluetoothSerial SerialBT;
 
+// #region timed events
+int eventtimeTemp = 1000;
+long pasteventTemp = 0;
+
 void setup()
 {
   SerialBT.begin("DogBit-BD-1MCT1");
@@ -61,23 +65,25 @@ void setup()
 
 void loop()
 {
-  // sensors.requestTemperatures();
-  // temperatureC = sensors.getTempCByIndex(0);
   digitalWrite(LED, 1);
-  delay(150);
-  // testList[0] = temperatureC;
-  // sendData(testList);
+  if ((millis() - pasteventTemp) > eventtimeTemp)
+  {
+    sendTemperature();
+    pasteventTemp = millis();
+  }
   digitalWrite(LED, 0);
-  getMPU();
+  detectSteps();
   delay(10);
 }
 
-void sendData(float pData[3])
+void sendTemperature()
 {
-  SerialBT.println(String(pData[0]));
+  sensors.requestTemperatures();
+  temperatureC = sensors.getTempCByIndex(0);
+  SerialBT.println("temperatuur: " + String(temperatureC));
 }
 
-void getMPU()
+void detectSteps()
 {
   /* Get new sensor events with the readings */
   sensors_event_t a, g, temp;
@@ -96,9 +102,8 @@ void getMPU()
     tussenStap = !tussenStap;
     if (tussenStap)
     {
-      stappen += 1;
+      SerialBT.println("stappen +1");
       Serial.println("stap genomen");
-      Serial.println(stappen);
     }
   }
 }
