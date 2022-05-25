@@ -12,7 +12,6 @@ int pasteventTemp = 0;
 //
 const byte owTemp = 4;
 float hoek;
-bool tussenStap = 0;
 bool tussenStap2 = 0;
 int stappen = 0;
 
@@ -50,9 +49,11 @@ void setup()
   Serial.println("Adafruit MPU6050 test!");
 
   // Try to initialize!
-  if (!mpu.begin()) {
+  if (!mpu.begin())
+  {
     Serial.println("Failed to find MPU6050 chip");
-    while (1) {
+    while (1)
+    {
       delay(10);
     }
   }
@@ -93,7 +94,7 @@ void sendTemperature()
 
 void detectSteps()
 {
-  float corner = .01;
+  float corner = .12;
   /* Get new sensor events with the readings */
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
@@ -108,10 +109,11 @@ void detectSteps()
 
   if ((hoek > corner) && (tussenStap2 == 1))
   {
-    Serial.println("tussenstap1");
+    // Serial.println("tussenstap1");
     tussenStap2 = 0;
-    if (tussenStap)
-      SerialBT.println("stappen +1");
-      Serial.println("stap genomen");
+    stappen += 1;
+    Serial.println(stappen);
+    SerialBT.println("stappen +1");
+    Serial.println("stap genomen");
   }
 }
