@@ -1,7 +1,7 @@
 // #include "WiFi.h"
+// #include <Wire.h>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
-// #include <Wire.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <BluetoothSerial.h>
@@ -20,16 +20,13 @@ DallasTemperature sensors(&oneWire);
 
 Adafruit_MPU6050 mpu;
 
-// voor OTA
-
 BluetoothSerial SerialBT;
+
+#define GPSSerial Serial2
 
 void setup()
 {
-  /*
-   * Login page
-   */
-
+  
   // basic setup
   byte LED = 2;
   pinMode(LED, OUTPUT);
@@ -64,6 +61,8 @@ void setup()
   mpu.setFilterBandwidth(MPU6050_BAND_5_HZ);
 
   // # endregion MPU setup
+
+  GPSSerial.begin(9600);
 
   sensors.begin();
 }
@@ -115,5 +114,13 @@ void detectSteps()
     Serial.println(stappen);
     SerialBT.println("stappen +1");
     Serial.println("stap genomen");
+  }
+}
+
+void getGPSdata()
+{
+  if (GPSSerial.available()) {
+    char GPSdata = GPSSerial.read();
+    SerialBT.println("GPS" + c);
   }
 }
