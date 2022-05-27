@@ -107,10 +107,12 @@ def switch_light(data):
 def all_out():
     while True:
         time.sleep(1)
-        data = (float(DogBit.recv()))
+        data = (DogBit.recv())
         print(data)
-        DataRepository.insert_data(data, 1, 1)
-        socketio.emit('B2F_temperatuur', {'temperatuur': data})
+        if 'temperatuur' in data:
+            temperatuur = float(data[-5:])
+            DataRepository.insert_data(temperatuur, 1, 1)
+            socketio.emit('B2F_temperatuur', {'temperatuur': temperatuur})
 
 
 def start_thread():
