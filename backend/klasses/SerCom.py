@@ -9,6 +9,10 @@ class SerCom:
 		self.ser.write(p_msg.encode("utf8"))
 	
 	def recv(self): #'/dev/ttyS0' bij TXRX arduino
-		if self.ser.in_waiting > 0:
-			line = self.ser.readline().decode('utf-8').rstrip()
-			return line
+		try:
+			if self.ser.in_waiting > 0:
+				line = self.ser.readline().decode('utf-8').rstrip()
+				return line
+
+		except exception as e:
+			print(e)

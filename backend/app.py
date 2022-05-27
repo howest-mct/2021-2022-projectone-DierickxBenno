@@ -10,6 +10,7 @@ from repositories.DataRepository import DataRepository
 
 from klasses.SerCom import SerCom
 from klasses.BTconfig import BTconfig
+from klasses.PA1616s import PA1616s
 
 from selenium import webdriver
 
@@ -25,30 +26,7 @@ BT.open_connection()
 time.sleep(1)
 DogBit = SerCom("rfcomm0")
 
-# Code voor Hardware
-# def setup_gpio():
-#    GPIO.setwarnings(False)
-#    GPIO.setmode(GPIO.BCM)
-
-#    GPIO.setup(ledPin, GPIO.OUT)
-#    GPIO.output(ledPin, GPIO.LOW)
-        
-#    btnPin.on_press(lees_knop)
-
-
-# def lees_knop(pin):
-#    if btnPin.pressed:
-#       print("**** button pressed ****")
-#       if GPIO.input(ledPin) == 1:
-#          switch_light({'lamp_id': '3', 'new_status': 0})
-#       else:
-#          switch_light({'lamp_id': '3', 'new_status': 1})
-
-
-
-
 # Code voor Flask
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'geheim!'
 socketio = SocketIO(app, cors_allowed_origins="*", logger=False,
@@ -56,16 +34,11 @@ socketio = SocketIO(app, cors_allowed_origins="*", logger=False,
 
 CORS(app)
 
-
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):
     print(e)
 
-
-
 # API ENDPOINTS
-
-
 @app.route('/')
 def hallo():
     print("test")
@@ -101,23 +74,31 @@ def switch_light(data):
         GPIO.output(ledPin, new_status)
 
 
-
-# START een thread op. Belangrijk!!! Debugging moet UIT staan op start van de server, anders start de thread dubbel op
-# werk enkel met de packages gevent en gevent-websocket.
-def all_out():
+def get_data():
     while True:
         time.sleep(1)
         data = (DogBit.recv())
-        print(data)
-        if 'temperatuur' in data:
-            temperatuur = float(data[-5:])
-            DataRepository.insert_data(temperatuur, 1, 1)
-            socketio.emit('B2F_temperatuur', {'temperatuur': temperatuur})
+        
+        if data != None:
+            if 'temperatuur' in data:
+                print('temp measured')
+                temperatuur = float(data[-5:])
+                DataRepository.insert_data(temperatuur, 1, 1)
+                socketio.emit('B2F_temperatuur', {'temperatuur': temperatuur})
+            
+            elif 'stappen +1' in data:
+                socketio.emit('B2F_stap', {'stap': 1})
+                print('step taken')
+
+            elif '$GP' in data:
+                gps_data = PA1616s.getInfo(data)
+                print('GPS data receiven: ', gps_data)
+                socketio.emit('B2F_GPS', {'GPS': gps_data})
 
 
 def start_thread():
     print("**** Starting THREAD ****")
-    thread = threading.Thread(target=all_out, args=(), daemon=True)
+    thread = threading.Thread(target=get_data, args=(), daemon=True)
     thread.start()
 
 
@@ -155,19 +136,15 @@ def start_chrome_thread():
     chromeThread = threading.Thread(target=start_chrome_kiosk, args=(), daemon=True)
     chromeThread.start()
 
-
-
-# ANDERE FUNCTIES
-
-
 if __name__ == '__main__':
     try:
-        # setup_gpio()
         start_thread()
         start_chrome_thread()
         print("**** Starting APP ****")
         socketio.run(app, debug=False, host='0.0.0.0')
+
     except KeyboardInterrupt:
         print ('KeyboardInterrupt exception is caught')
+
     finally:
         GPIO.cleanup()

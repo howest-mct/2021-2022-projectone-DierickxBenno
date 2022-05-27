@@ -13,7 +13,7 @@
 # Satellites: 7
 
 
-class PA1616s_convert_data:
+class PA1616s:
 	@staticmethod
 	def cdf(p_date): #conver date format (ddmmyy to yyyymmdd)
 		print(p_date)
@@ -46,37 +46,34 @@ class PA1616s_convert_data:
 	@staticmethod
 	def getInfo(p_msg):
 		#data opsplitsen
-		data = seperate_data(p_msg)
+		data = PA1616s.seperate_data(p_msg)
 		msg_id = data[0]
 
 		# data verwerken op basis van id
-		if "$GPGGA" == msg_id:
-			#region data
-			time = ctf(data[1])
+		if "$GPGGA" == msg_id and len(data) >= 15:
+				time = PA1616s.ctf(data[1])
 
-			lat = data[2]
-			lat_NS = data[3] # N or S
+				lat = data[2]
+				lat_NS = data[3] # N or S
 
-			longi = data[4]
-			longi_EW = data[5] # E or W
-			
-			pfi = data[6] # 0: Fix not available, 1: GPS FIX, 2: diffrential GPS fix (pfi = position fix indicator)
-			HDOP = data[7] # Horizontal Dilution of Precision
-			alt = data[8] #altitude to sea level
-			tot_data = {
-				"time": time,
-				"latitude": lat+lat_NS,
-				"longitude": longi+longi_EW,
-				"altitude": alt,
-				"fix": pfi,
-				"Horizontal Dilution of Precision": HDOP,
-			}
-			#endregion
-			return tot_data
+				longi = data[4]
+				longi_EW = data[5] # E or W
+				
+				pfi = data[6] # 0: Fix not available, 1: GPS FIX, 2: diffrential GPS fix (pfi = position fix indicator)
+				HDOP = data[7] # Horizontal Dilution of Precision
+				alt = data[8] #altitude to sea level
+				tot_data = {
+					"time": time,
+					"latitude": lat+lat_NS,
+					"longitude": longi+longi_EW,
+					"altitude": alt,
+					"fix": pfi,
+					"Horizontal Dilution of Precision": HDOP,
+				}
+				return tot_data
 
-		elif "$GPRMC" == msg_id:
-			#region data
-			time = ctf(data[1])
+		elif "$GPRMC" == msg_id and len(data)>=13:
+			time = PA1616s.ctf(data[1])
 
 			status = data[2] # A=data valid or V=data not valid
 
@@ -87,7 +84,7 @@ class PA1616s_convert_data:
 			longi_EW = data[6] # E or W
 			
 			speed = float(data[7])*1.852
-			datum = cdf(data[9])
+			datum = PA1616s.cdf(data[9])
 			mode = data[12][0]
 
 			tot_data = {
@@ -99,11 +96,11 @@ class PA1616s_convert_data:
 				"datum": datum,
 				"mode": mode
 			}
-			#endregion
 			# print(tot_data)
 			return tot_data
 
-		elif "$GPGSA" == msg_id:
+		elif "$GPGSA" == msg_id and len(data)>=18:
 			PDOP = data[7]
 			tot_data = {"PDOP": PDOP}
 			return tot_data
+
