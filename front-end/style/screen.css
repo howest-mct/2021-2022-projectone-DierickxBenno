@@ -112,6 +112,11 @@
   }
 }
 
+#mapid {
+  width: 40vw;
+  height: 224px;
+}
+
 body,
 html {
   height: 100%;
@@ -125,9 +130,9 @@ body {
   transition: all 0.14s ease-in;
 }
 
-/* body.u-active {
+body.u-active {
   background: #f3f7f9;
-} */
+}
 
 .o-container {
   display: flex;
@@ -137,15 +142,143 @@ body {
   width: 100vw;
 }
 
-.c-thermometer {
+
+/*
+    Objects: Layout
+    ---
+    The layout object provides us with a column-style layout system. This object
+    contains the basic structural elements, but classes should be complemented
+    with width utilities
+*/
+
+.o-layout {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.o-layout__item {
+  flex-basis: 100%;
+}
+
+/* gutter modifiers, these affect o-layout__item too */
+
+.o-layout--gutter {
+  margin: 0 -12px;
+}
+
+.o-layout--gutter>.o-layout__item {
+  padding: 0 12px;
+}
+
+.o-layout--gutter-sm {
+  margin: 0 -6px;
+}
+
+.o-layout--gutter-sm>.o-layout__item {
+  padding: 0 6px;
+}
+
+.o-layout--gutter-lg {
+  margin: 0 -24px;
+}
+
+.o-layout--gutter-lg>.o-layout__item {
+  padding: 0 24px;
+}
+
+.o-layout--gutter-xl {
+  margin: 0 -48px;
+}
+
+.o-layout--gutter-xl>.o-layout__item {
+  padding: 0 48px;
+}
+
+/* reverse horizontal row modifier */
+
+.o-layout--row-reverse {
+  flex-direction: row-reverse;
+}
+
+.o-layout--column {
+  flex-direction: column;
+}
+
+/* Horizontal alignment modifiers*/
+
+.o-layout--justify-start {
+  justify-content: flex-start;
+}
+
+.o-layout--justify-end {
+  justify-content: flex-end;
+}
+
+.o-layout--justify-center {
+  justify-content: center;
+}
+
+.o-layout--justify-space-around {
+  justify-content: space-around;
+}
+
+.o-layout--justify-space-evenly {
+  justify-content: space-evenly;
+}
+
+.o-layout--justify-space-between {
+  justify-content: space-between;
+}
+
+/* Vertical alignment modifiers */
+
+.o-layout--align-start {
+  align-items: flex-start;
+}
+
+.o-layout--align-end {
+  align-items: flex-end;
+}
+
+.o-layout--align-center {
+  align-items: center;
+}
+
+.o-layout--align-baseline {
+  align-items: baseline;
+}
+
+/* Vertical alignment modifiers that only work if there is more than one flex item */
+
+.o-layout--align-content-start {
+  align-content: start;
+}
+
+.o-layout--align-content-end {
+  align-content: end;
+}
+
+.o-layout--align-content-center {
+  align-content: center;
+}
+
+.o-layout--align-content-space-around {
+  align-content: space-around;
+}
+
+.o-layout--align-content-space-between {
+  align-content: space-between;
+}
+
+.c-icon {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.c-power-btn {
+.c-waarde_holder {
   margin: auto;
-  /* margin-top: 20px; */
+  margin-top: 20px;
   background: #38434a;
   border-radius: 5px;
   color: white;
@@ -165,84 +298,7 @@ body {
   transition: none;
 }
 
-.c-power-btn:hover {
-  background: #414e56;
-}
-
-.c-power-btn:active {
-  box-shadow: inset 0px 4px 10px 0px #2d363b;
-  transition: background 0.14s ease-in;
-}
-
-/* opmaak van de bulb */
-.c-fancy-bulb {
-  position: relative;
-}
-
-.c-fancy-bulb__streaks,
-.c-fancy-bulb__streaks:after,
-.c-fancy-bulb__streaks:before {
-  position: absolute;
-  background: #ffdb55;
-  border-radius: 5.5px;
-  height: 11px;
-  z-index: 5000;
-}
-
-.c-fancy-bulb__streaks:after,
-.c-fancy-bulb__streaks:before {
-  content: '';
-  display: block;
-}
-
-.c-fancy-bulb__streaks:before {
-  bottom: 65px;
-}
-
-.c-fancy-bulb__streaks:after {
-  top: 65px;
-}
-
-.c-fancy-bulb__streaks--left {
-  right: 217px;
-  top: 89.5px;
-}
-
-.c-fancy-bulb__streaks--left:before,
-.c-fancy-bulb__streaks--left:after {
-  left: 15px;
-}
-
-.c-fancy-bulb__streaks--right {
-  left: 217px;
-  top: 89.5px;
-}
-
-.c-fancy-bulb__streaks--right:before,
-.c-fancy-bulb__streaks--right:after {
-  right: 15px;
-}
-
-.c-fancy-bulb__streaks--left:before,
-.c-fancy-bulb__streaks--righ:after {
-  -webkit-transform: rotate(34deg);
-  transform: rotate(34deg);
-}
-
-.c-fancy-bulb__streaks--left:after,
-.c-fancy-bulb__streaks--righ:before {
-  -webkit-transform: rotate(-34deg);
-  transform: rotate(-34deg);
-}
-
-.c-fancy-bulb__light {
-  -webkit-transform: translate(50%, 50%) scale(0);
-  transform: translate(50%, 50%) scale(0);
-  opacity: 0;
-  fill: #ffdb55;
-}
-
-.c-room {
+.c-info_block {
   display: flex;
   flex-direction: column;
   background: #a3bcc9;
@@ -257,76 +313,4 @@ body {
   text-align: center;
   margin-bottom: 12px;
   color: #38434a;
-}
-
-.c-room__icon {
-  margin-bottom: 20px;
-}
-
-.c-room__control {}
-
-.c-room--wait .c-fancy-bulb__light {
-  opacity: 1;
-  -webkit-transform: translate(0) scale(1);
-  transform: translate(0) scale(1);
-  transition: all 0.14s ease-in;
-  fill: rgb(248, 238, 203);
-}
-
-.c-room--on .c-fancy-bulb__light {
-  opacity: 1;
-  -webkit-transform: translate(0) scale(1);
-  transform: translate(0) scale(1);
-  transition: all 0.14s ease-in;
-  fill: #ffdb55;
-}
-
-.c-room--on .c-fancy-bulb__streaks--left {
-  -webkit-animation: move-left 0.38s ease-out, width-to-zero 0.38s ease-out;
-  animation: move-left 0.38s ease-out, width-to-zero 0.38s ease-out;
-  -webkit-animation-delay: 0.14s;
-  animation-delay: 0.14s;
-}
-
-.c-room--on .c-fancy-bulb__streaks--left:before {
-  -webkit-animation: width-to-zero 0.38s ease-out, move-up 0.38s ease-out;
-  animation: width-to-zero 0.38s ease-out, move-up 0.38s ease-out;
-  -webkit-animation-delay: 0.14s;
-  animation-delay: 0.14s;
-}
-
-.c-room--on .c-fancy-bulb__streaks--left:after {
-  -webkit-animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
-  animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
-  -webkit-animation-delay: 0.14s;
-  animation-delay: 0.14s;
-}
-
-.c-room--on .c-fancy-bulb__streaks--right {
-  -webkit-animation: move-right 0.38s ease-out, width-to-zero 0.38s ease-out;
-  animation: move-right 0.38s ease-out, width-to-zero 0.38s ease-out;
-  -webkit-animation-delay: 0.14s;
-  animation-delay: 0.14s;
-}
-
-.c-room--on .c-fancy-bulb__streaks--right:before {
-  -webkit-animation: width-to-zero 0.38s ease-out, move-up 0.38s ease-out;
-  animation: width-to-zero 0.38s ease-out, move-up 0.38s ease-out;
-  -webkit-animation-delay: 0.14s;
-  animation-delay: 0.14s;
-}
-
-.c-room--on .c-fancy-bulb__streaks--right:after {
-  -webkit-animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
-  animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
-  -webkit-animation-delay: 0.14s;
-  animation-delay: 0.14s;
-}
-
-.c-room--on .c-power-btn {
-  background: #58c48d;
-}
-
-.c-room--on .c-power-btn:active {
-  box-shadow: inset 0px 6px 8px -1px #41b77b;
 }

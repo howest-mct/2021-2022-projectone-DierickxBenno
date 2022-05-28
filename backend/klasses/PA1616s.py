@@ -16,7 +16,7 @@
 class PA1616s:
 	@staticmethod
 	def cdf(p_date): #conver date format (ddmmyy to yyyymmdd)
-		print(p_date)
+		# print(p_date)
 		dd = p_date[:2]
 		mm = p_date[2:4]
 		yy = p_date[4:6]
@@ -63,9 +63,10 @@ class PA1616s:
 				HDOP = data[7] # Horizontal Dilution of Precision
 				alt = data[8] #altitude to sea level
 				tot_data = {
+					"data-id": data[0],
 					"time": time,
-					"latitude": lat+lat_NS,
-					"longitude": longi+longi_EW,
+					"latitude": lat,
+					"longitude": longi,
 					"altitude": alt,
 					"fix": pfi,
 					"Horizontal Dilution of Precision": HDOP,
@@ -88,6 +89,7 @@ class PA1616s:
 			mode = data[12][0]
 
 			tot_data = {
+				"data-id": data[0],
 				"time": time,
 				"validity": status,
 				"latitude": lat+lat_NS,
@@ -101,6 +103,8 @@ class PA1616s:
 
 		elif "$GPGSA" == msg_id and len(data)>=18:
 			PDOP = data[7]
-			tot_data = {"PDOP": PDOP}
+			tot_data = {"data-id": data[0],"PDOP": PDOP}
 			return tot_data
+
+
 

@@ -36,49 +36,49 @@ CORS(app)
 
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):
-    print(e)
+    print("error: ", e)
 
 # API ENDPOINTS
 @app.route('/')
 def hallo():
-    print("test")
     return "Server is running, er zijn momenteel geen API endpoints beschikbaar."
 
 
 @socketio.on('connect')
 def initial_connection():
     print('A new client connect')
+    mrd = DataRepository.get_most_recent()
     # # Send to the client!
     # vraag de status op van de lampen uit de DB
-    status = DataRepository.read_status_lampen()
-    emit('B2F_status_lampen', {'lampen': status}, broadcast=True)
+    # status = DataRepository.read_status_lampen()
+    socketio.emit('B2F_meest_recente_data', {'data': mrd}, broadcast=True)
 
 
-@socketio.on('F2B_switch_light')
-def switch_light(data):
-    # Ophalen van de data
-    lamp_id = data['lamp_id']
-    new_status = data['new_status']
-    print(f"Lamp {lamp_id} wordt geswitcht naar {new_status}")
+# @socketio.on('F2B_switch_light')
+# def switch_light(data):
+#     # Ophalen van de data
+#     lamp_id = data['lamp_id']
+#     new_status = data['new_status']
+#     print(f"Lamp {lamp_id} wordt geswitcht naar {new_status}")
 
-    # Stel de status in op de DB
-    res = DataRepository.update_status_lamp(lamp_id, new_status)
+#     # Stel de status in op de DB
+#     res = DataRepository.update_status_lamp(lamp_id, new_status)
 
-    # Vraag de (nieuwe) status op van de lamp en stuur deze naar de frontend.
-    data = DataRepository.read_status_lamp_by_id(lamp_id)
-    socketio.emit('B2F_verandering_lamp', {'lamp': data}, broadcast=True)
+#     # Vraag de (nieuwe) status op van de lamp en stuur deze naar de frontend.
+#     data = DataRepository.read_status_lamp_by_id(lamp_id)
+#     socketio.emit('B2F_verandering_lamp', {'lamp': data}, broadcast=True)
 
-    # Indien het om de lamp van de TV kamer gaat, dan moeten we ook de hardware aansturen.
-    if lamp_id == '3':
-        print(f"TV kamer moet switchen naar {new_status} !")
-        GPIO.output(ledPin, new_status)
+#     # Indien het om de lamp van de TV kamer gaat, dan moeten we ook de hardware aansturen.
+#     if lamp_id == '3':
+#         print(f"TV kamer moet switchen naar {new_status} !")
+#         GPIO.output(ledPin, new_status)
 
 
 def get_data():
     while True:
         time.sleep(1)
         data = (DogBit.recv())
-        
+
         if data != None:
             if 'temperatuur' in data:
                 print('temp measured')
@@ -92,7 +92,7 @@ def get_data():
 
             elif '$GP' in data:
                 gps_data = PA1616s.getInfo(data)
-                print('GPS data receiven: ', gps_data)
+                print('GPS data received')
                 socketio.emit('B2F_GPS', {'GPS': gps_data})
 
 
