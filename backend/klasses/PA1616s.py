@@ -92,8 +92,8 @@ class PA1616s:
 				"data-id": data[0],
 				"time": time,
 				"validity": status,
-				"latitude": lat+lat_NS,
-				"longitude": longi+longi_EW,
+				"latitude": lat,
+				"longitude": longi,
 				"speed km/h": speed,
 				"datum": datum,
 				"mode": mode

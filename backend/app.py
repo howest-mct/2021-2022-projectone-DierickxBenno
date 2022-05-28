@@ -83,7 +83,7 @@ def get_data():
             if 'temperatuur' in data:
                 print('temp measured')
                 temperatuur = float(data[-5:])
-                DataRepository.insert_data(temperatuur, 1, 1)
+                DataRepository.insert_data(temperatuur, 1)
                 socketio.emit('B2F_temperatuur', {'temperatuur': temperatuur})
             
             elif 'stappen +1' in data:

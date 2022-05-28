@@ -30,11 +30,23 @@ const listenToSocket = function () {
       ".c-temperatuur"
     ).innerHTML = `${jsonObject.temperatuur} °C`;
   });
+
   socketio.on("B2F_GPS",function (jsonObject) {
-    console.log("gps: ", jsonObject.GPS.latitude);
-    console.log("test")
-    // map.center: [jsonObject.latitude, -0.09]
-  })
+    const data = jsonObject.GPS
+    if (data != null){
+    const dataId = data["data-id"]
+    if (dataId == "$GPRMC"){
+      const lat = data.latitude/100
+      const longi = data.longitude/100 
+      map.panTo(new L.LatLng(lat, longi));
+    }
+    else if(dataId == "$GPGGA"){
+      const lat = data.latitude/100
+      const longi = data.longitude/100 
+      map.panTo(new L.LatLng(lat, longi));
+    }
+    
+  }})
 
   socketio.on("B2F_stap",function (jsonObject) {
     console.log("stap genomen ", jsonObject)
@@ -46,8 +58,10 @@ const listenToSocket = function () {
     for (const waarde of waardes){
       let waardeId = waarde.getAttribute("sensor-id");
       for (const el of jsonObject.data){
+        let eenheid = waarde.getAttribute("eenheid")
         if ((waardeId != null) && (waardeId == el.sensorid)){
-          waarde.innerHTML = el.waarde+" "+el.eenheid
+          
+          waarde.innerHTML = el.waarde+" "+eenheid
         }
       }
     }

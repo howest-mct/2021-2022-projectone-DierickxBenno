@@ -11,9 +11,9 @@ class DataRepository:
         return gegevens
 
     @staticmethod
-    def insert_data(p_waarde, p_sensorid, p_activiteitid):
-        sql = 'INSERT INTO data (waarde, sensorid, activiteitid, tijdstip) VALUES (%s, %s, %s, current_time())'
-        params = [p_waarde, p_sensorid, p_activiteitid]
+    def insert_data(p_waarde, p_sensorid):
+        sql = 'INSERT INTO data (waarde, sensorid, tijdstip) VALUES (%s, %s, current_time())'
+        params = [p_waarde, p_sensorid]
         Database.execute_sql(sql, params)
 
     #get most recent data
