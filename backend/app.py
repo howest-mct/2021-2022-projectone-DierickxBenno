@@ -47,11 +47,10 @@ def hallo():
 @socketio.on('connect')
 def initial_connection():
     print('A new client connect')
-    mrd = DataRepository.get_most_recent()
-    # # Send to the client!
-    # vraag de status op van de lampen uit de DB
-    # status = DataRepository.read_status_lampen()
-    socketio.emit('B2F_meest_recente_data', {'data': mrd}, broadcast=True)
+    mrs = DataRepository.get_most_recent_sensor()
+    
+    
+    socketio.emit('B2F_meest_recente_data', {'data': mrs}, broadcast=True)
 
 
 # @socketio.on('F2B_switch_light')
@@ -76,7 +75,6 @@ def initial_connection():
 
 def get_data():
     while True:
-        time.sleep(1)
         data = (DogBit.recv())
 
         if data != None:
@@ -87,13 +85,24 @@ def get_data():
                 socketio.emit('B2F_temperatuur', {'temperatuur': temperatuur})
             
             elif 'stappen +1' in data:
-                socketio.emit('B2F_stap', {'stap': 1})
                 print('step taken')
+                socketio.emit('B2F_stap', {'stap': 1})
 
             elif '$GP' in data:
                 gps_data = PA1616s.getInfo(data)
                 print('GPS data received')
-                socketio.emit('B2F_GPS', {'GPS': gps_data})
+
+                if gps_data is not None:
+                    if gps_data["data-id"] == "$GPGGA" or gps_data["data-id"] == "$GPRMC":
+                        longi = gps_data["longitude"]/100
+                        lat = gps_data["latitude"]/100
+                        DataRepository.add_location(longi, lat)
+
+                    socketio.emit('B2F_GPS', {'GPS': gps_data})
+
+            elif 'LI' in data:
+                licht_intensiteit = float(data[3:])
+                DataRepository.insert_data(licht_intensiteit, 3)
 
 
 def start_thread():

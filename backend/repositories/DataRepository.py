@@ -17,10 +17,34 @@ class DataRepository:
         Database.execute_sql(sql, params)
 
     #get most recent data
-    def get_most_recent():
+    @staticmethod
+    def get_most_recent_sensor():
         print("meest recente data werkt niet, voorlopig gwn gebruiken als placeholder")
         sql = "SELECT d.waarde, d.sensorid, s.eenheid from data d JOIN sensor s ON s.sensorid = d.sensorid GROUP BY sensorid"
         data = Database.get_rows(sql)
         return data
 
-    #stappen toevoegen
+    @staticmethod
+    def get_most_recent_location():
+        sql = """
+        Select * from locatie
+        Order BY tijdstip desc
+        LIMIT 1"""
+        data = Database.get_rows(sql)
+        return data
+
+    
+    @staticmethod
+    def get_most_recent_speed():
+        sql = """
+        Select * from snelheid
+        Order BY tijdstip desc
+        LIMIT 1"""
+        data = Database.get_rows(sql)
+        return data
+
+    @staticmethod
+    def add_location(longitude, latitude):
+        sql = "INSERT INTO locatie (latitude, longitude, tijdstip) VALUES (%s,%s, current_time())"
+        params = [latitude, longitude]
+        Database.execute_sql(sql, params)
