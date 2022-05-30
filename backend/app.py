@@ -47,10 +47,12 @@ def hallo():
 @socketio.on('connect')
 def initial_connection():
     print('A new client connect')
-    mrs = DataRepository.get_most_recent_sensor()
-    
-    
-    socketio.emit('B2F_meest_recente_data', {'data': mrs}, broadcast=True)
+    mrs = DataRepository.get_most_recent_sensor() #most recent sensor
+    mrl = DataRepository.get_most_recent_location() # most recent location
+    mrv = DataRepository.get_most_recent_speed() # most recent velocity
+    mrsc = DataRepository.get_most_recent_steps()
+
+    socketio.emit('B2F_meest_recente_data', {'data': mrs, 'locatie': mrl, 'snelheid': mrv, 'stappen': mrsc}, broadcast=True)
 
 
 # @socketio.on('F2B_switch_light')

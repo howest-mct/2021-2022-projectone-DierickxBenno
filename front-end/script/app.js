@@ -53,18 +53,34 @@ const listenToSocket = function () {
   })
 
   socketio.on("B2F_meest_recente_data",function (jsonObject) {
-    console.log("mrd: ", jsonObject)
+    console.log(jsonObject)
     const waardes = document.querySelectorAll(".c-waarde_holder");
+    // set sensor data
     for (const waarde of waardes){
       let waardeId = waarde.getAttribute("sensor-id");
       for (const el of jsonObject.data){
         let eenheid = waarde.getAttribute("eenheid")
         if ((waardeId != null) && (waardeId == el.sensorid)){
-          
           waarde.innerHTML = el.waarde+" "+eenheid
+        }
+        //set speed & stappen
+        if (eenheid != null){
+          if (eenheid == "km/h"){
+            const snelheid = jsonObject.snelheid[0].snelheid;
+            console.log(snelheid)
+            waarde.innerHTML = snelheid+" "+eenheid
+          }
+          else if (eenheid == ""){
+            const stappen = jsonObject.stappen[0].stappen;
+            waarde.innerHTML = stappen
+          }
         }
       }
     }
+    // set location
+    const lat = jsonObject.locatie[0].latitude;
+    const longi = jsonObject.locatie[0].longitude;
+    map.panTo(new L.LatLng(lat, longi));
   })
 };
 
