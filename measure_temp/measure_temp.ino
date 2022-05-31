@@ -5,30 +5,17 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <BluetoothSerial.h>
-#include <FastLED.h>
-
-#define numLeds 8
-
-CRGBArray<numLeds> leds;
-
-byte i; // led intensity
-byte pinWS2812 = 13;
 
 // timed events
-// measure temperature/light intensity
 int eventtimeTemp = 5000 * 60;
+int eventtimeGPS = 600;
+int pasteventGPS = 0;
 int pasteventTemp = 0;
 //
 const byte owTemp = 4;
 float hoek;
 bool tussenStap2 = 0;
 byte stappen = 0;
-int ldrPin = 34;
-float lightValue;
-float pastLightValue = 9999.0;
-// bools
-bool ledStatus = 0;
-//
 
 OneWire oneWire(owTemp);
 DallasTemperature sensors(&oneWire);
@@ -41,7 +28,7 @@ BluetoothSerial SerialBT;
 
 void setup()
 {
-  FastLED.addLeds<NEOPIXEL, 13>(leds, numLeds);
+
   // basic setup
   byte LED = 2;
   pinMode(LED, OUTPUT);
@@ -91,18 +78,18 @@ void loop()
   {
     sendTemperature();
     pasteventTemp = millis();
-    getLightIntensity();
   }
 
-  if (stappen >= 50)
+  if (((millis() - pasteventGPS) > eventtimeGPS) && stappen >= 50)
   {
     stappen = 0;
-    Serial.println(stappen);
-    getGPSdata();
   }
+  // getGPSdata();
 
-  setLedIntensity();
-  detectSteps();
+  // detectSteps();
+  sendTemperature();
+
+  // SerialBT.println("");
 }
 
 void sendTemperature()
@@ -129,10 +116,13 @@ void detectSteps()
 
   if ((hoek > corner) && (tussenStap2 == 1))
   {
+
     tussenStap2 = 0;
     stappen += 1;
-    // SerialBT.println("\n");
-    SerialBT.println("\nstappen +1");
+    Serial.println(stappen);
+    SerialBT.println("\n");
+    SerialBT.println("stappen +1");
+    Serial.println("stap genomen");
   }
 }
 
@@ -152,42 +142,5 @@ void getGPSdata()
       Serial.write(c);
       SerialBT.print(c);
     }
-  }
-}
-
-void getLightIntensity()
-{
-  lightValue = analogRead(ldrPin);
-  SerialBT.println("LI: " + String((lightValue / 4095) * 100));
-}
-
-void setLedIntensity()
-{
-  lightValue = ((analogRead(ldrPin) / 4095.0) * 100.0);
-  Serial.println(analogRead(ldrPin));
-
-  if (lightValue <= 75)
-  {
-    if (abs(lightValue - pastLightValue) > 10)
-    {
-      pastLightValue = lightValue*1.0; // *1.0 zodat het zeker float blijft
-      i = ((100-lightValue)/100)*255;
-      for (byte j = 0; j < numLeds; j++)
-      {
-        leds[j] = CRGB(i, i, i);
-      }
-        FastLED.show();
-        ledStatus = 1;
-    }
-  }
-  else
-  {
-    pastLightValue = 85.0;
-    for (byte j = 0; j < numLeds; j++)
-    {
-      leds[j] = CRGB(0, 0, 0);
-    }
-      FastLED.show();
-      ledStatus = 0;
   }
 }
