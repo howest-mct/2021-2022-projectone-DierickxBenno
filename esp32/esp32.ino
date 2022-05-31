@@ -15,11 +15,9 @@ byte i; // led intensity
 byte pinWS2812 = 13;
 
 // timed events
+// measure temperature/light intensity
 int eventtimeTemp = 5000 * 60;
 int pasteventTemp = 0;
-
-int eventtimeLI = 5000 * 60;
-int pasteventLI = 0;
 //
 const byte owTemp = 4;
 float hoek;
@@ -27,6 +25,9 @@ bool tussenStap2 = 0;
 byte stappen = 0;
 int ldrPin = 34;
 float lightValue;
+float pastLightValue = 9999.0;
+// bools
+bool ledStatus = 0;
 //
 
 OneWire oneWire(owTemp);
@@ -37,8 +38,6 @@ Adafruit_MPU6050 mpu;
 BluetoothSerial SerialBT;
 
 #define GPSSerial Serial2
-
-// 19 LO+, 18 LO-
 
 void setup()
 {
@@ -92,10 +91,6 @@ void loop()
   {
     sendTemperature();
     pasteventTemp = millis();
-  }
-
-  if ((millis() - pasteventLI) > eventtimeLI)
-  {
     getLightIntensity();
   }
 
@@ -105,6 +100,7 @@ void loop()
     Serial.println(stappen);
     getGPSdata();
   }
+
   setLedIntensity();
   detectSteps();
 }
@@ -167,23 +163,31 @@ void getLightIntensity()
 
 void setLedIntensity()
 {
-  lightValue = ((analogRead(ldrPin)/ 4095.0) * 100.0);
+  lightValue = ((analogRead(ldrPin) / 4095.0) * 100.0);
   Serial.println(analogRead(ldrPin));
+
   if (lightValue <= 75)
   {
-    i = (255 / 50) * (51 - lightValue);
-    for (byte j = 0; j < numLeds; j++)
+    if (abs(lightValue - pastLightValue) > 10)
     {
-      leds[j] = CRGB(i, i, i);
-      FastLED.show();
+      pastLightValue = lightValue*1.0; // *1.0 zodat het zeker float blijft
+      i = ((100-lightValue)/100)*255;
+      for (byte j = 0; j < numLeds; j++)
+      {
+        leds[j] = CRGB(i, i, i);
+      }
+        FastLED.show();
+        ledStatus = 1;
     }
   }
   else
   {
+    pastLightValue = 85.0;
     for (byte j = 0; j < numLeds; j++)
     {
       leds[j] = CRGB(0, 0, 0);
-      FastLED.show();
     }
+      FastLED.show();
+      ledStatus = 0;
   }
 }
