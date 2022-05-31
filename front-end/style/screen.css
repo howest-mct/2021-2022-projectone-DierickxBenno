@@ -1,3 +1,8 @@
+:root {
+  --darkestBlue: #2655FB;
+  --darkerBlue: #4771FF;
+}
+
 @-webkit-keyframes move-left {
   0% {
     -webkit-transform: none;
@@ -277,13 +282,11 @@ body.u-active {
   align-content: flex-start;
   display: flex;
   flex-wrap: wrap;
-  background: #3F69FB;
+  background: var(--darkerBlue);
   height: 100vh;
-  padding-left: 2em;
-  width: 180px;
+  width: 240px;
+  position: fixed;
   border-top-right-radius: 19px;
-  margin-right: 16px;
-  padding-right: 8px;
 }
 
 /* object content */
@@ -292,6 +295,9 @@ body.u-active {
   width: 90vw;
 }
 
+.o-content-row-one {
+  margin-left: 264px;
+}
 
 /* components */
 
@@ -313,19 +319,20 @@ body.u-active {
   font-style: normal;
   font-weight: 800;
   font-size: 1.9em;
-  height: 65px;
+  height: 48px;
   letter-spacing: 0.2px;
-  line-height: 65px;
+  line-height: 48px;
   text-align: center;
   width: 150px;
   border-radius: 0 19px;
+  padding: 8px;
 }
 
 .c-info_block {
   margin: 32px 16px;
   display: flex;
   flex-direction: column;
-  background: gainsboro;
+  background: #DDE;
   padding: 1em;
   height: fit-content;
   border-radius: 0 19px;
@@ -340,11 +347,18 @@ body.u-active {
 }
 
 .c-title {
+  margin: 0;
   font-family: co-headline;
   font-size: 2.5em;
   font-weight: 300;
-  text-align: center;
+  text-align: left;
   color: white;
+  background-color: var(--darkestBlue);
+  padding: 32px;
+  padding-left: 32px;
+  width: 200px;
+  padding-right: 8px;
+  border-radius: 0 19px;
 }
 
 .c-button {
@@ -356,8 +370,9 @@ body.u-active {
   height: 65px;
   letter-spacing: 0.2px;
   font-size: 16px;
-  width: 24vw;
+  width: 180px;
   color: white;
+  margin-left: 32px;
 }
 
 @media (min-width: 400px) {
