@@ -7,20 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
   <title>DogBit</title>
-  <!-- #region leaflet-->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css"
-    type="text/css" />
-  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js"></script>
 
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-    crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-    crossorigin=""></script>
-  <!-- #endregion -->
-
+  <link rel="stylesheet" href="https://use.typekit.net/ecu2cwh.css">
   <link rel="stylesheet" href="style/screen.css" />
 
   <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"
@@ -33,8 +21,19 @@
 </head>
 
 <body>
-  <div class="o-container o-layout--column ">
-    <div class="o-container">
+  <!-- side nav -->
+  <div class="o-container">
+    <div class="o-layout">
+      <div class="o-layout__item o-layout--column o-nav o-layout--align-start">
+        <p class="c-title">DogBit</p>
+        <a class="c-button" href="dashboard.html">dashboard</a>
+        <a class="c-button" href="historiek.html">historiek</a>
+        <a class="c-button" href="map.html">map</a>
+        <a class="c-button c-button-last" href="kleur.html">licht</a>
+      </div>
+    </div>
+
+    <div class="o-layout o-content">
       <article class="c-info_block js-room">
         <div class="c-room__name">
           Temperatuur
@@ -77,8 +76,8 @@
           <div class="c-icon">
             <img src=".\img\icons8-running-away-96.png" alt="">
           </div>
-          <a target="_blank" href="https://icons8.com/icon/B25oSPrRc3OS/running-away">Running Away</a> icon by <a
-            target="_blank" href="https://icons8.com">Icons8</a>
+          <a target="_blank" href="https://icons8.com/icon/B25oSPrRc3OS/running-away">Running Away</a> icon by
+          <a target="_blank" href="https://icons8.com">Icons8</a>
         </div>
         <div class="c-room__control">
           <div class="c-waarde_holder js-power-btn c-snelheid" eenheid="km/h">
@@ -104,19 +103,6 @@
         </div>
       </article>
     </div>
-    <div class="o-container">
-      <article class="c-info_block js-room">
-        <div class="c-room__name">
-          locatie
-        </div>
-        <div class="c-room__icon">
-          <div class="c-icon">
-            <div id="mapid"></div>
-          </div>
-        </div>
-      </article>
-    </div>
-
   </div>
 </body>
 

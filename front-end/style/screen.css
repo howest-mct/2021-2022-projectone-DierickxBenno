@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;900&display=swap');
-
 @-webkit-keyframes move-left {
   0% {
     -webkit-transform: none;
@@ -123,11 +121,11 @@ html {
   width: 100%;
   margin: 0;
   padding: 0;
+  font-family: co-text;
 }
 
 body {
-  background: #aecad8;
-  transition: all 0.14s ease-in;
+  background: #fff;
 }
 
 body.u-active {
@@ -136,8 +134,8 @@ body.u-active {
 
 .o-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center;
+  justify-content: center; */
   height: 100vh;
   width: 100vw;
 }
@@ -194,10 +192,14 @@ body.u-active {
   padding: 0 48px;
 }
 
-/* reverse horizontal row modifier */
+/* column/row modifier */
 
 .o-layout--row-reverse {
   flex-direction: row-reverse;
+}
+
+.o-layout--row {
+  flex-direction: row;
 }
 
 .o-layout--column {
@@ -270,6 +272,29 @@ body.u-active {
   align-content: space-between;
 }
 
+/*object navigatie */
+.o-nav {
+  align-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  background: #3F69FB;
+  height: 100vh;
+  padding-left: 2em;
+  width: 180px;
+  border-top-right-radius: 19px;
+  margin-right: 16px;
+  padding-right: 8px;
+}
+
+/* object content */
+.o-content {
+  height: 100vh;
+  width: 90vw;
+}
+
+
+/* components */
+
 .c-icon {
   display: flex;
   align-items: center;
@@ -279,38 +304,72 @@ body.u-active {
 .c-waarde_holder {
   margin: auto;
   margin-top: 20px;
+  margin-bottom: 8px;
   background: #38434a;
   border-radius: 5px;
   color: white;
   cursor: pointer;
-  font-family: Roboto;
+  font-family: co-text;
+  font-style: normal;
   font-weight: 800;
   font-size: 1.9em;
   height: 65px;
   letter-spacing: 0.2px;
   line-height: 65px;
   text-align: center;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   width: 150px;
-  transition: none;
+  border-radius: 0 19px;
 }
 
 .c-info_block {
+  margin: 32px 16px;
   display: flex;
   flex-direction: column;
-  background: #a3bcc9;
+  background: gainsboro;
   padding: 1em;
-  margin: 0 0.5em;
+  height: fit-content;
+  border-radius: 0 19px;
 }
 
 .c-room__name {
-  font-family: Roboto;
   font-size: 1.25em;
   font-weight: 100;
   text-align: center;
   margin-bottom: 12px;
   color: #38434a;
+}
+
+.c-title {
+  font-family: co-headline;
+  font-size: 2.5em;
+  font-weight: 300;
+  text-align: center;
+  color: white;
+}
+
+.c-button {
+  align-content: center;
+  justify-content: center;
+  text-align: left;
+  text-decoration: none;
+  line-height: 65px;
+  height: 65px;
+  letter-spacing: 0.2px;
+  font-size: 16px;
+  width: 24vw;
+  color: white;
+}
+
+@media (min-width: 400px) {
+  .c-button {
+    font-size: 24px;
+    width: 20vw;
+  }
+}
+
+@media (min-width: 720px) {
+  .c-button {
+    font-size: 28px;
+    width: 20vw;
+  }
 }
