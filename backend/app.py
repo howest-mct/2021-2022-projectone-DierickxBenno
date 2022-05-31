@@ -103,6 +103,7 @@ def get_data():
                     socketio.emit('B2F_GPS', {'GPS': gps_data})
 
             elif 'LI' in data:
+                print("nieuwe licht intensiteit gemeten")
                 licht_intensiteit = float(data[3:])
                 DataRepository.insert_data(licht_intensiteit, 3)
 
