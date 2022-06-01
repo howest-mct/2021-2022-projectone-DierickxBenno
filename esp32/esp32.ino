@@ -3,7 +3,6 @@
 #include <Wire.h>
 #include <Adafruit_MPU6050.h>
 #include <OneWire.h>
-// #include <DallasTemperature.h>
 #include <BluetoothSerial.h>
 #include <FastLED.h>
 
@@ -16,7 +15,7 @@ byte pinWS2812 = 13;
 
 // timed events
 // measure temperature/light intensity
-int eventtimeTemp = 5000 * 60;
+int eventtimeTemp = 2000 * 60;
 int pasteventTemp = 0;
 //
 const byte owTemp = 4;
@@ -104,7 +103,6 @@ void loop()
 void sendTemperature()
 {
   byte i;
-  byte present = 0;
   byte type_s;
   byte data[12];
   byte addr[8];
@@ -113,7 +111,6 @@ void sendTemperature()
   if (!ds.search(addr))
   {
     ds.reset_search();
-    delay(250);
     return;
   }
 
@@ -127,12 +124,12 @@ void sendTemperature()
   ds.select(addr);
   ds.write(0x44);
 
-  present = ds.reset();
+  ds.reset();
   ds.select(addr);
-  ds.write(0xBE); // Read Scratchpad
+  ds.write(0xBE);
 
   for (i = 0; i < 9; i++)
-  { // we need 9 bytes
+  {
     data[i] = ds.read();
   }
 
