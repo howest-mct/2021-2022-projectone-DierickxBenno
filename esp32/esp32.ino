@@ -1,7 +1,7 @@
 // #include <WiFi.h>
 // #include <Wire.h>
+// #include <Adafruit_Sensor.h>
 #include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <BluetoothSerial.h>
@@ -45,8 +45,7 @@ void setup()
   // basic setup
   byte LED = 2;
   pinMode(LED, OUTPUT);
-  while (!Serial)
-    ;
+  
   Serial.begin(115200);
 
   // wifi setup
