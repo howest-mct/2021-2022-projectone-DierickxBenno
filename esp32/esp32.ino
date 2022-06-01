@@ -1,9 +1,9 @@
 // #include <WiFi.h>
-// #include <Wire.h>
 // #include <Adafruit_Sensor.h>
+#include <Wire.h>
 #include <Adafruit_MPU6050.h>
 #include <OneWire.h>
-#include <DallasTemperature.h>
+// #include <DallasTemperature.h>
 #include <BluetoothSerial.h>
 #include <FastLED.h>
 
@@ -30,8 +30,7 @@ float pastLightValue = 9999.0;
 bool ledStatus = 0;
 //
 
-OneWire oneWire(owTemp);
-DallasTemperature sensors(&oneWire);
+OneWire ds(owTemp);
 
 Adafruit_MPU6050 mpu;
 
@@ -45,7 +44,7 @@ void setup()
   // basic setup
   byte LED = 2;
   pinMode(LED, OUTPUT);
-  
+
   Serial.begin(115200);
 
   // wifi setup
@@ -75,8 +74,6 @@ void setup()
   // # endregion MPU setup
 
   GPSSerial.begin(9600);
-
-  sensors.begin();
 }
 
 void loop()
@@ -106,9 +103,59 @@ void loop()
 
 void sendTemperature()
 {
+  byte i;
+  byte present = 0;
+  byte type_s;
+  byte data[12];
+  byte addr[8];
   float temperatureC;
-  sensors.requestTemperatures();
-  temperatureC = sensors.getTempCByIndex(0);
+
+  if (!ds.search(addr))
+  {
+    ds.reset_search();
+    delay(250);
+    return;
+  }
+
+  if (OneWire::crc8(addr, 7) != addr[7])
+  {
+    return;
+  }
+
+  // the first ROM byte indicates which chip
+  ds.reset();
+  ds.select(addr);
+  ds.write(0x44);
+
+  present = ds.reset();
+  ds.select(addr);
+  ds.write(0xBE); // Read Scratchpad
+
+  for (i = 0; i < 9; i++)
+  { // we need 9 bytes
+    data[i] = ds.read();
+  }
+
+  int16_t raw = (data[1] << 8) | data[0];
+  if (type_s)
+  {
+    raw = raw << 3;
+    if (data[7] == 0x10)
+    {
+      raw = (raw & 0xFFF0) + 12 - data[6];
+    }
+  }
+  else
+  {
+    byte cfg = (data[4] & 0x60);
+    if (cfg == 0x00)
+      raw = raw & ~7;
+    else if (cfg == 0x20)
+      raw = raw & ~3;
+    else if (cfg == 0x40)
+      raw = raw & ~1;
+  }
+  temperatureC = (float)raw / 16.0;
   SerialBT.println("temperatuur: " + String(temperatureC));
 }
 
@@ -137,7 +184,6 @@ void detectSteps()
 
 void getGPSdata()
 {
-
   while ((Serial.available()) or (GPSSerial.available()))
   {
     while (Serial.available())
@@ -169,14 +215,14 @@ void setLedIntensity()
   {
     if (abs(lightValue - pastLightValue) > 10)
     {
-      pastLightValue = lightValue*1.0; // *1.0 zodat het zeker float blijft
-      i = ((100-lightValue)/100)*255;
+      pastLightValue = lightValue * 1.0; // *1.0 zodat het zeker float blijft
+      i = ((100 - lightValue) / 100) * 255;
       for (byte j = 0; j < numLeds; j++)
       {
         leds[j] = CRGB(i, i, i);
       }
-        FastLED.show();
-        ledStatus = 1;
+      FastLED.show();
+      ledStatus = 1;
     }
   }
   else
@@ -186,7 +232,7 @@ void setLedIntensity()
     {
       leds[j] = CRGB(0, 0, 0);
     }
-      FastLED.show();
-      ledStatus = 0;
+    FastLED.show();
+    ledStatus = 0;
   }
 }
