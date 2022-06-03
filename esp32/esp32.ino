@@ -1,7 +1,7 @@
 // #include <WiFi.h>
 // #include <Adafruit_Sensor.h>
+// #include <Adafruit_MPU6050.h>
 #include <Wire.h>
-#include <Adafruit_MPU6050.h>
 #include <OneWire.h>
 #include <BluetoothSerial.h>
 #include <FastLED.h>
@@ -15,9 +15,11 @@ byte pinWS2812 = 13;
 
 // timed events
 // measure temperature/light intensity
-int eventtimeTemp = 2000 * 60;
+int eventtimeTemp = 30000;
 int pasteventTemp = 0;
 //
+byte LOplus = 41;
+byte LOmin = 40;
 const byte owTemp = 4;
 float hoek;
 bool tussenStap2 = 0;
@@ -25,13 +27,20 @@ byte stappen = 0;
 int ldrPin = 34;
 float lightValue;
 float pastLightValue = 9999.0;
+const int MPU = 0x68; // MPU6050 I2C address
+int GyroY;
 // bools
 bool ledStatus = 0;
 //
+// ecg
+int heartVal;
+int pastHeartVal;
+long startTime = millis();
+long endTime = 0;
+float pulse;
+//
 
 OneWire ds(owTemp);
-
-Adafruit_MPU6050 mpu;
 
 BluetoothSerial SerialBT;
 
@@ -39,6 +48,10 @@ BluetoothSerial SerialBT;
 
 void setup()
 {
+  // ecg
+  pinMode(LOplus, INPUT);
+  pinMode(LOmin, INPUT);
+  //
   FastLED.addLeds<NEOPIXEL, 13>(leds, numLeds);
   // basic setup
   byte LED = 2;
@@ -53,24 +66,11 @@ void setup()
 
   //# region MPU setup
 
-  Serial.println("Adafruit MPU6050 test!");
-
-  // Try to initialize!
-  if (!mpu.begin())
-  {
-    Serial.println("Failed to find MPU6050 chip");
-    while (1)
-    {
-      delay(10);
-    }
-  }
-  Serial.println("MPU6050 Found!");
-
-  mpu.setAccelerometerRange(MPU6050_RANGE_4_G);
-  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
-  mpu.setFilterBandwidth(MPU6050_BAND_5_HZ);
-
-  // # endregion MPU setup
+  Wire.begin(); // Initialize comunication
+  mpuWriteMsg(0x6B, 0x1);
+  mpuWriteMsg(0x1c, 0x10);
+  mpuWriteMsg(0x1B, 0x10);
+  delay(20);
 
   GPSSerial.begin(9600);
 }
@@ -82,13 +82,15 @@ void loop()
   delay(10);
   digitalWrite(2, 0);
   // //
+
+  //elke 30 seconden wordt de temperatuur en licht intensiteit doorgestuurd
   if ((millis() - pasteventTemp) > eventtimeTemp)
   {
     sendTemperature();
     pasteventTemp = millis();
     getLightIntensity();
   }
-
+  //elke 50 stappen wordt de gps data doorgestuurd
   if (stappen >= 50)
   {
     stappen = 0;
@@ -156,13 +158,38 @@ void sendTemperature()
   SerialBT.println("temperatuur: " + String(temperatureC));
 }
 
+// #region step counter
+void mpuWriteMsg(int regAdres, int msg)
+{
+  Wire.beginTransmission(MPU);
+  Wire.write(regAdres);
+  Wire.write(msg);
+  Wire.endTransmission(true);
+}
+
+void mpuDataRequest(int regAdres, int bytes)
+{
+  Wire.beginTransmission(MPU);
+  Wire.write(regAdres);
+  Wire.endTransmission(false);
+  Wire.requestFrom(MPU, bytes, true);
+}
+
 void detectSteps()
 {
-  float corner = .12;
+  mpuDataRequest(0x45, 6);
+  GyroY = (Wire.read() << 8 | Wire.read());
+  if (((GyroY & 0x8000) >> 15) == 1)
+  {
+    hoek = (GyroY - 0xffff) / 131.0;
+  }
+  else
+  {
+    hoek = GyroY / 131.0;
+  }
+
+  float corner = 12.22;
   /* Get new sensor events with the readings */
-  sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp);
-  hoek = g.gyro.y;
 
   // code for step counter
   if (hoek < (-1 * corner))
@@ -174,10 +201,10 @@ void detectSteps()
   {
     tussenStap2 = 0;
     stappen += 1;
-    // SerialBT.println("\n");
     SerialBT.println("\nstappen +1");
   }
 }
+//
 
 void getGPSdata()
 {
@@ -231,5 +258,38 @@ void setLedIntensity()
     }
     FastLED.show();
     ledStatus = 0;
+  }
+}
+
+void measureECG(){
+    if ((digitalRead(LOplus) == 1) || (digitalRead(LOmin) == 1))
+  {
+    Serial.println('!');
+    digitalWrite(LED_BUILTIN, 1);
+  }
+  else
+  {
+    heartVal = analogRead(A0);
+    //        Serial.println(heartVal);
+    if (heartVal > 2500)
+    {
+      heartVal = analogRead(A0);
+      if (heartVal < pastHeartVal)
+      {
+        digitalWrite(LED_BUILTIN, 0);
+        if (endTime != startTime)
+        {
+          pulse = 300 / ((startTime - endTime) / (200.0));
+          //          Serial.println(pulse);
+          SerialBT.println("pulse: ", pulse);
+        }
+      }
+      pastHeartVal = heartVal;
+      endTime = startTime;
+    }
+    else
+    {
+      startTime = millis();
+    }
   }
 }
