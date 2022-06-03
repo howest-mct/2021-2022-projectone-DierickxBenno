@@ -47,12 +47,9 @@ def hallo():
 @socketio.on('connect')
 def initial_connection():
     print('A new client connect')
-    mrs = DataRepository.get_most_recent_sensor() #most recent sensor
-    mrl = DataRepository.get_most_recent_location() # most recent location
-    mrv = DataRepository.get_most_recent_speed() # most recent velocity
-    mrsc = DataRepository.get_most_recent_steps()
+    most_recent_data = DataRepository.get_most_recent_data() #most recent data
 
-    socketio.emit('B2F_meest_recente_data', {'data': mrs, 'locatie': mrl, 'snelheid': mrv, 'stappen': mrsc}, broadcast=True)
+    socketio.emit('B2F_meest_recente_data', {'data': most_recent_data}, broadcast=True)
 
 
 # @socketio.on('F2B_switch_light')
@@ -83,11 +80,13 @@ def get_data():
             if 'temperatuur' in data:
                 print('temp measured')
                 temperatuur = float(data[-5:])
-                DataRepository.insert_data(temperatuur, 1)
+                DataRepository.insert_data(temperatuur, 7)
                 socketio.emit('B2F_temperatuur', {'temperatuur': temperatuur})
             
-            elif 'stappen +1' in data:
+            elif 'stappen +' in data:
                 print('step taken')
+                stappen = int(data[9:])
+                DataRepository.insert_data(stappen, 2)
                 socketio.emit('B2F_stap', {'stap': 1})
 
             elif '$GP' in data:
@@ -100,12 +99,23 @@ def get_data():
                         lat = gps_data["latitude"]/100
                         DataRepository.add_location(longi, lat)
 
+                        if gps_data["data-id"] == "$GPRMC":
+                            if gps_data["validity"] == "A": # A betekent valid
+                                snelheid = gps_data["speed"]
+                                DataRepository.insert_data(snelheid, 1)
+
+
+
                     socketio.emit('B2F_GPS', {'GPS': gps_data})
 
             elif 'LI' in data:
                 print("nieuwe licht intensiteit gemeten")
                 licht_intensiteit = float(data[3:])
-                DataRepository.insert_data(licht_intensiteit, 3)
+                DataRepository.insert_data(licht_intensiteit, 6)
+            
+            elif 'pulse' in data:
+                pulse = float(data[7:])
+                DataRepository.insert_data(pulse, 5)
 
 
 def start_thread():

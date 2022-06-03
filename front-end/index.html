@@ -7,7 +7,19 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
   <title>DogBit</title>
+  <!-- #region leaflet-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css"
+    type="text/css" />
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js"></script>
 
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+  <!-- #endregion -->
   <link rel="stylesheet" href="https://use.typekit.net/ecu2cwh.css">
   <link rel="stylesheet" href="style/screen.css" />
 
@@ -22,92 +34,164 @@
 
 <body>
   <!-- side nav -->
-  <div class="o-container">
-    <div class="o-layout">
-      <div class="o-layout__item o-layout--align-start o-nav o-layout--column">
-        <p class="c-title">DogBit</p>
-        <a class="c-button" href="dashboard.html">dashboard</a>
-        <a class="c-button" href="historiek.html">historiek</a>
-        <a class="c-button" href="map.html">map</a>
-        <a class="c-button c-button-last" href="kleur.html">licht</a>
-      </div>
-    </div>
-
-    <div class="o-layout o-content">
-      <div class="o-content-row-one">
-        <article class="c-info_block js-room">
-          <div class="c-room__name">
-            Temperatuur
-          </div>
-          <div class="c-room__icon">
-            <div class="c-icon">
-              <img src="./img/icons8-temperature-96.png">
-            </div>
-            <a target="_blank" href="https://icons8.com/icon/32690/temperature">Temperature</a> icon by <a
-              target="_blank" href="https://icons8.com">Icons8</a>
-          </div>
-          <div class="c-room__control">
-            <div class="c-waarde_holder js-power-btn c-temperatuur" sensor-id="1" eenheid="°C">
-              36,6 C
-            </div>
-          </div>
-        </article>
-        <article class="c-info_block js-room">
-          <div class="c-room__name">
-            stappen
-          </div>
-          <div class="c-room__icon">
-            <div class="c-icon">
-              <img src=".\img\icons8-dog-jump-96.png" alt="">
-            </div>
-            <a target="_blank" href="https://icons8.com/icon/121336/dog-jump">Dog Jump</a> icon by <a target="_blank"
-              href="https://icons8.com">Icons8</a>
-          </div>
-          <div class="c-room__control">
-            <div class="c-waarde_holder js-power-btn c-stappen" type-id="stappen" eenheid="">
-              1000000
-            </div>
-          </div>
-        </article>
-      </div>
-      <div class="o-content-row-two">
-        <article class="c-info_block js-room">
-          <div class="c-room__name">
-            snelheid
-          </div>
-          <div class="c-room__icon">
-            <div class="c-icon">
-              <img src=".\img\icons8-running-away-96.png" alt="">
-            </div>
-            <a target="_blank" href="https://icons8.com/icon/B25oSPrRc3OS/running-away">Running Away</a> icon by
-            <a target="_blank" href="https://icons8.com">Icons8</a>
-          </div>
-          <div class="c-room__control">
-            <div class="c-waarde_holder js-power-btn c-snelheid" eenheid="km/h">
-              100 km/h
-            </div>
-          </div>
-        </article>
-        <article class="c-info_block js-room">
-          <div class="c-room__name">
-            hartslag
-          </div>
-          <div class="c-room__icon">
-            <div class="c-icon">
-              <img src=".\img\icons8-heartbeat-96.png">
-            </div>
-            <a target="_blank" href="https://icons8.com/icon/2g9z5XU1rTyg/heartbeat">Heartbeat</a> icon by
-            <atarget="_blank" href="https://icons8.com">Icons8</a>
-          </div>
-          <div class="c-room__control">
-            <div class="c-waarde_holder js-power-btn c-hartslag" sensor-id="2" eenheid="bpm">
-              999 bpm
-            </div>
-          </div>
-        </article>
-      </div>
+  <div class="o-layout">
+    <div class="o-layout__item o-layout--align-start o-nav o-layout--column">
+      <p class="c-title">DogBit</p>
+      <a class="c-button c-button-top" href="">dashboard</a>
+      <a class="c-button" href="">map</a>
+      <a class="c-button" href="">historiek</a>
+      <a class="c-button c-button-last" href="">licht</a>
     </div>
   </div>
+
+  <!-- content -->
+  <div class="o-container o-layout o-layout--justify-center u-5-of-6">
+    <!-- dashboard -->
+    <div class="o-dashboard c-content-row-one o-layout o-layout--justify-start">
+      <article class="c-info_block js-room ">
+        <div class="c-room__name">
+          Temperatuur
+        </div>
+        <div class="c-room__icon">
+          <div class="c-icon">
+            <img src="./img/icons8-temperature-96.png">
+          </div>
+
+
+        </div>
+        <div class="c-room__control">
+          <div class="c-waarde_holder js-power-btn c-temperatuur" eenheid-id="7">
+            36,6 C
+          </div>
+        </div>
+      </article>
+      <article class="c-info_block js-room ">
+        <div class="c-room__name">
+          stappen
+        </div>
+        <div class="c-room__icon">
+          <div class="c-icon">
+            <img src=".\img\icons8-dog-jump-96.png" alt="">
+          </div>
+
+
+        </div>
+        <div class="c-room__control">
+          <div class="c-waarde_holder js-power-btn c-stappen" eenheid-id="2">
+            1000000
+          </div>
+        </div>
+      </article>
+      <article class="c-info_block js-room">
+        <div class="c-room__name">
+          snelheid
+        </div>
+        <div class="c-room__icon">
+          <div class="c-icon">
+            <img src=".\img\icons8-running-away-96.png" alt="">
+          </div>
+
+        </div>
+        <div class="c-room__control">
+          <div class="c-waarde_holder js-power-btn c-snelheid" eenheid-id="1">
+            100 km/h
+          </div>
+        </div>
+      </article>
+      <article class="c-info_block js-room ">
+        <div class="c-room__name">
+          hartslag
+        </div>
+        <div class="c-room__icon">
+          <div class="c-icon">
+            <img src=".\img\icons8-heartbeat-96.png">
+          </div>
+
+        </div>
+        <div class="c-room__control">
+          <div class="c-waarde_holder js-power-btn c-hartslag" eenheid-id="5">
+            999 bpm
+          </div>
+        </div>
+      </article>
+
+    </div>
+    <!-- map -->
+    <div class="o-layout o-map ">
+      <article class=" js-map c-info_block-map">
+        <div class="c-room__name">
+          locatie
+        </div>
+        <div class="c-room__icon ">
+          <div class="c-icon">
+            <div id="mapid"></div>
+          </div>
+          <div class="c-waarde_holder c-button-dog js-find-dog ">
+            to dog
+          </div>
+        </div>
+      </article>
+    </div>
+    <!-- historiek -->
+    <div class="col-md-12 col-lg-4 o-layout__item o-layout--justify-center o-content">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <td>Categorie</td>
+            <td>Tijd</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1. Create</td>
+            <td>27.05</td>
+          </tr>
+          <tr>
+            <td>2. Code</td>
+            <td>32.73</td>
+          </tr>
+          <tr>
+            <td>3. Connect</td>
+            <td>2.07</td>
+          </tr>
+          <tr>
+            <td>4. Test</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>5. Correct</td>
+            <td>0.01</td>
+          </tr>
+          <tr>
+            <td>6. Deploy</td>
+            <td>0</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Totaal</td>
+            <td>61.94</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <!-- about -->
+    <div>
+      <p>about:</p>
+      <p></p><a target="_blank" href="https://icons8.com/icon/32690/temperature">Temperature</a> icon by <a
+        target="_blank" href="https://icons8.com">Icons8</a></p>
+      <p></p><a target="_blank" href="https://icons8.com/icon/121336/dog-jump">Dog Jump</a> icon by <a target="_blank"
+        href="https://icons8.com">Icons8</a></p>
+      <p></p><a target="_blank" href="https://icons8.com/icon/B25oSPrRc3OS/running-away">Running Away</a></p> icon by
+      <p></p><a target="_blank" href="https://icons8.com">Icons8</a></p>
+      <p></p><a target="_blank" href="https://icons8.com/icon/2g9z5XU1rTyg/heartbeat">Heartbeat</a></p> icon by
+      <p></p><a target="_blank" href="https://icons8.com">Icons8</a></p>
+
+      </p>
+    </div>
+
+  </div>
+
 </body>
 
 </html>

@@ -12,55 +12,29 @@ class DataRepository:
 
     # add _data
     @staticmethod
-    def insert_data(p_waarde, p_sensorid):
-        sql = 'INSERT INTO data (waarde, sensorid, tijdstip) VALUES (%s, %s, current_time())'
-        params = [p_waarde, p_sensorid]
+    def insert_data(p_waarde, p_eenheidid):
+        sql = 'INSERT INTO historiek (waarde, eenheidid, tijdstip) VALUES (%s,%s, current_time());'
+        params = [p_waarde, p_eenheidid]
         Database.execute_sql(sql, params)
 
     @staticmethod
     def add_location(longitude, latitude):
-        sql = "INSERT INTO locatie (latitude, longitude, tijdstip) VALUES (%s,%s, current_time())"
+        sql = "INSERT INTO historiek (waarde, eenheidid, tijdstip) VALUES (%s,3, current_time()); INSERT INTO historiek (waarde, eenheidid, tijdstip) VALUES (%s,4, current_time());"
         params = [latitude, longitude]
         Database.execute_sql(sql, params)
 
-    
-
     #get most recent data
     @staticmethod
-    def get_most_recent_sensor():
+    def get_most_recent_data():
         sql = """
-        SELECT round(d.waarde, 1) as `waarde`, (d.sensorid), s.eenheid from data d 
-JOIN sensor s ON s.sensorid = d.sensorid 
-where dataid in(select max(dataid) from data group by sensorid order by dataid)
-ORDER BY d.tijdstip desc;"""
+        SELECT h.eenheidid, waarde, eenheid from historiek h 
+	    JOIN eenheden e ON h.eenheidid = e.eenheidid
+        where h.historiekid in (select max(historiekid) from historiek group by eenheidid order by historiekid)
+        ORDER BY h.tijdstip desc"""
         data = Database.get_rows(sql)
         return data
 
-    @staticmethod
-    def get_most_recent_location():
-        sql = """
-        Select latitude, longitude from locatie
-        Order BY tijdstip desc
-        LIMIT 1"""
-        data = Database.get_rows(sql)
-        return data
- 
-    @staticmethod
-    def get_most_recent_speed():
-        sql = """
-        Select snelheid from snelheid
-        Order BY tijdstip desc
-        LIMIT 1"""
-        data = Database.get_rows(sql)
-        return data
-
-    @staticmethod
-    def get_most_recent_steps():
-        sql = """
-        Select stappen from activiteit
-        Order BY datum desc
-        LIMIT 1"""
-        data = Database.get_rows(sql)
-        return data
-
-    
+    @staticmethod 
+    def get_total_steps():
+        sql="""SELECT SUM(waarde) AS `waarde` from historiek
+where eenheidid = 2 and date_format(tijdstip, "yyyy-mm-dd") = date_format(now(), "yyyy-mm-dd");"""

@@ -94,7 +94,7 @@ class PA1616s:
 				"validity": status,
 				"latitude": lat,
 				"longitude": longi,
-				"speed km/h": speed,
+				"speed": speed,
 				"datum": datum,
 				"mode": mode
 			}
