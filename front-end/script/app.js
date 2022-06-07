@@ -24,8 +24,12 @@ const init_map = function () {
 
 const setColor = function () {
   const slider = document.querySelector(".c-slider")
+  // ook bij inladen pagina
+  socketio.emit("F2B_set_color", {"hue": slider.value})
+  console.log("new slider value sent")
   slider.addEventListener("click", function () {
-    socketio.emit()
+    socketio.emit("F2B_set_color", {"hue": slider.value})
+    console.log("new slider value sent")
   })
 }
 

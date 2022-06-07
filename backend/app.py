@@ -58,6 +58,9 @@ def initial_connection():
     total_steps = DataRepository.get_total_steps()
     socketio.emit('B2F_stap', {'stap': total_steps})
 
+@socketio.on('F2B_set_color')
+def send_hue(jsonObject):
+    print(jsonObject)
 
 # @socketio.on('F2B_switch_light')
 # def switch_light(data):
@@ -81,8 +84,8 @@ def initial_connection():
 
 def get_data():
     while True:
+        # receive
         data = (DogBit.recv())
-
         if data != None:
             if 'temperatuur' in data:
                 print('temp measured')
@@ -124,6 +127,8 @@ def get_data():
             elif 'pulse' in data:
                 pulse = float(data[7:])
                 DataRepository.insert_data(pulse, 5)
+
+
 
 def start_thread():
     print("**** Starting THREAD ****")
