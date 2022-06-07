@@ -39,18 +39,18 @@
       <p class="c-title">DogBit</p>
       <a class="c-button c-button-top" href="">dashboard</a>
       <a class="c-button" href="">map</a>
-      <a class="c-button" href="">historiek</a>
-      <a class="c-button c-button-last" href="">licht</a>
+      <a class="c-button" href="">statistics</a>
+      <a class="c-button c-button-last" href="">light</a>
     </div>
   </div>
 
   <!-- content -->
-  <div class="o-container o-layout o-layout--justify-center u-5-of-6">
+  <div class="o-container o-layout u-5-of-6 o-layout--justify-start">
     <!-- dashboard -->
     <div class="o-dashboard c-content-row-one o-layout o-layout--justify-start">
-      <article class="c-info_block js-room ">
+      <article class="c-info_block js-room c-mt-clear">
         <div class="c-room__name">
-          Temperatuur
+          temperature
         </div>
         <div class="c-room__icon">
           <div class="c-icon">
@@ -65,16 +65,14 @@
           </div>
         </div>
       </article>
-      <article class="c-info_block js-room ">
+      <article class="c-info_block js-room c-mr-clear c-mt-clear">
         <div class="c-room__name">
-          stappen
+          steps
         </div>
         <div class="c-room__icon">
           <div class="c-icon">
             <img src=".\img\icons8-dog-jump-96.png" alt="">
           </div>
-
-
         </div>
         <div class="c-room__control">
           <div class="c-waarde_holder js-power-btn c-stappen" eenheid-id="2">
@@ -82,9 +80,9 @@
           </div>
         </div>
       </article>
-      <article class="c-info_block js-room">
+      <article class="c-info_block js-room ">
         <div class="c-room__name">
-          snelheid
+          speed
         </div>
         <div class="c-room__icon">
           <div class="c-icon">
@@ -94,13 +92,15 @@
         </div>
         <div class="c-room__control">
           <div class="c-waarde_holder js-power-btn c-snelheid" eenheid-id="1">
-            100 km/h
+
+            99 km/h
+
           </div>
         </div>
       </article>
-      <article class="c-info_block js-room ">
+      <article class="c-info_block js-room c-mr-clear">
         <div class="c-room__name">
-          hartslag
+          heartrate
         </div>
         <div class="c-room__icon">
           <div class="c-icon">
@@ -120,7 +120,7 @@
     <div class="o-layout o-map ">
       <article class=" js-map c-info_block-map">
         <div class="c-room__name">
-          locatie
+          location
         </div>
         <div class="c-room__icon ">
           <div class="c-icon">
@@ -132,60 +132,60 @@
         </div>
       </article>
     </div>
-    <!-- historiek -->
-    <div class="col-md-12 col-lg-4 o-layout__item o-layout--justify-center o-content">
-      <table class="table table-striped table-sm">
-        <thead>
-          <tr>
-            <td>Categorie</td>
-            <td>Tijd</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1. Create</td>
-            <td>27.05</td>
-          </tr>
-          <tr>
-            <td>2. Code</td>
-            <td>32.73</td>
-          </tr>
-          <tr>
-            <td>3. Connect</td>
-            <td>2.07</td>
-          </tr>
-          <tr>
-            <td>4. Test</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>5. Correct</td>
-            <td>0.01</td>
-          </tr>
-          <tr>
-            <td>6. Deploy</td>
-            <td>0</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>Totaal</td>
-            <td>61.94</td>
-          </tr>
-        </tfoot>
-      </table>
+    <!-- graph -->
+    <div class="c-big_block">
+      <div class="c-room__name">statistics</div>
+      <!-- <div class="c-graph-selector">
+        <div class="c-checkbox">
+          <input type="checkbox" id="heartrate" name="heartrate" value="heartrate">
+          <label for="heartrate"> heartrate</label>
+        </div>
+        <div class="c-checkbox">
+          <input type="checkbox" id="temperature" name="temperature" value="temperature">
+          <label for="temperature"> temperature</label>
+        </div>
+        <div class="c-checkbox">
+          <input type="checkbox" id="speed" name="speed" value="speed">
+          <label for="speed"> speed</label>
+        </div>
+        <div class="c-checkbox">
+          <input type="checkbox" id="steps" name="steps" value="steps">
+          <label for="steps"> steps</label>
+        </div>
+      </div> -->
+      <div class="c-graph-background"></div>
     </div>
-    <!-- about -->
-    <div>
+
+    <!-- color picker -->
+    <div class="c-big_block">
+      <div class="c-room__name">light</div>
+      <div class=" o-layout o-layout--row ">
+        <div class="c-color-background o-layout">
+          <div>
+            pick color
+          </div>
+          <div>
+            <input type="range" class="">
+          </div>
+        </div>
+        <div class="c-color-background">
+        </div>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <div class="o-footer">
       <p>about:</p>
-      <p></p><a target="_blank" href="https://icons8.com/icon/32690/temperature">Temperature</a> icon by <a
-        target="_blank" href="https://icons8.com">Icons8</a></p>
-      <p></p><a target="_blank" href="https://icons8.com/icon/121336/dog-jump">Dog Jump</a> icon by <a target="_blank"
-        href="https://icons8.com">Icons8</a></p>
-      <p></p><a target="_blank" href="https://icons8.com/icon/B25oSPrRc3OS/running-away">Running Away</a></p> icon by
-      <p></p><a target="_blank" href="https://icons8.com">Icons8</a></p>
-      <p></p><a target="_blank" href="https://icons8.com/icon/2g9z5XU1rTyg/heartbeat">Heartbeat</a></p> icon by
-      <p></p><a target="_blank" href="https://icons8.com">Icons8</a></p>
+      <p><a target="_blank" href="https://icons8.com/icon/32690/temperature">Temperature</a> icon by <a target="_blank"
+          href="https://icons8.com">Icons8</a></p>
+      <p><a target="_blank" href="https://icons8.com/icon/121336/dog-jump">Dog Jump</a> icon by <a target="_blank"
+          href="https://icons8.com">Icons8</a></p>
+      <p><a target="_blank" href="https://icons8.com/icon/B25oSPrRc3OS/running-away">Running Away</a> icon by
+        <a target="_blank" href="https://icons8.com">Icons8</a>
+      </p>
+      <p><a target="_blank" href="https://icons8.com/icon/2g9z5XU1rTyg/heartbeat">Heartbeat</a> icon by
+        <a target="_blank" href="https://icons8.com">Icons8</a>
+      </p>
 
       </p>
     </div>
