@@ -11,19 +11,24 @@ from repositories.DataRepository import DataRepository
 from klasses.SerCom import SerCom
 from klasses.BTconfig import BTconfig
 from klasses.PA1616s import PA1616s
+from klasses.LCD import LCDcontrol
 
 from selenium import webdriver
 
 # from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
+scherm = LCDcontrol(17, 5, 6, 13, 19, 26, 21, 20, 27, 22)
+scherm.init_screen([1,1,0], [1,0,0])
+scherm.show_ip()
 
 channel = "hci0"
 mac = "78:21:84:7D:85:BE"
 
 BT = BTconfig(channel, mac)
+time.sleep(1)
 BT.open_connection()
 
-time.sleep(1)
+time.sleep(2)
 DogBit = SerCom("rfcomm0")
 
 # Code voor Flask
@@ -50,6 +55,8 @@ def initial_connection():
     most_recent_data = DataRepository.get_most_recent_data() #most recent data
 
     socketio.emit('B2F_meest_recente_data', {'data': most_recent_data}, broadcast=True)
+    total_steps = DataRepository.get_total_steps()
+    socketio.emit('B2F_stap', {'stap': total_steps})
 
 
 # @socketio.on('F2B_switch_light')
@@ -87,12 +94,13 @@ def get_data():
                 print('step taken')
                 stappen = int(data[9:])
                 DataRepository.insert_data(stappen, 2)
-                socketio.emit('B2F_stap', {'stap': 1})
+                total_steps = DataRepository.get_total_steps()
+                socketio.emit('B2F_stap', {'stap': total_steps})
 
             elif '$GP' in data:
                 gps_data = PA1616s.getInfo(data)
                 print('GPS data received')
-
+                
                 if gps_data is not None:
                     if gps_data["data-id"] == "$GPGGA" or gps_data["data-id"] == "$GPRMC":
                         longi = gps_data["longitude"]/100
@@ -106,7 +114,7 @@ def get_data():
 
 
 
-                    socketio.emit('B2F_GPS', {'GPS': gps_data})
+                    # socketio.emit('B2F_GPS', {'GPS': gps_data})
 
             elif 'LI' in data:
                 print("nieuwe licht intensiteit gemeten")
@@ -117,41 +125,10 @@ def get_data():
                 pulse = float(data[7:])
                 DataRepository.insert_data(pulse, 5)
 
-
 def start_thread():
     print("**** Starting THREAD ****")
     thread = threading.Thread(target=get_data, args=(), daemon=True)
     thread.start()
-
-
-def start_chrome_kiosk():
-    import os
-
-    os.environ['DISPLAY'] = ':0.0'
-    options = webdriver.ChromeOptions()
-    # options.headless = True
-    # options.add_argument("--window-size=1920,1080")
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36")
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--allow-running-insecure-content')
-    options.add_argument("--disable-extensions")
-    # options.add_argument("--proxy-server='direct://'")
-    options.add_argument("--proxy-bypass-list=*")
-    options.add_argument("--start-maximized")
-    options.add_argument('--disable-gpu')
-    # options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--kiosk')
-    # chrome_options.add_argument('--no-sandbox')       
-    # options.add_argument("disable-infobars")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option('useAutomationExtension', False)
-
-    driver = webdriver.Chrome(options=options)
-    driver.get("http://localhost")
-    while True:
-        pass
-
 
 def start_chrome_thread():
     print("**** Starting CHROME ****")
@@ -161,7 +138,7 @@ def start_chrome_thread():
 if __name__ == '__main__':
     try:
         start_thread()
-        start_chrome_thread()
+        # start_chrome_thread()
         print("**** Starting APP ****")
         socketio.run(app, debug=False, host='0.0.0.0')
 

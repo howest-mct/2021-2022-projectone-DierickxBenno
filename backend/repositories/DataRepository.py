@@ -38,3 +38,6 @@ class DataRepository:
     def get_total_steps():
         sql="""SELECT SUM(waarde) AS `waarde` from historiek
 where eenheidid = 2 and date_format(tijdstip, "yyyy-mm-dd") = date_format(now(), "yyyy-mm-dd");"""
+        data = Database.get_one_row(sql)
+        return data
+        
