@@ -61,6 +61,7 @@ def initial_connection():
 @socketio.on('F2B_set_color')
 def send_hue(jsonObject):
     print(jsonObject)
+    DogBit.sendBT(f"hue: {jsonObject['hue']}")
 
 # @socketio.on('F2B_switch_light')
 # def switch_light(data):
