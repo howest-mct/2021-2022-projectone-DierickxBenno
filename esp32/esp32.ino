@@ -1,6 +1,4 @@
 // #include <WiFi.h>
-// #include <Adafruit_Sensor.h>
-// #include <Adafruit_MPU6050.h>
 #include <Wire.h>
 #include <OneWire.h>
 #include <BluetoothSerial.h>
@@ -12,6 +10,8 @@ CRGBArray<numLeds> leds;
 
 byte i; // led intensity
 byte pinWS2812 = 13;
+int hue = 360;
+String recvd_hue = "";
 
 // timed events
 // measure temperature/light intensity
@@ -83,14 +83,14 @@ void loop()
   digitalWrite(2, 0);
   // //
 
-  //elke 30 seconden wordt de temperatuur en licht intensiteit doorgestuurd
+  // elke 30 seconden wordt de temperatuur en licht intensiteit doorgestuurd
   if ((millis() - pasteventTemp) > eventtimeTemp)
   {
     sendTemperature();
     pasteventTemp = millis();
     getLightIntensity();
   }
-  //elke 50 stappen wordt de gps data doorgestuurd
+  // elke 50 stappen wordt de gps data doorgestuurd
   if (stappen >= 50)
   {
     stappen = 0;
@@ -100,6 +100,7 @@ void loop()
 
   setLedIntensity();
   detectSteps();
+  setLedColor();
 }
 
 void sendTemperature()
@@ -233,7 +234,7 @@ void getLightIntensity()
 void setLedIntensity()
 {
   lightValue = ((analogRead(ldrPin) / 4095.0) * 100.0);
-  Serial.println(analogRead(ldrPin));
+  // Serial.println(analogRead(ldrPin));
 
   if (lightValue <= 75)
   {
@@ -243,7 +244,7 @@ void setLedIntensity()
       i = ((100 - lightValue) / 100) * 255;
       for (byte j = 0; j < numLeds; j++)
       {
-        leds[j] = CRGB(i, i, i);
+        leds[i] = CHSV(hue, 255, 255);
       }
       FastLED.show();
       ledStatus = 1;
@@ -261,11 +262,11 @@ void setLedIntensity()
   }
 }
 
-void measureECG(){
-    if ((digitalRead(LOplus) == 1) || (digitalRead(LOmin) == 1))
+void measureECG()
+{
+  if ((digitalRead(LOplus) == 1) || (digitalRead(LOmin) == 1))
   {
     Serial.println('!');
-    digitalWrite(LED_BUILTIN, 1);
   }
   else
   {
@@ -276,12 +277,11 @@ void measureECG(){
       heartVal = analogRead(A0);
       if (heartVal < pastHeartVal)
       {
-        digitalWrite(LED_BUILTIN, 0);
         if (endTime != startTime)
         {
           pulse = 300 / ((startTime - endTime) / (200.0));
           //          Serial.println(pulse);
-          SerialBT.println("pulse: ", pulse);
+          SerialBT.println("pulse: " + String(pulse));
         }
       }
       pastHeartVal = heartVal;
@@ -292,4 +292,26 @@ void measureECG(){
       startTime = millis();
     }
   }
+}
+
+void setLedColor()
+{
+
+  while (SerialBT.available())
+  {
+    // Serial.println("ontvangen");
+    // Serial.write(SerialBT.read());
+    char c = SerialBT.read();
+    recvd_hue += c;
+    // Serial.write(c);
+  }
+  if (recvd_hue != "")
+  {
+    for (byte i = 5; i <= 9; i++)
+    {
+      Serial.println(recvd_hue[i]);
+    }
+    Serial.println(recvd_hue);
+  }
+  recvd_hue = "";
 }
