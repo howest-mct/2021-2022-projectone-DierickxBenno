@@ -22,7 +22,18 @@ const init_map = function () {
   // L.tileLayer(provider, { attribution: copyright }).addTo(map);
 };
 
-const listenToUI = function () {};
+const setColor = function () {
+  const slider = document.querySelector(".c-slider")
+  slider.addEventListener("click", function () {
+    socketio.emit()
+  })
+}
+
+const listenToUI = function () {
+  // listen to slider
+  setColor();
+
+};
 
 const listenToSocket = function () {
   socketio.on("B2F_temperatuur", function (jsonObject) {
@@ -104,8 +115,7 @@ const listenToSocket = function () {
     console.log("3")
     map.panTo(new L.LatLng(lat, longi)); 
   })
-}
-;
+};
 
 document.addEventListener("DOMContentLoaded", function () {
   console.info("DOM geladen");
