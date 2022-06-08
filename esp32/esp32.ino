@@ -12,6 +12,7 @@ byte i; // led intensity
 byte pinWS2812 = 13;
 int hue = 360;
 String recvd_hue = "";
+String strHue;
 
 // timed events
 // measure temperature/light intensity
@@ -309,9 +310,13 @@ void setLedColor()
   {
     for (byte i = 5; i <= 9; i++)
     {
-      Serial.println(recvd_hue[i]);
+      strHue += recvd_hue[i];
+      Serial.println(strHue);
+      // Serial.println(recvd_hue[i]);
     }
-    Serial.println(recvd_hue);
+    Serial.print('.');
+    hue = strHue.toInt();
+    Serial.println('hue is: ' + String(hue));
   }
   recvd_hue = "";
 }
