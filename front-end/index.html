@@ -20,9 +20,11 @@
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
   <!-- #endregion -->
+
   <link rel="stylesheet" href="https://use.typekit.net/ecu2cwh.css">
   <link rel="stylesheet" href="style/screen.css" />
 
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"
     integrity="sha384-LzhRnpGmQP+lOvWruF/lgkcqD+WDVt9fU3H4BWmwP5u5LTmkUGafMcpZKNObVMLU"
     crossorigin="anonymous"></script>
@@ -135,25 +137,9 @@
     <!-- graph -->
     <div class="c-big_block">
       <div class="c-room__name">statistics</div>
-      <!-- <div class="c-graph-selector">
-        <div class="c-checkbox">
-          <input type="checkbox" id="heartrate" name="heartrate" value="heartrate">
-          <label for="heartrate"> heartrate</label>
-        </div>
-        <div class="c-checkbox">
-          <input type="checkbox" id="temperature" name="temperature" value="temperature">
-          <label for="temperature"> temperature</label>
-        </div>
-        <div class="c-checkbox">
-          <input type="checkbox" id="speed" name="speed" value="speed">
-          <label for="speed"> speed</label>
-        </div>
-        <div class="c-checkbox">
-          <input type="checkbox" id="steps" name="steps" value="steps">
-          <label for="steps"> steps</label>
-        </div>
-      </div> -->
-      <div class="c-graph-background"></div>
+      <div class="c-graph-background">
+        <div class="c-graph"></div>
+      </div>
     </div>
 
     <!-- color picker -->

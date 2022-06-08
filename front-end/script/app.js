@@ -121,11 +121,32 @@ const listenToSocket = function () {
   })
 };
 
+const show_graph = function () {
+  var options = {
+    chart: {
+      type: 'line'
+    },
+    series: [{
+      name: 'sales',
+      data: []
+    }],
+    xaxis: {
+      categories: []
+    }
+  }
+  
+  var chart = new ApexCharts(document.querySelector(".c-graph"), options);
+  console.log(document.querySelector(".c-graph"))
+  
+  chart.render();
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   console.info("DOM geladen");
   listenToUI();
   listenToSocket();
   init_map();
+  show_graph();
 
 });
 
