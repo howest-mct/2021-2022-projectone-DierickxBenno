@@ -2,7 +2,7 @@ import time
 from RPi import GPIO
 from helpers.klasseknop import Button
 import threading
-print("zit just")
+# print(__name__, time.now())
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, send
 from flask import Flask, jsonify
@@ -52,36 +52,21 @@ def hallo():
 @socketio.on('connect')
 def initial_connection():
     print('A new client connect')
+    #meestrecente data doorsturen
     most_recent_data = DataRepository.get_most_recent_data() #most recent data
-
     socketio.emit('B2F_meest_recente_data', {'data': most_recent_data}, broadcast=True)
+    #totaal aantal stappen, vandaag doorsturen
     total_steps = DataRepository.get_total_steps()
     socketio.emit('B2F_stap', {'stap': total_steps})
+    #historiek
+    historiek = DataRepository.get_historiek()
+    # print(historiek)
+    socketio.emit('B2F_historiek', {"historiek": historiek})
 
 @socketio.on('F2B_set_color')
 def send_hue(jsonObject):
     print(jsonObject)
     DogBit.sendBT(f"hue: {jsonObject['hue']}")
-
-# @socketio.on('F2B_switch_light')
-# def switch_light(data):
-#     # Ophalen van de data
-#     lamp_id = data['lamp_id']
-#     new_status = data['new_status']
-#     print(f"Lamp {lamp_id} wordt geswitcht naar {new_status}")
-
-#     # Stel de status in op de DB
-#     res = DataRepository.update_status_lamp(lamp_id, new_status)
-
-#     # Vraag de (nieuwe) status op van de lamp en stuur deze naar de frontend.
-#     data = DataRepository.read_status_lamp_by_id(lamp_id)
-#     socketio.emit('B2F_verandering_lamp', {'lamp': data}, broadcast=True)
-
-#     # Indien het om de lamp van de TV kamer gaat, dan moeten we ook de hardware aansturen.
-#     if lamp_id == '3':
-#         print(f"TV kamer moet switchen naar {new_status} !")
-#         GPIO.output(ledPin, new_status)
-
 
 def get_data():
     while True:
@@ -129,22 +114,14 @@ def get_data():
                 pulse = float(data[7:])
                 DataRepository.insert_data(pulse, 5)
 
-
-
 def start_thread():
     print("**** Starting THREAD ****")
     thread = threading.Thread(target=get_data, args=(), daemon=True)
     thread.start()
 
-def start_chrome_thread():
-    print("**** Starting CHROME ****")
-    chromeThread = threading.Thread(target=start_chrome_kiosk, args=(), daemon=True)
-    chromeThread.start()
-
 if __name__ == '__main__':
     try:
         start_thread()
-        # start_chrome_thread()
         print("**** Starting APP ****")
         socketio.run(app, debug=False, host='0.0.0.0')
 

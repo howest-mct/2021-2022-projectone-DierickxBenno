@@ -37,14 +37,15 @@ class DataRepository:
     @staticmethod 
     def get_total_steps():
         sql="""SELECT SUM(waarde) AS `waarde` from historiek
-where eenheidid = 2 and date_format(tijdstip, "yyyy-mm-dd") = date_format(now(), "yyyy-mm-dd");"""
+        where eenheidid = 2 and date_format(tijdstip, "yyyy-mm-dd") = date_format(now(), "yyyy-mm-dd");"""
         data = Database.get_one_row(sql)
         return data
     
     #get historiek waarden
     def get_historiek():
-        sql = """SELECT h.eenheidid, waarde, tijdstip, eenheid FROM historiek h
- join eenheden e on e.eenheidid = h.eenheidid
- where h.eenheidid in (1,5,6,7)
-order by historiekid asc"""
+        sql = """SELECT h.eenheidid, waarde, concat((date_format(tijdstip, "%d/%m/%Y"))) as `tijdstip`, eenheid FROM historiek h
+        join eenheden e on e.eenheidid = h.eenheidid
+        where h.eenheidid in (1,5,6,7)
+        order by historiekid asc"""
         data = Database.get_rows(sql)
+        return data

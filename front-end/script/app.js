@@ -3,6 +3,8 @@
 const lanIP = `${window.location.hostname}:5000`;
 const socketio = io(`http://${lanIP}`);
 const provider = "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
+// zo kunnen we options aanpassen via socketio
+var options;
 // const copyright= '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>';
 
   let map, layergroup;
@@ -119,24 +121,97 @@ const listenToSocket = function () {
     console.log("3")
     map.panTo(new L.LatLng(lat, longi)); 
   })
+  socketio.on("B2F_historiek", function (jsonObject) {
+    const historiek = jsonObject.historiek;
+    console.log(historiek)
+    console.log(options)
+    // options.labels = [""]
+    for (const el of historiek){
+      options.labels.push((el.tijdstip))
+      if (el.eenheidid == 1){
+        
+      }
+    }
+    // {eenheidid: 5, waarde: '33', tijdstip: '03/06/2022', eenheid: 'bpm'}
+    // show_graph();
+  })
 };
 
 const show_graph = function () {
-  var options = {
-    chart: {
-      type: 'line'
-    },
+     
+  options = {
     series: [{
-      name: 'sales',
-      data: []
-    }],
-    xaxis: {
-      categories: []
+    name: 'stappen',
+    type: 'column',
+    data: []
+  }, {
+    name: 'speed',
+    type: 'area',
+    data: []
+  }, {
+    name: 'temperature',
+    type: 'line',
+    data: []
+  }, {
+    name: 'heartrate',
+    type: 'line',
+    data: []
+  }],
+    chart: {
+    height: '350px',
+    type: 'line',
+    stacked: false,
+  },
+  stroke: {
+    width: [0, 2, 5],
+    curve: 'smooth'
+  },
+  plotOptions: {
+    bar: {
+      columnWidth: '50%'
+    }
+  },
+  
+  fill: {
+    opacity: [0.85, 0.25, 1],
+    gradient: {
+      inverseColors: false,
+      shade: 'light',
+      type: "vertical",
+      opacityFrom: 0.85,
+      opacityTo: 0.55,
+      stops: [0, 100, 100, 100]
+    }
+  },
+  labels: [],
+  markers: {
+    size: 0
+  },
+  xaxis: {
+    type: 'datetime'
+  },
+  yaxis: {
+    title: {
+      text: '',
+    },
+    min: 0
+  },
+  tooltip: {
+    shared: true,
+    intersect: false,
+    y: {
+      formatter: function (y) {
+        if (typeof y !== "undefined") {
+          return y.toFixed(0) + " eenheid";
+        }
+        return y;
+  
+      }
     }
   }
+  };
   
   var chart = new ApexCharts(document.querySelector(".c-graph"), options);
-  console.log(document.querySelector(".c-graph"))
   
   chart.render();
 }
@@ -144,9 +219,8 @@ const show_graph = function () {
 document.addEventListener("DOMContentLoaded", function () {
   console.info("DOM geladen");
   listenToUI();
-  listenToSocket();
   init_map();
   show_graph();
-
+  listenToSocket();
 });
 
