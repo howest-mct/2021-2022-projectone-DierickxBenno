@@ -21,6 +21,7 @@ html {
   margin: 0;
   padding: 0;
   font-family: co-text;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -392,9 +393,25 @@ body.u-active {
   margin-top: 32px;
 }
 
+.c-shutdown-button {
+  padding-left: 8px;
+  padding-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.c-power-text {
+  padding-left: 8px;
+}
+
 .c-button:hover {
   background-color: #fff;
   color: #2655FB;
+}
+
+
+.c-button:hover svg .c-power-icon:last-child {
+  fill: #2655FB;
 }
 
 

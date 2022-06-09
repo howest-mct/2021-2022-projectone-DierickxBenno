@@ -29,7 +29,7 @@ const setColor = function () {
   // ook bij inladen pagina
   socketio.emit("F2B_set_color", {"hue": slider.value})
   console.log("new slider value sent")
-  slider.addEventListener("click", function () {
+  slider.addEventListener("change", function () {
     socketio.emit("F2B_set_color", {"hue": slider.value})
     console.log("new slider value sent")
   })

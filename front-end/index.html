@@ -39,17 +39,26 @@
   <div class="o-layout">
     <div class="o-layout__item o-layout--align-start o-nav o-layout--column">
       <p class="c-title">DogBit</p>
-      <a class="c-button c-button-top" href="">dashboard</a>
-      <a class="c-button" href="">map</a>
-      <a class="c-button" href="">statistics</a>
-      <a class="c-button c-button-last" href="">light</a>
+      <a class="c-button c-button-top" href="#dashboard">dashboard</a>
+      <a class="c-button" href="#map">map</a>
+      <a class="c-button" href="#statistics">statistics</a>
+      <a class="c-button" href="#color-picker">light</a>
+      <div class="c-button c-button-last c-shutdown-button">
+        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 24 24" width="36px" fill="#fff">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path class="c-power-icon"
+            d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z" />
+        </svg>
+        <div class="c-power-text">shutdown</div>
+      </div>
+
     </div>
   </div>
 
   <!-- content -->
   <div class="o-container o-layout u-5-of-6 o-layout--justify-start">
     <!-- dashboard -->
-    <div class="o-dashboard c-content-row-one o-layout o-layout--justify-start">
+    <div class="o-dashboard c-content-row-one o-layout o-layout--justify-start" id="dashboard">
       <article class="c-info_block js-room c-mt-clear">
         <div class="c-room__name">
           temperature
@@ -119,7 +128,7 @@
 
     </div>
     <!-- map -->
-    <div class="o-layout o-map ">
+    <div class="o-layout o-map" id="map">
       <article class=" js-map c-info_block-map">
         <div class="c-room__name">
           location
@@ -135,7 +144,7 @@
       </article>
     </div>
     <!-- graph -->
-    <div class="c-big_block">
+    <div class="c-big_block" id="statistics">
       <div class="c-room__name">statistics</div>
       <div class="c-graph-background">
         <div class="c-graph"></div>
@@ -143,7 +152,7 @@
     </div>
 
     <!-- color picker -->
-    <div class="c-big_block">
+    <div class="c-big_block" id="color-picker">
       <div class="c-room__name">light</div>
       <div class=" o-layout o-layout--row ">
         <div class="c-color-background o-layout">
@@ -151,7 +160,7 @@
             pick color
           </div>
           <div>
-            <input type="range" class="c-slider" min="0" max="360">
+            <input type="range" class="c-slider" min="0" max="255">
           </div>
         </div>
         <div class="c-color-background">
@@ -162,18 +171,11 @@
     <!-- footer -->
     <div class="o-footer">
       <p>about:</p>
-      <p><a target="_blank" href="https://icons8.com/icon/32690/temperature">Temperature</a> icon by <a target="_blank"
-          href="https://icons8.com">Icons8</a></p>
-      <p><a target="_blank" href="https://icons8.com/icon/121336/dog-jump">Dog Jump</a> icon by <a target="_blank"
-          href="https://icons8.com">Icons8</a></p>
-      <p><a target="_blank" href="https://icons8.com/icon/B25oSPrRc3OS/running-away">Running Away</a> icon by
-        <a target="_blank" href="https://icons8.com">Icons8</a>
-      </p>
-      <p><a target="_blank" href="https://icons8.com/icon/2g9z5XU1rTyg/heartbeat">Heartbeat</a> icon by
-        <a target="_blank" href="https://icons8.com">Icons8</a>
-      </p>
-
-      </p>
+      <p><a target="_blank" href="https://icons8.com/icon/32690/temperature">Temperature</a></p>
+      <p><a target="_blank" href="https://icons8.com/icon/121336/dog-jump">Dog Jump</a></p>
+      <p><a target="_blank" href="https://icons8.com/icon/B25oSPrRc3OS/running-away">Running Away</a></p>
+      <p><a target="_blank" href="https://icons8.com/icon/2g9z5XU1rTyg/heartbeat">Heartbeat</a></p>
+      <p>Icons By <a target="_blank" href="https://icons8.com">Icons8</a></p>
     </div>
 
   </div>
