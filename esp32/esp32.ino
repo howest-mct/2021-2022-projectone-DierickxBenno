@@ -245,7 +245,8 @@ void setLedIntensity()
       i = ((100 - lightValue) / 100) * 255;
       for (byte j = 0; j < numLeds; j++)
       {
-        leds[i] = CHSV(hue, 255, 255);
+        Serial.println(hue);
+        leds[j] = CHSV(hue, 255, i);
       }
       FastLED.show();
       ledStatus = 1;
@@ -256,11 +257,39 @@ void setLedIntensity()
     pastLightValue = 85.0;
     for (byte j = 0; j < numLeds; j++)
     {
-      leds[j] = CRGB(0, 0, 0);
+      leds[j] = CHSV(0, 0, 0);
+      ;
     }
     FastLED.show();
     ledStatus = 0;
   }
+}
+
+void setLedColor()
+{
+
+  while (SerialBT.available())
+  {
+    // Serial.println("ontvangen");
+    // Serial.write(SerialBT.read());
+    pastLightValue = -1000;
+    char c = SerialBT.read();
+    recvd_hue += c;
+    // Serial.write(c);
+  }
+  if (recvd_hue != "")
+  {
+    strHue = "";
+    for (byte i = 5; i <= 9; i++)
+    {
+      strHue += recvd_hue[i];
+      hue = strHue.toInt();
+      // Serial.println("strhue " + strHue);
+      // Serial.println("hue " + String(hue));
+      // Serial.println(recvd_hue[i]);
+    }
+  }
+  recvd_hue = "";
 }
 
 void measureECG()
@@ -293,30 +322,4 @@ void measureECG()
       startTime = millis();
     }
   }
-}
-
-void setLedColor()
-{
-
-  while (SerialBT.available())
-  {
-    // Serial.println("ontvangen");
-    // Serial.write(SerialBT.read());
-    char c = SerialBT.read();
-    recvd_hue += c;
-    // Serial.write(c);
-  }
-  if (recvd_hue != "")
-  {
-    for (byte i = 5; i <= 9; i++)
-    {
-      strHue += recvd_hue[i];
-      Serial.println(strHue);
-      // Serial.println(recvd_hue[i]);
-    }
-    Serial.print('.');
-    hue = strHue.toInt();
-    Serial.println('hue is: ' + String(hue));
-  }
-  recvd_hue = "";
 }
