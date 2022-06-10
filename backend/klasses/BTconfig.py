@@ -7,7 +7,7 @@ class BTconfig:
 	
 	def open_connection(self):
 		cmd = f"sudo rfcomm connect {self.channel} {self.mac_adres} &"
-		print(os.system(cmd))
+		os.system(cmd)
 	
 	def close_connection(self):
 		cmd = f"sudo rfcomm release {self.channel} {self.mac_adres} &"

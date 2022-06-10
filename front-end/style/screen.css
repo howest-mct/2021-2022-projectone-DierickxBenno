@@ -344,12 +344,6 @@ body.u-active {
   border-radius: 0 19px;
 }
 
-
-
-
-
-
-
 .c-room__name {
   font-size: 1.25em;
   font-weight: 100;
@@ -423,9 +417,11 @@ body.u-active {
 
 .c-pick-color-title {
   background-color: #38434a;
+  margin: 0;
   color: white;
   font-size: 24px;
-
+  width: 240px;
+  padding: 8px 141px;
   border-radius: 0 19px;
 }
 

@@ -31,13 +31,15 @@ while 1:
         BT = BTconfig(channel, mac)
         time.sleep(2)
         BT.open_connection()
-        
-    except KeyboardInterrupt:
+        time.sleep(2)
+        DogBit = SerCom("rfcomm0")
         break
+        
+    except:
+        pass
 
 
-time.sleep(2)
-DogBit = SerCom("rfcomm0")
+
 
 # Code voor Flask
 app = Flask(__name__)
