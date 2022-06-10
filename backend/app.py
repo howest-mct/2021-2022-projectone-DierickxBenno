@@ -25,19 +25,24 @@ scherm.show_ip()
 channel = "hci0"
 mac = "78:21:84:7D:85:BE"
 
-print('connecting to BT...')
-while 1:
-    try:
-        BT = BTconfig(channel, mac)
-        time.sleep(2)
-        BT.open_connection()
-        time.sleep(2)
-        DogBit = SerCom("rfcomm0")
-        break
-        
-    except:
-        pass
 
+
+def connect_to_esp32():
+    print('connecting to BT...')
+    BT = BTconfig(channel, mac)
+    time.sleep(2)
+    BT.open_connection()
+    time.sleep(2)
+    while 1:
+        try:
+            DogBit = SerCom("rfcomm0")
+            break
+            
+        except:
+            pass
+    return DogBit
+
+DogBit = connect_to_esp32()
 
 
 

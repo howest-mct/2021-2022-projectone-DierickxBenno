@@ -423,6 +423,7 @@ body.u-active {
   width: 240px;
   padding: 8px 141px;
   border-radius: 0 19px;
+  align-self: center;
 }
 
 .c-button:hover svg .c-power-icon:last-child {
