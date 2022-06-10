@@ -1,5 +1,6 @@
 "use strict";
 
+let lat, longi
 const lanIP = `${window.location.hostname}:5000`;
 const socketio = io(`http://${lanIP}`);
 const provider = "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
@@ -7,13 +8,13 @@ const provider = "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
 var options;
 // const copyright= '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>';
 
-  let map, layergroup;
+let map, layergroup;
 
 const listenToPwr = function () {
   const pwrBtn = document.querySelector(".c-shutdown-button")
   pwrBtn.addEventListener("click", function () {
-    socketio.emit("F2B_poweroff", {'power': 0})
-    console.log("turn off")
+  socketio.emit("F2B_poweroff", {'power': 0})
+  console.log("turn off")
   })
 }
 
@@ -43,10 +44,18 @@ const setColor = function () {
   })
 }
 
+const listenToCenterDog = function () {
+  const btnDog = document.querySelector(".c-button-dog")
+  btnDog.addEventListener("click", function () {
+    map.panTo(new L.LatLng(lat, longi)); 
+  })
+}
+
 const listenToUI = function () {
   // listen to slider
   setColor();
   listenToPwr();
+  listenToCenterDog();
 };
 
 const listenToSocket = function () {
@@ -62,10 +71,10 @@ const listenToSocket = function () {
     if (data != null){
       const dataId = data["data-id"]
       if (dataId == "$GPRMC"){
-        const lat = data.latitude/100
-        const longi = data.longitude/100
+        lat = data.latitude/100
+        longi = data.longitude/100
         const speed = data.speed
-        map.panTo(new L.LatLng(lat, longi));
+        // map.panTo(new L.LatLng(lat, longi));
         const waardeHolders = document.querySelectorAll(".c-waarde_holder")
         for (const waarde of waardeHolders){
           if (waarde.getAttribute("eenheid-id") == 1){
@@ -75,9 +84,9 @@ const listenToSocket = function () {
 
       }
       else if(dataId == "$GPGGA"){
-        const lat = data.latitude/100
-        const longi = data.longitude/100 
-        map.panTo(new L.LatLng(lat, longi));
+        lat = data.latitude/100
+        longi = data.longitude/100 
+        // map.panTo(new L.LatLng(lat, longi));
       }
     
   }})
@@ -131,8 +140,8 @@ const listenToSocket = function () {
     }
     
     // set location
-    const lat = jsonObject.data[3].waarde/100
-    const longi = jsonObject.data[4].waarde/100
+    lat = jsonObject.data[3].waarde/100
+    longi = jsonObject.data[4].waarde/100
     console.log("3")
     map.panTo(new L.LatLng(lat, longi)); 
   })
