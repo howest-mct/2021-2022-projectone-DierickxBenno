@@ -64,10 +64,14 @@ def initial_connection():
     # print(historiek)
     socketio.emit('B2F_historiek', {"historiek": historiek})
 
+    hue = DataRepository.get_hue()
+    socketio.emit('B2F_curr_hue', {"hue": hue})
+
 @socketio.on('F2B_set_color')
 def send_hue(jsonObject):
-    DataRepository.set_hue(jsonObject['hue'])
+    data = DataRepository.set_hue(jsonObject['hue'])
     DogBit.sendBT(f"hue: {jsonObject['hue']}")
+    socketio.emit('B2F_curr_hue', {"hue": jsonObject['hue']})
 
 @socketio.on('F2B_poweroff')
 def poweroff(par):

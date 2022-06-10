@@ -44,23 +44,24 @@ class DataRepository:
     @staticmethod
     def set_hue(p_hue):
         sql  = """
-        SELECT * FROM Projectone.actie;
         UPDATE historiek 
-        set waarde = %s
-        set tijdstip = now()
+        set waarde = %s,
+        tijdstip = now()
         where actieid = 5"""
         params = [p_hue]
         data = Database.execute_sql(sql, params)
         return data
     
     @staticmethod
-    def get_hue()
+    def get_hue():
         sql = "SELECT waarde FROM historiek WHERE actieid = 5"
+        data = Database.get_one_row(sql)
+        return data
 
     #get historiek waarden
     @staticmethod
     def get_historiek():
-        sql = """SELECT h.eenheidid, waarde, concat((date_format(tijdstip, "%d/%m/%Y"))) as `tijdstip`, eenheid FROM historiek h
+        sql = """SELECT h.eenheidid, h.actieid,waarde, concat((date_format(tijdstip, "%d/%m/%Y"))) as `tijdstip`, eenheid FROM historiek h
         join eenheden e on e.eenheidid = h.eenheidid
         where h.eenheidid in (1,5,6,7)
         order by historiekid asc"""

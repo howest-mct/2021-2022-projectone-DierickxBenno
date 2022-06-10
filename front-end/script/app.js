@@ -93,6 +93,11 @@ const listenToSocket = function () {
     }
   })
 
+  socketio.on("B2F_curr_hue", function (jsonObject) {
+    console.log(jsonObject.hue)
+    document.querySelector(".c-slider").value = jsonObject.hue
+  })
+
   socketio.on("B2F_meest_recente_data",function (jsonObject) {
     // console.log(jsonObject)
     const waardes = document.querySelectorAll(".c-waarde_holder");
@@ -120,6 +125,8 @@ const listenToSocket = function () {
           waarde.innerHTML = i.waarde+" "+i.eenheid
         }
         
+
+        
     }
     }
     
@@ -129,6 +136,7 @@ const listenToSocket = function () {
     console.log("3")
     map.panTo(new L.LatLng(lat, longi)); 
   })
+
   socketio.on("B2F_historiek", function (jsonObject) {
     const historiek = jsonObject.historiek;
     console.log(historiek)
