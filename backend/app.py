@@ -14,6 +14,7 @@ from klasses.PA1616s import PA1616s
 from klasses.LCD import LCDcontrol
 
 from selenium import webdriver
+import os
 
 # from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
@@ -65,8 +66,12 @@ def initial_connection():
 
 @socketio.on('F2B_set_color')
 def send_hue(jsonObject):
-    print(jsonObject)
+    DataRepository.set_hue(jsonObject['hue'])
     DogBit.sendBT(f"hue: {jsonObject['hue']}")
+
+@socketio.on('F2B_poweroff')
+def poweroff(par):
+    return os.system("sudo poweroff")
 
 def get_data():
     while True:
