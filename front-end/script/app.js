@@ -9,6 +9,14 @@ var options;
 
   let map, layergroup;
 
+const listenToPwr = function () {
+  const pwrBtn = document.querySelector(".c-shutdown-button")
+  pwrBtn.addEventListener("click", function () {
+    socketio.emit("F2B_poweroff", {'power': 0})
+    console.log("turn off")
+  })
+}
+
 const init_map = function () {
   console.log("init map initiated!");
   map = L.map("mapid", {
@@ -38,7 +46,7 @@ const setColor = function () {
 const listenToUI = function () {
   // listen to slider
   setColor();
-
+  listenToPwr();
 };
 
 const listenToSocket = function () {
