@@ -25,9 +25,16 @@ scherm.show_ip()
 channel = "hci0"
 mac = "78:21:84:7D:85:BE"
 
-BT = BTconfig(channel, mac)
-time.sleep(1)
-BT.open_connection()
+print('connecting to BT...')
+while 1:
+    try:
+        BT = BTconfig(channel, mac)
+        time.sleep(2)
+        BT.open_connection()
+        
+    except KeyboardInterrupt:
+        break
+
 
 time.sleep(2)
 DogBit = SerCom("rfcomm0")
@@ -48,7 +55,6 @@ def error_handler(e):
 @app.route('/')
 def hallo():
     return "Server is running, er zijn momenteel geen API endpoints beschikbaar."
-
 
 @socketio.on('connect')
 def initial_connection():
