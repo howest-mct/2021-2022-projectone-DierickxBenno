@@ -71,8 +71,8 @@ const listenToSocket = function () {
     if (data != null){
       const dataId = data["data-id"]
       if (dataId == "$GPRMC"){
-        lat = data.latitude/100
-        longi = data.longitude/100
+        lat = data.latitude
+        longi = data.longitude
         const speed = data.speed
         // map.panTo(new L.LatLng(lat, longi));
         const waardeHolders = document.querySelectorAll(".c-waarde_holder")
@@ -84,8 +84,8 @@ const listenToSocket = function () {
 
       }
       else if(dataId == "$GPGGA"){
-        lat = data.latitude/100
-        longi = data.longitude/100 
+        lat = data.latitude
+        longi = data.longitude
         // map.panTo(new L.LatLng(lat, longi));
       }
     
@@ -134,31 +134,39 @@ const listenToSocket = function () {
           waarde.innerHTML = i.waarde+" "+i.eenheid
         }
         
-
-        
     }
     }
     
     // set location
-    lat = jsonObject.data[3].waarde/100
-    longi = jsonObject.data[4].waarde/100
+    lat = jsonObject.data[3].waarde
+    longi = jsonObject.data[4].waarde
     console.log("3")
     map.panTo(new L.LatLng(lat, longi)); 
   })
 
   socketio.on("B2F_historiek", function (jsonObject) {
-    const historiek = jsonObject.historiek;
-    console.log(historiek)
-    console.log(options)
+    const historiek = jsonObject.historiek
     // options.labels = [""]
+    const dataSerie = options.series
     for (const el of historiek){
-      options.labels.push((el.tijdstip))
-      if (el.eenheidid == 1){
-        
+      // if (el.eenheidid == 1){
+        //   dataSerie[0].data.push(el.waarde)
+        // }
+        // else if (el.eenheidid == 2){
+          //   dataSerie[1].data.push(el.waarde)
+          // }
+      if (el.eenheidid == 7){
+            dataSerie[3].data.push(el.waarde)
+            options.labels.push((el.tijdstip))
       }
+
+      // else if (el.eenheidid == 7){
+      //   dataSerie[3].data.push(el.waarde)
+      // }
     }
     // {eenheidid: 5, waarde: '33', tijdstip: '03/06/2022', eenheid: 'bpm'}
     // show_graph();
+    console.log(dataSerie);
   })
 };
 
@@ -166,19 +174,21 @@ const show_graph = function () {
      
   options = {
     series: [{
+    name: 'speed',
+    type: 'area',
+    data: []
+
+  }, {
     name: 'stappen',
     type: 'column',
     data: []
   }, {
-    name: 'speed',
-    type: 'area',
-    data: []
-  }, {
-    name: 'temperature',
+    name: 'heartrate',
     type: 'line',
     data: []
+   
   }, {
-    name: 'heartrate',
+    name: 'temperature',
     type: 'line',
     data: []
   }],
@@ -245,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
   console.info("DOM geladen");
   listenToUI();
   init_map();
-  show_graph();
   listenToSocket();
+  show_graph();
 });
 

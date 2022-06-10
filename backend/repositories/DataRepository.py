@@ -19,8 +19,11 @@ class DataRepository:
 
     @staticmethod
     def add_location(longitude, latitude):
-        sql = "INSERT INTO historiek (waarde, eenheidid, tijdstip) VALUES (%s,3, current_time()); INSERT INTO historiek (waarde, eenheidid, tijdstip) VALUES (%s,4, current_time());"
-        params = [latitude, longitude]
+        sql = "INSERT INTO historiek (waarde, eenheidid, tijdstip) VALUES (%s,3, current_time());"
+        params = [latitude]
+        Database.execute_sql(sql, params)
+        sql = "INSERT INTO historiek (waarde, eenheidid, tijdstip) VALUES (%s,4, current_time());"
+        params = [longitude]
         Database.execute_sql(sql, params)
 
     #get most recent data
@@ -61,7 +64,7 @@ class DataRepository:
     #get historiek waarden
     @staticmethod
     def get_historiek():
-        sql = """SELECT h.eenheidid, h.actieid,waarde, concat((date_format(tijdstip, "%d/%m/%Y"))) as `tijdstip`, eenheid FROM historiek h
+        sql = """SELECT h.eenheidid, waarde as `y`, unix_timestamp(tijdstip)*1000 as `x`, eenheid FROM historiek h
         join eenheden e on e.eenheidid = h.eenheidid
         where h.eenheidid in (1,5,6,7)
         order by historiekid asc"""

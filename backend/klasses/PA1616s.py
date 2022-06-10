@@ -53,10 +53,10 @@ class PA1616s:
 		if "$GPGGA" == msg_id and len(data) >= 15:
 				time = PA1616s.ctf(data[1])
 
-				lat = data[2]
+				lat = float(data[2])/100
 				lat_NS = data[3] # N or S
 
-				longi = data[4]
+				longi = float(data[4])/100
 				longi_EW = data[5] # E or W
 				
 				pfi = data[6] # 0: Fix not available, 1: GPS FIX, 2: diffrential GPS fix (pfi = position fix indicator)
@@ -78,13 +78,13 @@ class PA1616s:
 
 			status = data[2] # A=data valid or V=data not valid
 
-			lat = data[3]
+			lat = float(data[3])/100
 			lat_NS = data[4] # N or S
 
-			longi = data[5]
+			longi = float(data[5])/100
 			longi_EW = data[6] # E or W
 			
-			speed = float(data[7])*1.852
+			speed = round(float(data[7])*1.852, 0)
 			datum = PA1616s.cdf(data[9])
 			mode = data[12][0]
 

@@ -65,7 +65,7 @@ def hallo():
 
 @socketio.on('connect')
 def initial_connection():
-    print('A new client connect')
+    print('A new client connected')
     #meestrecente data doorsturen
     most_recent_data = DataRepository.get_most_recent_data() #most recent data
     socketio.emit('B2F_meest_recente_data', {'data': most_recent_data}, broadcast=True)
@@ -114,8 +114,8 @@ def get_data():
                 
                 if gps_data is not None:
                     if gps_data["data-id"] == "$GPGGA" or gps_data["data-id"] == "$GPRMC":
-                        longi = gps_data["longitude"]/100
-                        lat = gps_data["latitude"]/100
+                        longi = gps_data["longitude"]
+                        lat = gps_data["latitude"]
                         DataRepository.add_location(longi, lat)
 
                         if gps_data["data-id"] == "$GPRMC":
@@ -125,7 +125,7 @@ def get_data():
 
 
 
-                    # socketio.emit('B2F_GPS', {'GPS': gps_data})
+                    socketio.emit('B2F_GPS', {'GPS': gps_data})
 
             elif 'LI' in data:
                 print("nieuwe licht intensiteit gemeten")
