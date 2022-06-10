@@ -411,6 +411,23 @@ body.u-active {
   color: #2655FB;
 }
 
+.c-color {
+  display: flex;
+  flex-basis: 50%;
+  margin: 0 auto;
+  justify-content: center;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  height: 48px;
+}
+
+.c-pick-color-title {
+  background-color: #38434a;
+  color: white;
+  font-size: 24px;
+
+  border-radius: 0 19px;
+}
 
 .c-button:hover svg .c-power-icon:last-child {
   fill: #2655FB;
