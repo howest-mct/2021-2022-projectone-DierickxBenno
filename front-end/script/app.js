@@ -145,6 +145,7 @@ const listenToSocket = function () {
   })
 
   socketio.on("B2F_historiek", function (jsonObject) {
+    console.log(jsonObject)
     const historiek = jsonObject.historiek
     // options.labels = [""]
     const dataSerie = options.series
@@ -167,6 +168,8 @@ const listenToSocket = function () {
     // {eenheidid: 5, waarde: '33', tijdstip: '03/06/2022', eenheid: 'bpm'}
     // show_graph();
     console.log(dataSerie);
+   
+  
   })
 };
 
