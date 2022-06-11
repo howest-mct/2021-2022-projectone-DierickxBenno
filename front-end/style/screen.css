@@ -4,6 +4,7 @@
   --border-radius: 19px 0px;
   --map-block-heigth: 520px;
   --map-heigth: 390px;
+  --html-background: #fff;
 }
 
 
@@ -25,7 +26,7 @@ html {
 }
 
 body {
-  background: #fff;
+  background: var(--html-background);
 }
 
 body.u-active {
@@ -201,12 +202,28 @@ body.u-active {
 .o-nav {
   align-content: flex-start;
   display: flex;
+  background-color: var(--html-background);
   flex-wrap: wrap;
-  background: var(--darkerBlue);
-  height: 100vh;
-  width: 240px;
+
   position: fixed;
   border-top-right-radius: 19px;
+}
+
+.o-nav .c-button {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .o-nav {
+    background-color: var(--darkerBlue);
+    height: 100vh;
+    width: 240px;
+  }
+
+  .o-nav .c-button {
+    display: flex;
+  }
+
 }
 
 /* object content */
@@ -368,7 +385,7 @@ body.u-active {
 }
 
 .c-button {
-  justify-content: center;
+  justify-content: left;
   text-align: left;
   text-decoration: none;
   line-height: 65px;
