@@ -39,6 +39,7 @@ body.u-active {
   justify-content: center; */
   /* height: 100vh; */
   /* width: 100vw; */
+  flex-direction: column;
   padding-left: 16px;
 }
 
@@ -212,10 +213,14 @@ body.u-active {
 }
 
 .o-nav .c-title {
-  width: 50vw;
+  width: 400px;
   align-content: center;
   justify-content: start;
   justify-content: space-between;
+}
+
+.o-nav .c-title p {
+  margin-left: 32pxpx;
 }
 
 .o-nav .c-title svg {
@@ -229,6 +234,7 @@ body.u-active {
 @media (min-width: 1200px) {
   .o-container {
     padding-left: 312px;
+    flex-direction: unset;
   }
 
   .o-nav {
@@ -236,8 +242,6 @@ body.u-active {
     height: 100vh;
     width: 240px;
   }
-
-  .o-nav .c-title {}
 
   .o-nav .c-button {
     display: flex;
@@ -247,19 +251,21 @@ body.u-active {
 
 /* object content */
 .o-dashboard {
-  /* flex-basis: calc(100%/2); */
+  margin: 32px;
+  flex-basis: 100%;
   margin-top: 224px;
-  margin-right: 72px;
-  width: 482px;
+  /* margin-right: 72px; */
+  width: 550px;
   height: 522px;
   justify-content: start;
   align-content: start;
 }
 
 .o-map {
-  justify-content: center;
-  flex-basis: calc((100%/2));
-
+  margin: 32px;
+  justify-content: start;
+  flex-basis: 100%;
+  margin-top: 32px;
   /* width: 6000px; */
 }
 
@@ -268,14 +274,32 @@ body.u-active {
   padding-left: 256px;
 }
 
+@media (min-width: 720px) {
+  .o-map {
+    margin: 0;
+
+    /* margin: auto; */
+  }
+
+  .o-dashboard {
+    justify-content: start;
+    /* margin-right: 72px */
+  }
+}
+
 @media (min-width: 1200px) {
   .o-dashboard {
+    margin-left: 16px;
     margin-top: 114px;
+    flex-basis: 40%;
+    width: 550px;
+    height: 522px;
   }
 
   .o-map {
-    justify-content: start;
-    /* flex-basis: calc((100%/3)*1); */
+    justify-content: center;
+    flex-basis: 40%;
+    margin-top: 0;
   }
 }
 
@@ -329,7 +353,7 @@ body.u-active {
 
 .c-info_block-map {
   margin: 0px;
-  margin-left: 240px;
+  margin-left: 48px;
   margin-bottom: 13px;
   display: flex;
   flex-direction: column;
@@ -351,6 +375,7 @@ body.u-active {
   padding: 24px;
   margin-top: 72px;
 }
+
 
 .c-graph-background {
   margin: auto;
@@ -405,7 +430,7 @@ body.u-active {
   line-height: 65px;
   height: 65px;
   letter-spacing: 0.2px;
-  font-size: 16px;
+  font-size: 24px;
   width: 192px;
   color: white;
   margin-left: 16px;
@@ -462,17 +487,7 @@ body.u-active {
 }
 
 
-@media (min-width: 400px) {
-  .c-button {
-    font-size: 24px;
-  }
-}
 
-@media (min-width: 720px) {
-  .c-button {
-    font-size: 28px;
-  }
-}
 
 @media (min-width: 1200px) {
 
