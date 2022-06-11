@@ -39,8 +39,10 @@ body.u-active {
   justify-content: center; */
   /* height: 100vh; */
   /* width: 100vw; */
-  padding-left: 312px;
+  padding-left: 16px;
 }
+
+
 
 /*
     Objects: Layout
@@ -225,15 +227,17 @@ body.u-active {
 }
 
 @media (min-width: 1200px) {
+  .o-container {
+    padding-left: 312px;
+  }
+
   .o-nav {
     background-color: var(--darkerBlue);
     height: 100vh;
     width: 240px;
   }
 
-  .o-nav .c-title {
-    width
-  }
+  .o-nav .c-title {}
 
   .o-nav .c-button {
     display: flex;
@@ -244,7 +248,8 @@ body.u-active {
 /* object content */
 .o-dashboard {
   /* flex-basis: calc(100%/2); */
-  margin-top: 114px;
+  margin-top: 224px;
+  margin-right: 72px;
   width: 482px;
   height: 522px;
   justify-content: start;
@@ -263,26 +268,14 @@ body.u-active {
   padding-left: 256px;
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
   .o-dashboard {
-    /* flex-basis: 50%; */
-    /* margin-left: 0px; */
+    margin-top: 114px;
   }
 
   .o-map {
     justify-content: start;
     /* flex-basis: calc((100%/3)*1); */
-  }
-}
-
-@media (min-width: 1660px) {
-  .o-dashboard {
-    /* flex-basis: calc((100%/3)*1); */
-  }
-
-  .o-map {
-    justify-content: start;
-    /* flex-basis: calc(100%/2) */
   }
 }
 
@@ -321,8 +314,10 @@ body.u-active {
 }
 
 .c-info_block {
-  margin: 32px 32px;
-  margin-bottom: 0;
+  margin: 16px;
+  /* margin-right: 16px; */
+  margin-top: 0px;
+  margin-bottom: 32px;
   display: flex;
   flex-direction: column;
   background: #DDE;
@@ -333,7 +328,7 @@ body.u-active {
 }
 
 .c-info_block-map {
-  margin: 72px 0px;
+  margin: 0px;
   margin-left: 240px;
   margin-bottom: 13px;
   display: flex;
@@ -397,12 +392,13 @@ body.u-active {
   padding-left: 32px;
   width: 50vw;
   height: 60px;
-  padding-right: 16px;
+  padding-right: 32px;
   border-radius: 0 19px;
 }
 
 
 .c-button {
+  margin: 0;
   justify-content: left;
   text-align: left;
   text-decoration: none;
@@ -481,14 +477,13 @@ body.u-active {
 @media (min-width: 1200px) {
 
   .c-info_block-map {
-    margin: 114px 72px;
+    margin: 114px 0px;
     margin-bottom: 0;
   }
 
   .c-info_block {
-    margin: 32px 32px;
     margin-left: 0px;
-    margin-bottom: 0;
+    margin-bottom: 32px;
   }
 
   .o-nav .c-title {
@@ -501,27 +496,16 @@ body.u-active {
   }
 }
 
-@media (min-width: 1660px) {
-  .c-info_block-map {
-    margin: 114px 72px;
-    margin-bottom: 0;
-  }
 
-  .c-info_block {
-    margin: 32px 32px;
-    margin-left: 0px;
-    margin-bottom: 0;
-  }
-}
 
 /* clear ... */
-.c-mt-clear {
+/* .c-mt-clear {
   margin-top: 0;
 }
 
 .c-mr-clear {
   margin-right: 0;
-}
+} */
 
 input[type="range"] {
   -webkit-appearance: none;
