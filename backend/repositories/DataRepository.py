@@ -66,7 +66,7 @@ class DataRepository:
     def get_historiek():
         sql = """SELECT h.eenheidid, waarde as `y`, unix_timestamp(tijdstip)*1000 as `x`, eenheid FROM historiek h
         join eenheden e on e.eenheidid = h.eenheidid
-        where h.eenheidid in (1,5,6,7)
+        where h.eenheidid in (1,2,5,6,7)
         order by historiekid asc"""
         data = Database.get_rows(sql)
         return data

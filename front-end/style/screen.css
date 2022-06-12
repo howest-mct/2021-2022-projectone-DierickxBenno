@@ -219,9 +219,7 @@ body.u-active {
   justify-content: space-between;
 }
 
-.o-nav .c-title p {
-  margin-left: 32pxpx;
-}
+.o-nav .c-title p {}
 
 .o-nav .c-title svg {
   margin: auto 0
@@ -290,7 +288,7 @@ body.u-active {
 @media (min-width: 1200px) {
   .o-dashboard {
     margin-left: 16px;
-    margin-top: 114px;
+    margin-top: 124px;
     flex-basis: 40%;
     width: 550px;
     height: 522px;
@@ -319,7 +317,7 @@ body.u-active {
   font-family: co-text;
   font-style: normal;
   font-weight: 800;
-  font-size: 30px;
+  font-size: 24px;
   line-height: 45px;
   text-align: center;
   border-radius: 0 19px;
@@ -328,6 +326,12 @@ body.u-active {
   padding-bottom: 14px;
   width: 134px;
   height: 32px;
+}
+
+@media (min-width: 900px) {
+  .c-waarde_holder {
+    font-size: 30px;
+  }
 }
 
 .c-button-dog {
@@ -352,6 +356,7 @@ body.u-active {
 }
 
 .c-info_block-map {
+  flex-basis: 15%;
   margin: 0px;
   margin-left: 48px;
   margin-bottom: 13px;
@@ -366,7 +371,7 @@ body.u-active {
 }
 
 .c-big_block {
-  /* flex-basis: calc((100%/3)*2); */
+  flex-basis: 80%;
   justify-content: start;
   width: 988px;
   height: 481px;
@@ -430,7 +435,7 @@ body.u-active {
   line-height: 65px;
   height: 65px;
   letter-spacing: 0.2px;
-  font-size: 24px;
+  font-size: 30px;
   width: 192px;
   color: white;
   margin-left: 16px;
@@ -492,7 +497,7 @@ body.u-active {
 @media (min-width: 1200px) {
 
   .c-info_block-map {
-    margin: 114px 0px;
+    margin: 124px 0px;
     margin-bottom: 0;
   }
 
@@ -546,3 +551,11 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /*  */
+.displayed {
+  display: flex !important;
+}
+
+.background-displayed {
+  background-color: var(--darkerBlue) !important;
+  height: 100vh !important;
+}

@@ -54,6 +54,7 @@ socketio = SocketIO(app, cors_allowed_origins="*", logger=False,
 
 CORS(app)
 
+
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):
     print("error: ", e)
@@ -63,6 +64,12 @@ def error_handler(e):
 def hallo():
     return "Server is running, er zijn momenteel geen API endpoints beschikbaar."
 
+@app.route('/stappen')
+def stappen():
+    pass
+
+
+# socketio
 @socketio.on('connect')
 def initial_connection():
     print('A new client connected')

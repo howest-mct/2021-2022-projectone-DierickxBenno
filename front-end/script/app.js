@@ -50,12 +50,25 @@ const listenToCenterDog = function () {
     map.panTo(new L.LatLng(lat, longi)); 
   })
 }
+ 
+  function listenToSidenav() {
+    const toggleTrigger = document.querySelector(".js-toggle-nav");
+    toggleTrigger.addEventListener("click", function () {
+      const buttons = document.querySelectorAll(".c-button");
+      document.querySelector(".o-nav").classList.toggle("displayed")
+      document.querySelector(".o-nav").classList.toggle("background-displayed")
+      for (const btn of buttons){
+        btn.classList.toggle("displayed")
+      }
+    })
+  }
 
 const listenToUI = function () {
   // listen to slider
   setColor();
   listenToPwr();
   listenToCenterDog();
+  listenToSidenav();
 };
 
 const listenToSocket = function () {
@@ -147,28 +160,29 @@ const listenToSocket = function () {
   socketio.on("B2F_historiek", function (jsonObject) {
     console.log(jsonObject)
     const historiek = jsonObject.historiek
-    // options.labels = [""]
     const dataSerie = options.series
-    for (const el of historiek){
-      // if (el.eenheidid == 1){
-        //   dataSerie[0].data.push(el.waarde)
-        // }
-        // else if (el.eenheidid == 2){
-          //   dataSerie[1].data.push(el.waarde)
-          // }
-      if (el.eenheidid == 7){
-            dataSerie[3].data.push(el.waarde)
-            options.labels.push((el.tijdstip))
-      }
+    for (const el of historiek){ 
+      // time sorting properties
+      const date = new Date(el.x);
+      const dateTimestamp = date.getTime();
 
-      // else if (el.eenheidid == 7){
-      //   dataSerie[3].data.push(el.waarde)
-      // }
+      if (el.eenheidid == 1){
+        // speed
+        dataSerie[0].data.push([el.x, el.y])
+      }
+      else if (el.eenheidid == 2){
+        // steps
+        dataSerie[1].data.push([dateTimestamp, el.y])
+      }
+      else if (el.eenheidid == 5){
+        // heartrate
+        dataSerie[2].data.push([el.x, el.y])
+      }
+      else if (el.eenheidid == 7){
+        // temperature
+        dataSerie[3].data.push([el.x, el.y])
+      }
     }
-    // {eenheidid: 5, waarde: '33', tijdstip: '03/06/2022', eenheid: 'bpm'}
-    // show_graph();
-    console.log(dataSerie);
-   
   
   })
 };
@@ -204,16 +218,20 @@ const show_graph = function () {
     width: [0, 2, 5],
     curve: 'smooth'
   },
+  
+responsive: [{
+  breakpoint: undefined,
+  options: {},
+}],
   plotOptions: {
     bar: {
-      columnWidth: '50%'
+      columnWidth: '100%'
     }
   },
-  
   fill: {
     opacity: [0.85, 0.25, 1],
     gradient: {
-      inverseColors: false,
+      inverseColors: false, 
       shade: 'light',
       type: "vertical",
       opacityFrom: 0.85,
@@ -235,12 +253,12 @@ const show_graph = function () {
     min: 0
   },
   tooltip: {
-    shared: true,
+    shared: false,
     intersect: false,
     y: {
       formatter: function (y) {
         if (typeof y !== "undefined") {
-          return y.toFixed(0) + " eenheid";
+          return y.toFixed(0) + "";
         }
         return y;
   
