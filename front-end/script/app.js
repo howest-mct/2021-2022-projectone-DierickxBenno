@@ -51,7 +51,7 @@ const listenToCenterDog = function () {
   })
 }
  
-  function listenToSidenav() {
+function listenToSidenav() {
     const toggleTrigger = document.querySelector(".js-toggle-nav");
     toggleTrigger.addEventListener("click", function () {
       const buttons = document.querySelectorAll(".c-button");
@@ -166,22 +166,22 @@ const listenToSocket = function () {
       const date = new Date(el.x);
       const dateTimestamp = date.getTime();
 
-      if (el.eenheidid == 1){
-        // speed
-        dataSerie[0].data.push([el.x, el.y])
+      switch (el.eenheid){
+        case 1:
+          dataSerie[0].data.push([el.x, el.y])
+          break;
+        case 2:
+          dataSerie[1].data.push([dateTimestamp, el.y])
+          break;
+        case 3:
+          dataSerie[2].data.push([el.x, el.y])
+          break;
+        case 4:
+          dataSerie[3].data.push([el.x, el.y])
+          break;
+
       }
-      else if (el.eenheidid == 2){
-        // steps
-        dataSerie[1].data.push([dateTimestamp, el.y])
-      }
-      else if (el.eenheidid == 5){
-        // heartrate
-        dataSerie[2].data.push([el.x, el.y])
-      }
-      else if (el.eenheidid == 7){
-        // temperature
-        dataSerie[3].data.push([el.x, el.y])
-      }
+      
     }
   
   })
@@ -193,21 +193,21 @@ const show_graph = function () {
     series: [{
     name: 'speed',
     type: 'area',
-    data: []
+    data: [[1, null], [2, null], [3, null], [4, null], [5, null]]
 
   }, {
     name: 'stappen',
     type: 'column',
-    data: []
+    data: [[1, null], [2, null], [3, null], [4, null], [5, null]]
   }, {
     name: 'heartrate',
     type: 'line',
-    data: []
+    data: [[1, null], [2, null], [3, null], [4, null], [5, null]]
    
   }, {
     name: 'temperature',
     type: 'line',
-    data: []
+    data: [[1, null], [2, null], [3, null], [4, null], [5, null]]
   }],
     chart: {
     height: '350px',

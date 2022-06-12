@@ -31,10 +31,10 @@ def connect_to_esp32():
     print('connecting to BT...')
     BT = BTconfig(channel, mac)
     time.sleep(2)
-    BT.open_connection()
-    time.sleep(2)
     while 1:
         try:
+            BT.open_connection()
+            time.sleep(2)
             DogBit = SerCom("rfcomm0")
             break
             

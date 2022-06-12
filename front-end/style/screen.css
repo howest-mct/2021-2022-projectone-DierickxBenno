@@ -281,11 +281,12 @@ body.u-active {
 
   .o-dashboard {
     justify-content: start;
+    flex-basis: 55%;
     /* margin-right: 72px */
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1300px) {
   .o-dashboard {
     margin-left: 16px;
     margin-top: 124px;
