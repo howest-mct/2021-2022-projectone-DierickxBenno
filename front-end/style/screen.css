@@ -280,16 +280,19 @@ body.u-active {
 @media (min-width: 720px) {
   .o-map {
     margin: 0;
-
+    flex-basis: 20%;
     /* margin: auto; */
   }
 
+
   .o-dashboard {
+    margin-right: 0;
     justify-content: start;
     flex-basis: 55%;
     /* margin-right: 72px */
   }
 }
+
 
 @media (min-width: 1300px) {
   .o-dashboard {
@@ -503,12 +506,20 @@ body.u-active {
     width: 320px;
     margin-bottom: 0;
   }
+
+  .c-info_block-map {
+    margin: 224px 0px;
+    width: 300px;
+    margin-bottom: 0;
+  }
 }
+
 
 
 @media (min-width: 1200px) {
   .c-info_block-map {
-    margin: 48px 32px;
+    margin: 224px 0px;
+    width: 300px;
     margin-bottom: 0;
   }
 
@@ -550,6 +561,7 @@ body.u-active {
   .c-info_block-map {
     margin: 124px 0px;
     margin-bottom: 0;
+    width: 480px
   }
 
 }

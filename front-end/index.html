@@ -69,89 +69,91 @@
   <!-- content -->
   <div class="o-container o-layout u-5-of-6 o-layout--justify-start">
     <!-- dashboard -->
-    <div class="o-dashboard c-content-row-one o-layout" id="dashboard">
-      <article class="c-info_block js-room">
-        <div class="c-room__name">
-          temperature
-        </div>
-        <div class="c-room__icon">
-          <div class="c-icon">
-            <img src="./img/icons8-temperature-96.png">
+    <div class="o-layout">
+      <div class="o-dashboard c-content-row-one o-layout" id="dashboard">
+        <article class="c-info_block js-room">
+          <div class="c-room__name">
+            temperature
           </div>
-
-        </div>
-        <div class="c-room__control">
-          <div class="c-waarde_holder js-power-btn c-temperatuur" eenheid-id="7">
-            36,6 C
-          </div>
-        </div>
-      </article>
-      <article class="c-info_block js-room">
-        <div class="c-room__name">
-          steps
-        </div>
-        <div class="c-room__icon">
-          <div class="c-icon">
-            <img src=".\img\icons8-dog-jump-96.png" alt="">
-          </div>
-        </div>
-        <div class="c-room__control">
-          <div class="c-waarde_holder js-power-btn c-stappen" eenheid-id="2">
-            1000000
-          </div>
-        </div>
-      </article>
-      <article class="c-info_block js-room ">
-        <div class="c-room__name">
-          speed
-        </div>
-        <div class="c-room__icon">
-          <div class="c-icon">
-            <img src=".\img\icons8-running-away-96.png" alt="">
-          </div>
-
-        </div>
-        <div class="c-room__control">
-          <div class="c-waarde_holder js-power-btn c-snelheid" eenheid-id="1">
-
-            99 km/h
+          <div class="c-room__icon">
+            <div class="c-icon">
+              <img src="./img/icons8-temperature-96.png">
+            </div>
 
           </div>
-        </div>
-      </article>
-      <article class="c-info_block js-room c-mr-clear">
-        <div class="c-room__name">
-          heartrate
-        </div>
-        <div class="c-room__icon">
-          <div class="c-icon">
-            <img src=".\img\icons8-heartbeat-96.png">
+          <div class="c-room__control">
+            <div class="c-waarde_holder js-power-btn c-temperatuur" eenheid-id="7">
+              36,6 C
+            </div>
           </div>
+        </article>
+        <article class="c-info_block js-room">
+          <div class="c-room__name">
+            steps
+          </div>
+          <div class="c-room__icon">
+            <div class="c-icon">
+              <img src=".\img\icons8-dog-jump-96.png" alt="">
+            </div>
+          </div>
+          <div class="c-room__control">
+            <div class="c-waarde_holder js-power-btn c-stappen" eenheid-id="2">
+              1000000
+            </div>
+          </div>
+        </article>
+        <article class="c-info_block js-room ">
+          <div class="c-room__name">
+            speed
+          </div>
+          <div class="c-room__icon">
+            <div class="c-icon">
+              <img src=".\img\icons8-running-away-96.png" alt="">
+            </div>
 
-        </div>
-        <div class="c-room__control">
-          <div class="c-waarde_holder js-power-btn c-hartslag" eenheid-id="5">
-            999 bpm
           </div>
-        </div>
-      </article>
+          <div class="c-room__control">
+            <div class="c-waarde_holder js-power-btn c-snelheid" eenheid-id="1">
 
-    </div>
-    <!-- map -->
-    <div class="o-layout o-map" id="map" z-index="1000">
-      <article class=" js-map c-info_block-map">
-        <div class="c-room__name">
-          location
-        </div>
-        <div class="c-room__icon ">
-          <div class="c-icon">
-            <div id="mapid"></div>
+              99 km/h
+
+            </div>
           </div>
-          <div class="c-waarde_holder c-button-dog js-find-dog ">
-            to dog
+        </article>
+        <article class="c-info_block js-room c-mr-clear">
+          <div class="c-room__name">
+            heartrate
           </div>
-        </div>
-      </article>
+          <div class="c-room__icon">
+            <div class="c-icon">
+              <img src=".\img\icons8-heartbeat-96.png">
+            </div>
+
+          </div>
+          <div class="c-room__control">
+            <div class="c-waarde_holder js-power-btn c-hartslag" eenheid-id="5">
+              999 bpm
+            </div>
+          </div>
+        </article>
+
+      </div>
+      <!-- map -->
+      <div class="o-layout o-map" id="map" z-index="1000">
+        <article class=" js-map c-info_block-map">
+          <div class="c-room__name">
+            location
+          </div>
+          <div class="c-room__icon ">
+            <div class="c-icon">
+              <div id="mapid"></div>
+            </div>
+            <div class="c-waarde_holder c-button-dog js-find-dog ">
+              to dog
+            </div>
+          </div>
+        </article>
+      </div>
     </div>
     <!-- graph -->
     <div class="c-big_block" id="statistics">
