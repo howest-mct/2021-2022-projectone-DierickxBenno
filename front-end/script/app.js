@@ -50,17 +50,26 @@ const listenToCenterDog = function () {
     map.panTo(new L.LatLng(lat, longi)); 
   })
 }
- 
-function listenToSidenav() {
+
+const displaySidenav = function (buttons) {
+  document.querySelector(".o-nav").classList.toggle("displayed")
+  document.querySelector(".o-nav").classList.toggle("background-displayed")
+  for (const btn of buttons){
+    btn.classList.toggle("displayed")
+  }
+}
+
+const listenToSidenav = function() {
     const toggleTrigger = document.querySelector(".js-toggle-nav");
+    const buttons = document.querySelectorAll(".c-button");
+    console.log(buttons)
     toggleTrigger.addEventListener("click", function () {
-      const buttons = document.querySelectorAll(".c-button");
-      document.querySelector(".o-nav").classList.toggle("displayed")
-      document.querySelector(".o-nav").classList.toggle("background-displayed")
-      for (const btn of buttons){
-        btn.classList.toggle("displayed")
-      }
+      displaySidenav(buttons)
     })
+    for (const btn of buttons){
+      btn.addEventListener("click", function () {
+      displaySidenav(buttons)
+    })}
   }
 
 const listenToUI = function () {
