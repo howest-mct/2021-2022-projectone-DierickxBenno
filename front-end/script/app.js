@@ -54,6 +54,7 @@ const listenToCenterDog = function () {
 const displaySidenav = function (buttons) {
   document.querySelector(".o-nav").classList.toggle("displayed")
   document.querySelector(".o-nav").classList.toggle("background-displayed")
+  document.querySelector(".c-title").classList.toggle("remove_boxshadow")
   for (const btn of buttons){
     btn.classList.toggle("displayed")
   }
@@ -69,6 +70,7 @@ const listenToSidenav = function() {
     for (const btn of buttons){
       btn.addEventListener("click", function () {
       displaySidenav(buttons)
+      
     })}
   }
 
