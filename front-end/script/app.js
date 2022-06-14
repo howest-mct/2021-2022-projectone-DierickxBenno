@@ -257,176 +257,70 @@ const show_graph_spd = function () { //speed
 }
 const show_graph_temp = function () { //temperature
      
-  options = {
-    series: [{
-    name: 'speed',
-    type: 'area',
-    data: []
-
-  }, {
-    name: 'stappen',
-    type: 'column',
-    data: []
-  }, {
-    name: 'heartrate',
-    type: 'line',
-    data: []
-   
-  }, {
-    name: 'temperature',
-    type: 'line',
-    data: []
-  }],
+  var options_temp = {
     chart: {
-    height: '350px',
-    type: 'line',
-    stacked: false,
-  },
-  stroke: {
-    width: [0, 2, 5],
-    curve: 'smooth'
-  },
-  
-responsive: [{
-  breakpoint: undefined,
-  options: {},
-}],
-  plotOptions: {
-    bar: {
-      columnWidth: '100%'
-    }
-  },
-  fill: {
-    opacity: [0.85, 0.25, 1],
-    gradient: {
-      inverseColors: false, 
-      shade: 'light',
-      type: "vertical",
-      opacityFrom: 0.85,
-      opacityTo: 0.55,
-      stops: [0, 100, 100, 100]
-    }
-  },
-  labels: [],
-  markers: {
-    size: 0
-  },
-  xaxis: {
-    type: 'datetime'
-  },
-  yaxis: {
-    title: {
-      text: '',
+      type: 'line'
     },
-    min: 0
-  },
-  tooltip: {
-    shared: false,
-    intersect: false,
-    y: {
-      formatter: function (y) {
-        if (typeof y !== "undefined") {
-          return y.toFixed(0) + "";
+    series: [{
+      name: 'temp',
+      data: [[1, 30],[2, 32],[3, 23],[4, 21],[5, 15],[6, 13]],
+    }],
+    xaxis: {
+      type: 'datetime',
+      // categories: []
+    },
+    tooltip: {
+      shared: false,
+      intersect: false,
+      y: {
+        formatter: function (y) {
+          if (typeof y !== "undefined") {
+            return y.toFixed(0) + " km/h";
+          }
+          return y;
         }
-        return y;
-  
       }
     }
   }
-  };
-  
-  var chart = new ApexCharts(document.querySelector(".c-graph"), options);
-  chart.render();
+  var chart_temp = new ApexCharts(document.querySelector(".g-temperature"), options_temp);
+  chart_temp.render();
 }
 const show_graph_steps = function () {
      
-  options = {
-    series: [{
-    name: 'speed',
-    type: 'area',
-    data: []
-
-  }, {
-    name: 'stappen',
-    type: 'column',
-    data: []
-  }, {
-    name: 'heartrate',
-    type: 'line',
-    data: []
-   
-  }, {
-    name: 'temperature',
-    type: 'line',
-    data: []
-  }],
+  var options_steps = {
     chart: {
-    height: '350px',
-    type: 'line',
-    stacked: false,
-  },
-  stroke: {
-    width: [0, 2, 5],
-    curve: 'smooth'
-  },
-  
-responsive: [{
-  breakpoint: undefined,
-  options: {},
-}],
-  plotOptions: {
-    bar: {
-      columnWidth: '100%'
-    }
-  },
-  fill: {
-    opacity: [0.85, 0.25, 1],
-    gradient: {
-      inverseColors: false, 
-      shade: 'light',
-      type: "vertical",
-      opacityFrom: 0.85,
-      opacityTo: 0.55,
-      stops: [0, 100, 100, 100]
-    }
-  },
-  labels: [],
-  markers: {
-    size: 0
-  },
-  xaxis: {
-    type: 'datetime'
-  },
-  yaxis: {
-    title: {
-      text: '',
+      type: 'bar'
     },
-    min: 0
-  },
-  tooltip: {
-    shared: false,
-    intersect: false,
-    y: {
-      formatter: function (y) {
-        if (typeof y !== "undefined") {
-          return y.toFixed(0) + "";
+    series: [{
+      name: 'temp',
+      data: [[1, 30],[2, 32],[3, 23],[4, 21],[5, 15],[6, 13]],
+    }],
+    xaxis: {
+      type: 'datetime',
+      // categories: []
+    },
+    tooltip: {
+      shared: false,
+      intersect: false,
+      y: {
+        formatter: function (y) {
+          if (typeof y !== "undefined") {
+            return y.toFixed(0) + " km/h";
+          }
+          return y;
         }
-        return y;
-  
       }
     }
   }
-  };
-  
-  var chart = new ApexCharts(document.querySelector(".c-graph"), options);
-  chart.render();
+  var chart_steps = new ApexCharts(document.querySelector(".g-steps"), options_steps);
+  chart_steps.render();
 }
 
 const show_graphs = function () {
   show_graph_hr();
   show_graph_spd();
-  // show_graph_temp();
-  // show_graph_steps();
+  show_graph_temp();
+  show_graph_steps();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
