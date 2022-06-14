@@ -6,6 +6,7 @@ const socketio = io(`http://${lanIP}`);
 const provider = "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
 // zo kunnen we options aanpassen via socketio
 var options_hr, options_spd, option_temp, options_steps;
+var chart_hr, chart_spd, chart_steps, chart_temp;
 // const copyright= '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>';
 
 let map, layergroup;
@@ -236,7 +237,7 @@ const show_graph_hr = function () { // heartrate
     }
   }
 
-  var chart_hr = new ApexCharts(document.querySelector(".g-heartrate"), options_hr);
+  chart_hr = new ApexCharts(document.querySelector(".g-heartrate"), options_hr);
   chart_hr.render();
 }
 
@@ -277,7 +278,7 @@ const show_graph_spd = function () { //speed
       }
     }
   }
-  var chart_spd = new ApexCharts(document.querySelector(".g-speed"), options_spd);
+  chart_spd = new ApexCharts(document.querySelector(".g-speed"), options_spd);
   chart_spd.render();
 }
 
@@ -319,7 +320,7 @@ const show_graph_temp = function () { //temperature
     }
   
   }
-  var chart_temp = new ApexCharts(document.querySelector(".g-temperature"), options_temp);
+  chart_temp = new ApexCharts(document.querySelector(".g-temperature"), options_temp);
   chart_temp.render();
 }
 
@@ -360,7 +361,7 @@ const show_graph_steps = function () {
       }
     }
   }
-  var chart_steps = new ApexCharts(document.querySelector(".g-steps"), options_steps);
+  chart_steps = new ApexCharts(document.querySelector(".g-steps"), options_steps);
   chart_steps.render();
 }
 
@@ -370,7 +371,49 @@ const show_graphs = function () {
   show_graph_temp();
   show_graph_steps();
 }
+
+const renderGraphs = function () {
+  chart_hr.render();
+  chart_spd.render();
+  chart_temp.render();
+  chart_steps.render();
+}
 // #endregion
+
+const getHistory = function (jsonObject) {
+  const historiek = jsonObject.historiek
+  const dataSerie_hr = options_hr.series
+  const dataSerie_spd = options_spd.series
+  const dataSerie_temp = options_spd.series
+  const dataSerie_steps = options_steps.series
+  for (const el of historiek){ 
+    // time sorting properties
+    const date = new Date(el.x);
+    const dateTimestamp = date.getTime();
+
+    switch (el.eenheidid){
+      case 1:
+        dataSerie_spd.data.push([el.x, el.y])
+        break;
+      case 2:
+        dataSerie_steps.data.push([dateTimestamp, el.y])
+        break;
+      case 5:
+        dataSerie_hr.data.push([el.x, el.y])
+        break;
+      case 7:
+        dataSerie_temp.data.push([el.x, el.y])
+        break;
+    }
+  }
+  console.log(dataSerie)
+}
+
+const handle_history = function () {
+  const url = `http://${lanIP}/api/v1/historiek/day/`;
+  handleData(url, getHistory);
+  renderGraphs();
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   console.info("DOM geladen");
