@@ -225,6 +225,7 @@ const show_graph_hr = function () { // heartrate
   var chart_hr = new ApexCharts(document.querySelector(".g-heartrate"), options_hr);
   chart_hr.render();
 }
+
 const show_graph_spd = function () { //speed
      
     var options_spd = {
@@ -255,6 +256,7 @@ const show_graph_spd = function () { //speed
   var chart_spd = new ApexCharts(document.querySelector(".g-speed"), options_spd);
   chart_spd.render();
 }
+
 const show_graph_temp = function () { //temperature
      
   var options_temp = {
@@ -285,6 +287,7 @@ const show_graph_temp = function () { //temperature
   var chart_temp = new ApexCharts(document.querySelector(".g-temperature"), options_temp);
   chart_temp.render();
 }
+
 const show_graph_steps = function () {
      
   var options_steps = {
@@ -292,8 +295,8 @@ const show_graph_steps = function () {
       type: 'bar'
     },
     series: [{
-      name: 'temp',
-      data: [[1, 30],[2, 32],[3, 23],[4, 21],[5, 15],[6, 13]],
+      name: 'steps',
+      data: [[1, 50000],[2, 75000],[3, 10023],[4, 10000],[5, 20000],[6, 50333]],
     }],
     xaxis: {
       type: 'datetime',
@@ -305,7 +308,7 @@ const show_graph_steps = function () {
       y: {
         formatter: function (y) {
           if (typeof y !== "undefined") {
-            return y.toFixed(0) + " km/h";
+            return y.toFixed(0) + " steps";
           }
           return y;
         }
