@@ -43,7 +43,7 @@ class DataRepository:
     @staticmethod 
     def get_total_steps():
         sql="""SELECT SUM(waarde) AS `waarde` from historiek
-        where eenheidid = 2 and date_format(tijdstip, "yyyy-mm-dd") = date_format(now(), "yyyy-mm-dd");"""
+        where eenheidid = 2 and date_format(tijdstip, "%Y-%m-%d") = date_format(now(), "%Y-%m-%d");"""
         data = Database.get_one_row(sql)
         return data
     
@@ -66,10 +66,11 @@ class DataRepository:
 
     #get historiek waarden
     @staticmethod
-    def get_historiek():
+    def get_historiek(p_interval):
         sql = """SELECT h.eenheidid, waarde as `y`, unix_timestamp(tijdstip)*1000 as `x`, eenheid FROM historiek h
         join eenheden e on e.eenheidid = h.eenheidid
-        where h.eenheidid in (1,2,5,6,7)
+        where h.eenheidid in (1,2,5,6,7) and tijdstip between date_sub(now(),INTERVAL 1 %s) and now()
         order by historiekid asc"""
+        params=(p_interval)
         data = Database.get_rows(sql)
         return data

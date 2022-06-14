@@ -60,9 +60,14 @@ def error_handler(e):
     print("error: ", e)
 
 # API ENDPOINTS
+endpoint = '/api/v1/'
 @app.route('/')
 def hallo():
     return "Server is running, er zijn momenteel geen API endpoints beschikbaar."
+
+@app.route(endpoint+'/historiek/<interval>/', methods=['GET'])
+def dag_historiek(interval):
+    return jsonify(DataRepository.get_historiek(interval))
 
 
 # socketio
