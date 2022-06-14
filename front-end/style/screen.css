@@ -614,10 +614,6 @@ body.u-active {
 }
 
 @media (min-width: 920px) {
-  .c-color-background {
-    width: 45%;
-    margin-bottom: 0;
-  }
 
   .c-info_block-map {
     margin: 48px;
@@ -629,6 +625,7 @@ body.u-active {
 @media (min-width: 1045px) {
   .c-color-background {
     /* width: 360px; */
+    width: 45%;
     margin-bottom: 0;
   }
 
