@@ -521,8 +521,9 @@ body.u-active {
   margin: auto;
   width: 255px;
   height: 255px;
-  background-color: black;
+  /* background-color: black; */
   border-radius: 19px 0px;
+  background: hsl(360, 100%, 50%)
 }
 
 .c-room__name {

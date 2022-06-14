@@ -39,10 +39,13 @@ const setColor = function () {
   // ook bij inladen pagina
   socketio.emit("F2B_set_color", {"hue": slider.value})
   console.log("new slider value sent")
+  document.querySelector('.c-curr_color').style.background = `hsl(${Math.round(((slider.value)/255)*360)}, 100%, 50%)`
   slider.addEventListener("change", function () {
+    document.querySelector('.c-curr_color').style.background = `hsl(${Math.round(((slider.value)/255)*360)}, 100%, 50%)`
     socketio.emit("F2B_set_color", {"hue": slider.value})
     console.log("new slider value sent")
   })
+
 }
 
 const listenToCenterDog = function () {
@@ -75,7 +78,6 @@ const listenToSidenav = function() {
   }
 
 const listenToUI = function () {
-  // listen to slider
   setColor();
   listenToPwr();
   listenToCenterDog();
@@ -379,6 +381,7 @@ const renderGraphs = function () {
   chart_steps.render();
 }
 // #endregion
+
 
 const getHistory = function (jsonObject) {
   const historiek = jsonObject.historiek
