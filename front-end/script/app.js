@@ -170,7 +170,10 @@ const listenToSocket = function () {
   socketio.on("B2F_historiek", function (jsonObject) {
     console.log(jsonObject)
     const historiek = jsonObject.historiek
-    const dataSerie = options.series
+    const dataSerie_hr = options_hr.series
+    const dataSerie_spd = options_spd.series
+    const dataSerie_temp = options_spd.series
+    const dataSerie_steps = options_steps.series
     for (const el of historiek){ 
       // time sorting properties
       const date = new Date(el.x);
@@ -178,16 +181,16 @@ const listenToSocket = function () {
 
       switch (el.eenheidid){
         case 1:
-          dataSerie[0].data.push([el.x, el.y])
+          dataSerie_spd.data.push([el.x, el.y])
           break;
         case 2:
-          dataSerie[1].data.push([dateTimestamp, el.y])
+          dataSerie_steps.data.push([dateTimestamp, el.y])
           break;
         case 5:
-          dataSerie[2].data.push([el.x, el.y])
+          dataSerie_hr.data.push([el.x, el.y])
           break;
         case 7:
-          dataSerie[3].data.push([el.x, el.y])
+          dataSerie_temp.data.push([el.x, el.y])
           break;
       }
     }
@@ -195,6 +198,7 @@ const listenToSocket = function () {
   })
 };
 
+// #region graphs
 const show_graph_hr = function () { // heartrate
   var options_hr = {
     chart: {
@@ -366,6 +370,7 @@ const show_graphs = function () {
   show_graph_temp();
   show_graph_steps();
 }
+// #endregion
 
 document.addEventListener("DOMContentLoaded", function () {
   console.info("DOM geladen");
@@ -374,4 +379,3 @@ document.addEventListener("DOMContentLoaded", function () {
   listenToSocket();
   show_graphs();
 });
-
