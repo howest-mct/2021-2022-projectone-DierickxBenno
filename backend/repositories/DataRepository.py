@@ -19,12 +19,15 @@ class DataRepository:
 
     @staticmethod
     def add_location(longitude, latitude):
+        location = []
         sql = "INSERT INTO historiek (waarde, eenheidid, tijdstip) VALUES (%s,3, current_time());"
         params = [latitude]
         Database.execute_sql(sql, params)
         sql = "INSERT INTO historiek (waarde, eenheidid, tijdstip) VALUES (%s,4, current_time());"
         params = [longitude]
         Database.execute_sql(sql, params)
+        
+        
 
     #get most recent data
     @staticmethod

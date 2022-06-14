@@ -64,10 +64,6 @@ def error_handler(e):
 def hallo():
     return "Server is running, er zijn momenteel geen API endpoints beschikbaar."
 
-@app.route('/stappen')
-def stappen():
-    pass
-
 
 # socketio
 @socketio.on('connect')

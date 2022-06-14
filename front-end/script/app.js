@@ -70,7 +70,6 @@ const listenToSidenav = function() {
     for (const btn of buttons){
       btn.addEventListener("click", function () {
       displaySidenav(buttons)
-      
     })}
   }
 
@@ -132,13 +131,12 @@ const listenToSocket = function () {
   })
 
   socketio.on("B2F_meest_recente_data",function (jsonObject) {
-    // console.log(jsonObject)
+    console.log('json:',  jsonObject)
     const waardes = document.querySelectorAll(".c-waarde_holder");
     // set sensor data
     for (const waarde of waardes){
       let eenheidID = waarde.getAttribute("eenheid-id");
       const el = jsonObject.data
-
       for (const i of el){
         // console.log(eenheidID, i)
         if (eenheidID == 1 && i.eenheidid == 1){
@@ -149,6 +147,12 @@ const listenToSocket = function () {
           //stappen
           waarde.innerHTML = i.waarde
         }      
+        else if (i.eenheidid == 3){
+          lat = i.waarde
+        }
+        else  if (i.eenheidid == 4){
+          longi = i.waarde
+        }
         else if (eenheidID == 5 && i.eenheidid == 5){
           // bpm
           waarde.innerHTML = i.waarde+" "+i.eenheid
@@ -157,15 +161,10 @@ const listenToSocket = function () {
           // temperatuur
           waarde.innerHTML = i.waarde+" "+i.eenheid
         }
-        
+        // set location
     }
     }
-    
-    // set location
-    lat = jsonObject.data[3].waarde
-    longi = jsonObject.data[4].waarde
-    console.log("3")
-    map.panTo(new L.LatLng(lat, longi)); 
+    map.panTo(new L.LatLng(lat, longi));
   })
 
   socketio.on("B2F_historiek", function (jsonObject) {
