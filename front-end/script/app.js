@@ -216,16 +216,20 @@ const show_graph_hr = function () { // heartrate
       y: {
         formatter: function (y) {
           if (typeof y !== "undefined") {
-            return y.toFixed(0) + "";
+            return y.toFixed(0) + " bpm";
           }
           return y;
         }
       }
     },
-    responsive: [{
-      breakpoint: undefined,
-      options: {},
-  }]
+    title: {
+      text: 'heartrate',
+      align: 'left',
+      style:{
+        fontSize: '24px',
+        fontFamily: 'Co Text'
+      }
+    }
   }
 
   var chart_hr = new ApexCharts(document.querySelector(".g-heartrate"), options_hr);
@@ -259,6 +263,14 @@ const show_graph_spd = function () { //speed
           return y;
         }
       }
+    },
+    title: {
+      text: 'speed',
+      align: 'left',
+      style:{
+        fontSize: '24px',
+        fontFamily: 'Co Text'
+      }
     }
   }
   var chart_spd = new ApexCharts(document.querySelector(".g-speed"), options_spd);
@@ -287,12 +299,21 @@ const show_graph_temp = function () { //temperature
       y: {
         formatter: function (y) {
           if (typeof y !== "undefined") {
-            return y.toFixed(0) + " km/h";
+            return y.toFixed(0) + " °C";
           }
           return y;
         }
       }
+    },
+    title: {
+      text: 'temperature',
+      align: 'left',
+      style:{
+        fontSize: '24px',
+        fontFamily: 'Co Text'
+      }
     }
+  
   }
   var chart_temp = new ApexCharts(document.querySelector(".g-temperature"), options_temp);
   chart_temp.render();
@@ -324,6 +345,14 @@ const show_graph_steps = function () {
           }
           return y;
         }
+      }
+    },
+    title: {
+      text: 'steps',
+      align: 'left',
+      style:{
+        fontSize: '24px',
+        fontFamily: 'Co Text'
       }
     }
   }
