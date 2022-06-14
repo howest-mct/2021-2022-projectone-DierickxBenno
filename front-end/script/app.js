@@ -97,10 +97,11 @@ const listenToPresets = function () {
       switch (kleurId){
         case '0':
           document.querySelector('.c-curr_color').style.background = 'linear-gradient(to bottom right, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D)'
-          console.log("pride!!")
+          socketio.emit('F2B_set_color', {'hue': 'pride'})
           break
         case '1':
           document.querySelector('.c-curr_color').style.background = 'white'
+          socketio.emit('F2B_set_color', {'hue': 'white'})
           console.log("white!!")
           break
       }
@@ -160,8 +161,24 @@ const listenToSocket = function () {
   })
 
   socketio.on("B2F_curr_hue", function (jsonObject) {
-    console.log(jsonObject.hue)
+    // console.log(jsonObject.hue)
+    const presets = ['pride', 'white']
+    if (jsonObject.hue in presets){
+      switch (jsonObject.hue){
+        case 'pride':
+          document.querySelector('.rainbow').classList.add('c-selected_color')
+          document.querySelector('.c-curr_color').style.background = 'linear-gradient(to bottom right, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D)'
+          break
+
+        case 'white':
+          document.querySelector('.white').classList.add('c-selected_color')
+          document.querySelector('.c-curr_color').style.background = 'white'
+          break
+      }
+    }
+    else{
     document.querySelector(".c-slider").value = jsonObject.hue
+    }
   })
 
   socketio.on("B2F_meest_recente_data",function (jsonObject) {
