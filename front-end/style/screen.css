@@ -629,6 +629,7 @@ body.u-active {
   }
 
   .c-info_block-map {
+    flex-basis: 75%;
     margin: 144px 0px;
     width: 100%;
     margin-bottom: 0;
@@ -657,6 +658,7 @@ body.u-active {
   }
 
   .c-big_block {
+    flex-basis: 85%;
     margin-left: 32px;
     height: 482px;
   }
@@ -676,6 +678,7 @@ body.u-active {
   }
 
   .c-big_block {
+    flex-basis: 66%;
     width: 998px;
     margin-left: 0;
   }
