@@ -275,11 +275,11 @@ body.u-active {
 
 .o-dashboard {
   margin: 32px;
-  margin-left: -8px;
+  margin-left: 4px;
   flex-basis: 100%;
   margin-top: 144px;
   /* margin-right: 72px; */
-  width: 100%;
+  width: 85%;
   height: 550px;
   justify-content: start;
   justify-content: space-between;
@@ -414,7 +414,7 @@ body.u-active {
 }
 
 .c-info_block {
-  margin: 16px;
+  margin: 8px;
   /* margin-right: 16px; */
   margin-top: 0px;
   margin-bottom: 32px;
@@ -438,7 +438,7 @@ body.u-active {
   background: #DDE;
   padding: 16px;
   border-radius: var(--border-radius);
-  width: 80%;
+  width: 85%;
   height: 490px;
   /* background-color: blue; */
 }
@@ -678,7 +678,7 @@ body.u-active {
   }
 
   .c-big_block {
-    flex-basis: 66%;
+    flex-basis: 85%;
     width: 998px;
     margin-left: 0;
   }
