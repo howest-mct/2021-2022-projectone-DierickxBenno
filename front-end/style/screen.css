@@ -452,16 +452,17 @@ body.u-active {
   border-radius: var(--border-radius);
   padding: 24px;
   margin-top: 16px;
+  margin-bottom: 32px;
   margin-left: 8px;
 }
 
 .c-graph-background {
   margin: 16px;
-  padding: 32px 16px;
+  padding: 16px;
   /* margin-top: 103px; */
   background-color: white;
   /* width: 908px; */
-  width: 30%;
+  width: 500px;
   height: 100%;
   border-radius: 0 19px;
 }
@@ -471,9 +472,10 @@ body.u-active {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  overflow-x: scroll;
-  height: 90%;
+  height: 320px;
   width: 100%;
+  overflow-y: scroll;
+  /* overflow-x: scroll; */
 }
 
 .c-color-background {
@@ -493,6 +495,10 @@ body.u-active {
   text-align: center;
   margin-bottom: 12px;
   color: #38434a;
+}
+
+.c-block-title {
+  font-size: 28px;
 }
 
 .c-title {
@@ -658,11 +664,19 @@ body.u-active {
     margin-left: 32px;
     height: 482px;
   }
+
+  .c-graph-holder {
+    height: 85%;
+  }
 }
 
 @media (min-width: 1300px) {
   .c-graph-background {
     width: 60%
+  }
+
+  .c-graph-holder {
+    height: 90%;
   }
 
   .c-big_block {

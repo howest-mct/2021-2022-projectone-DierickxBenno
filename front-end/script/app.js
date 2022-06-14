@@ -221,7 +221,11 @@ const show_graph_hr = function () { // heartrate
           return y;
         }
       }
-    }
+    },
+    responsive: [{
+      breakpoint: undefined,
+      options: {},
+  }]
   }
 
   var chart_hr = new ApexCharts(document.querySelector(".g-heartrate"), options_hr);
