@@ -363,7 +363,6 @@ body.u-active {
   }
 }
 
-
 @media (min-width: 1300px) {
   .o-dashboard {
     margin-left: 0px;
@@ -516,6 +515,14 @@ body.u-active {
   height: 417px;
   border-radius: 0 19px;
   margin-bottom: 32px;
+}
+
+.c-curr_color {
+  margin: auto;
+  width: 255px;
+  height: 255px;
+  background-color: black;
+  border-radius: 19px 0px;
 }
 
 .c-room__name {
