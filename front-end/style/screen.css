@@ -397,6 +397,7 @@ body.u-active {
   padding-bottom: 14px;
   width: 134px;
   height: 32px;
+
 }
 
 @media (min-width: 900px) {
@@ -424,6 +425,7 @@ body.u-active {
   height: 213px;
   width: 193px;
   border-radius: 19px 0;
+  /* box-shadow: 4px 4px 10px #888; */
 }
 
 .c-info_block-map {
@@ -444,23 +446,31 @@ body.u-active {
 .c-big_block {
   flex-basis: 90%;
   justify-content: start;
-  width: 90%;
+  width: 80%;
   height: 998px;
   background-color: #DDE;
   border-radius: var(--border-radius);
   padding: 24px;
-  margin-top: 72px;
+  margin-top: 16px;
   margin-left: 8px;
 }
 
 .c-graph-background {
-  margin: auto;
+  margin: 8px;
   /* margin-top: 103px; */
   background-color: white;
   /* width: 908px; */
-  width: 100%;
+  width: 720px;
   height: 370px;
   border-radius: 0 19px;
+}
+
+.c-graph-holder {
+  display: flex;
+  /* flex-wrap: wrap;s */
+  flex-direction: row;
+  height: 100%;
+  width: 100%
 }
 
 .c-color-background {

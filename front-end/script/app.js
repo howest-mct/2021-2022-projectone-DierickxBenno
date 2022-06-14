@@ -90,14 +90,13 @@ const listenToSocket = function () {
 
   socketio.on("B2F_GPS",function (jsonObject) {
     const data = jsonObject.GPS
-
     if (data != null){
       const dataId = data["data-id"]
       if (dataId == "$GPRMC"){
         lat = data.latitude
         longi = data.longitude
         const speed = data.speed
-        // map.panTo(new L.LatLng(lat, longi));
+        var marker = L.marker([lat, longi]).addTo(map);
         const waardeHolders = document.querySelectorAll(".c-waarde_holder")
         for (const waarde of waardeHolders){
           if (waarde.getAttribute("eenheid-id") == 1){
@@ -109,7 +108,7 @@ const listenToSocket = function () {
       else if(dataId == "$GPGGA"){
         lat = data.latitude
         longi = data.longitude
-        // map.panTo(new L.LatLng(lat, longi));
+        var marker = L.marker([lat, longi]).addTo(map);
       }
     
   }})
@@ -165,6 +164,7 @@ const listenToSocket = function () {
     }
     }
     map.panTo(new L.LatLng(lat, longi));
+    var marker = L.marker([lat, longi]).addTo(map);
   })
 
   socketio.on("B2F_historiek", function (jsonObject) {
@@ -176,48 +176,129 @@ const listenToSocket = function () {
       const date = new Date(el.x);
       const dateTimestamp = date.getTime();
 
-      switch (el.eenheid){
+      switch (el.eenheidid){
         case 1:
           dataSerie[0].data.push([el.x, el.y])
           break;
         case 2:
           dataSerie[1].data.push([dateTimestamp, el.y])
           break;
-        case 3:
+        case 5:
           dataSerie[2].data.push([el.x, el.y])
           break;
-        case 4:
+        case 7:
           dataSerie[3].data.push([el.x, el.y])
           break;
-
       }
-      
     }
-  
+    console.log(dataSerie)
   })
 };
 
-const show_graph = function () {
+const show_graph_hr = function () { // heartrate
      
   options = {
     series: [{
     name: 'speed',
     type: 'area',
-    data: [[1, null], [2, null], [3, null], [4, null], [5, null]]
+    data: []
 
   }, {
     name: 'stappen',
     type: 'column',
-    data: [[1, null], [2, null], [3, null], [4, null], [5, null]]
+    data: []
   }, {
     name: 'heartrate',
     type: 'line',
-    data: [[1, null], [2, null], [3, null], [4, null], [5, null]]
+    data: []
    
   }, {
     name: 'temperature',
     type: 'line',
-    data: [[1, null], [2, null], [3, null], [4, null], [5, null]]
+    data: []
+  }],
+    chart: {
+    height: '350px',
+    type: 'line',
+    stacked: false,
+  },
+  stroke: {
+    width: [0, 2, 5],
+    curve: 'smooth'
+  },
+  
+responsive: [{
+  breakpoint: undefined,
+  options: {},
+}],
+  plotOptions: {
+    bar: {
+      columnWidth: '100%'
+    }
+  },
+  fill: {
+    opacity: [0.85, 0.25, 1],
+    gradient: {
+      inverseColors: false, 
+      shade: 'light',
+      type: "vertical",
+      opacityFrom: 0.85,
+      opacityTo: 0.55,
+      stops: [0, 100, 100, 100]
+    }
+  },
+  labels: [],
+  markers: {
+    size: 0
+  },
+  xaxis: {
+    type: 'datetime'
+  },
+  yaxis: {
+    title: {
+      text: '',
+    },
+    min: 0
+  },
+  tooltip: {
+    shared: false,
+    intersect: false,
+    y: {
+      formatter: function (y) {
+        if (typeof y !== "undefined") {
+          return y.toFixed(0) + "";
+        }
+        return y;
+  
+      }
+    }
+  }
+  };
+  
+  var chart = new ApexCharts(document.querySelector(".g-heartrate"), options);
+  chart.render();
+}
+const show_graph_spd = function () { //speed
+     
+  options = {
+    series: [{
+    name: 'speed',
+    type: 'area',
+    data: []
+
+  }, {
+    name: 'stappen',
+    type: 'column',
+    data: []
+  }, {
+    name: 'heartrate',
+    type: 'line',
+    data: []
+   
+  }, {
+    name: 'temperature',
+    type: 'line',
+    data: []
   }],
     chart: {
     height: '350px',
@@ -278,7 +359,172 @@ responsive: [{
   };
   
   var chart = new ApexCharts(document.querySelector(".c-graph"), options);
+  chart.render();
+}
+const show_graph_temp = function () { //temperature
+     
+  options = {
+    series: [{
+    name: 'speed',
+    type: 'area',
+    data: []
+
+  }, {
+    name: 'stappen',
+    type: 'column',
+    data: []
+  }, {
+    name: 'heartrate',
+    type: 'line',
+    data: []
+   
+  }, {
+    name: 'temperature',
+    type: 'line',
+    data: []
+  }],
+    chart: {
+    height: '350px',
+    type: 'line',
+    stacked: false,
+  },
+  stroke: {
+    width: [0, 2, 5],
+    curve: 'smooth'
+  },
   
+responsive: [{
+  breakpoint: undefined,
+  options: {},
+}],
+  plotOptions: {
+    bar: {
+      columnWidth: '100%'
+    }
+  },
+  fill: {
+    opacity: [0.85, 0.25, 1],
+    gradient: {
+      inverseColors: false, 
+      shade: 'light',
+      type: "vertical",
+      opacityFrom: 0.85,
+      opacityTo: 0.55,
+      stops: [0, 100, 100, 100]
+    }
+  },
+  labels: [],
+  markers: {
+    size: 0
+  },
+  xaxis: {
+    type: 'datetime'
+  },
+  yaxis: {
+    title: {
+      text: '',
+    },
+    min: 0
+  },
+  tooltip: {
+    shared: false,
+    intersect: false,
+    y: {
+      formatter: function (y) {
+        if (typeof y !== "undefined") {
+          return y.toFixed(0) + "";
+        }
+        return y;
+  
+      }
+    }
+  }
+  };
+  
+  var chart = new ApexCharts(document.querySelector(".c-graph"), options);
+  chart.render();
+}
+const show_graph_steps = function () {
+     
+  options = {
+    series: [{
+    name: 'speed',
+    type: 'area',
+    data: []
+
+  }, {
+    name: 'stappen',
+    type: 'column',
+    data: []
+  }, {
+    name: 'heartrate',
+    type: 'line',
+    data: []
+   
+  }, {
+    name: 'temperature',
+    type: 'line',
+    data: []
+  }],
+    chart: {
+    height: '350px',
+    type: 'line',
+    stacked: false,
+  },
+  stroke: {
+    width: [0, 2, 5],
+    curve: 'smooth'
+  },
+  
+responsive: [{
+  breakpoint: undefined,
+  options: {},
+}],
+  plotOptions: {
+    bar: {
+      columnWidth: '100%'
+    }
+  },
+  fill: {
+    opacity: [0.85, 0.25, 1],
+    gradient: {
+      inverseColors: false, 
+      shade: 'light',
+      type: "vertical",
+      opacityFrom: 0.85,
+      opacityTo: 0.55,
+      stops: [0, 100, 100, 100]
+    }
+  },
+  labels: [],
+  markers: {
+    size: 0
+  },
+  xaxis: {
+    type: 'datetime'
+  },
+  yaxis: {
+    title: {
+      text: '',
+    },
+    min: 0
+  },
+  tooltip: {
+    shared: false,
+    intersect: false,
+    y: {
+      formatter: function (y) {
+        if (typeof y !== "undefined") {
+          return y.toFixed(0) + "";
+        }
+        return y;
+  
+      }
+    }
+  }
+  };
+  
+  var chart = new ApexCharts(document.querySelector(".c-graph"), options);
   chart.render();
 }
 
