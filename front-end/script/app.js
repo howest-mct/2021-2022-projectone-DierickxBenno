@@ -198,7 +198,9 @@ const listenToSocket = function () {
 const show_graph_hr = function () { // heartrate
   var options_hr = {
     chart: {
-      type: 'line'
+      type: 'line',
+      height: '100%',
+      width: '100%',
     },
     series: [{
       name: 'heartrate',
@@ -230,7 +232,9 @@ const show_graph_spd = function () { //speed
      
     var options_spd = {
     chart: {
-      type: 'area'
+      type: 'area',
+      height: '100%',
+      width: '100%',
     },
     series: [{
       name: 'speed',
@@ -261,7 +265,9 @@ const show_graph_temp = function () { //temperature
      
   var options_temp = {
     chart: {
-      type: 'line'
+      type: 'line',
+      height: '100%',
+      width: '100%',
     },
     series: [{
       name: 'temp',
@@ -292,7 +298,9 @@ const show_graph_steps = function () {
      
   var options_steps = {
     chart: {
-      type: 'bar'
+      type: 'bar',
+      height: '100%',
+      width: '100%',
     },
     series: [{
       name: 'steps',

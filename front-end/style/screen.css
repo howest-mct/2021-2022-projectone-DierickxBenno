@@ -457,11 +457,11 @@ body.u-active {
 
 .c-graph-background {
   margin: 16px;
-  padding: 64px;
+  padding: 32px 16px;
   /* margin-top: 103px; */
   background-color: white;
   /* width: 908px; */
-  width: 25%;
+  width: 30%;
   height: 100%;
   border-radius: 0 19px;
 }
