@@ -523,7 +523,8 @@ body.u-active {
   height: 255px;
   /* background-color: black; */
   border-radius: 19px 0px;
-  background: hsl(360, 100%, 50%)
+  background: hsl(360, 100%, 50%);
+  box-shadow: 0 0 4px 2px #333;
 }
 
 .c-room__name {

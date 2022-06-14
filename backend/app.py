@@ -44,6 +44,7 @@ def connect_to_esp32():
 
 DogBit = connect_to_esp32()
 
+status_led = 'start'
 
 
 # Code voor Flask
@@ -80,10 +81,6 @@ def initial_connection():
     #totaal aantal stappen, vandaag doorsturen
     total_steps = DataRepository.get_total_steps()
     socketio.emit('B2F_stap', {'stap': total_steps})
-    #historiek
-    historiek = DataRepository.get_historiek()
-    # print(historiek)
-    socketio.emit('B2F_historiek', {"historiek": historiek})
 
     hue = DataRepository.get_hue()
     socketio.emit('B2F_curr_hue', {"hue": hue})
@@ -139,6 +136,15 @@ def get_data():
                 licht_intensiteit = float(data[3:])
                 DataRepository.insert_data(licht_intensiteit, 6)
                 print(licht_intensiteit)
+                if (licht_intensiteit > 90 and (status_led == 1 or status_led == 'start')):
+                    socketio.emit("B2F_status_led", {"status": "status: off"})
+                    status_led = 0
+                
+                elif (licht_intensiteit < 75 and (status_led == 0 or status_led == 'start')):
+                    socketio.emit("B2F_status_led", {"status": "status: on"})
+                    status_led = 1
+                
+                
             
             elif 'pulse' in data:
                 pulse = float(data[7:])

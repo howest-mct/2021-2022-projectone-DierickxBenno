@@ -170,35 +170,11 @@ const listenToSocket = function () {
     var marker = L.marker([lat, longi]).addTo(map);
   })
 
-  socketio.on("B2F_historiek", function (jsonObject) {
-    console.log(jsonObject)
-    const historiek = jsonObject.historiek
-    const dataSerie_hr = options_hr.series
-    const dataSerie_spd = options_spd.series
-    const dataSerie_temp = options_spd.series
-    const dataSerie_steps = options_steps.series
-    for (const el of historiek){ 
-      // time sorting properties
-      const date = new Date(el.x);
-      const dateTimestamp = date.getTime();
-
-      switch (el.eenheidid){
-        case 1:
-          dataSerie_spd.data.push([el.x, el.y])
-          break;
-        case 2:
-          dataSerie_steps.data.push([dateTimestamp, el.y])
-          break;
-        case 5:
-          dataSerie_hr.data.push([el.x, el.y])
-          break;
-        case 7:
-          dataSerie_temp.data.push([el.x, el.y])
-          break;
-      }
-    }
-    console.log(dataSerie)
+  socketio.on("B2F_status_led", function (jsonObject) {
+    const statusLed = jsonObject.status;
+    document.querySelector(".js-status").innerHTML = statusLed;
   })
+   
 };
 
 // #region graphs
