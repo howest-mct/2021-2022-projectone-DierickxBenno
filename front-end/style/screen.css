@@ -256,31 +256,48 @@ body.u-active {
 
 /* object content */
 .o-container .o-layout {
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .o-container .o-layout .o-dashboard {
-  flex-direction: none;
+  flex-direction: column;
 }
 
 @media (min-width: 1045px) {
   .o-container .o-layout {
     flex-direction: unset;
+    flex-basis: 100%;
+  }
+
+  .o-container .o-layout .o-dashboard {
+    flex-basis: 83%;
+  }
+}
+
+@media (min-width: 1300px) {
+  .o-container .o-layout {
+    flex-direction: row;
+    margin-bottom: 24px;
   }
 
   .o-container .o-layout .o-dashboard {
     flex-direction: row;
+    flex-basis: 53%;
+  }
+
+  .o-container .o-layout .o-map {
+    flex-basis: 45%;
   }
 }
 
 .o-dashboard {
   margin: 32px;
   margin-left: 4px;
-  flex-basis: 100%;
+  flex-basis: 90%;
   margin-top: 144px;
   /* margin-right: 72px; */
-  width: 85%;
-  height: 550px;
+  width: 90%;
+  height: 280px;
   justify-content: start;
   justify-content: space-between;
   align-content: start;
@@ -290,7 +307,7 @@ body.u-active {
 .o-map {
   justify-content: start;
   flex-basis: 100%;
-  margin-top: 32px;
+  margin-top: 16px;
 }
 
 .o-footer {
@@ -301,7 +318,6 @@ body.u-active {
 @media (min-width: 720px) {
   .o-map {
     margin: 0;
-    flex-basis: 50%;
     /* margin: auto; */
   }
 
@@ -310,65 +326,79 @@ body.u-active {
     margin-right: 0;
     margin-left: 32px;
     justify-content: start;
-    flex-basis: 45%;
+    flex-basis: 85%;
   }
 }
 
 @media (min-width: 920px) {
-  .o-map {
-    flex-basis: 80%;
-  }
-
 
   .o-dashboard {
     margin-right: 0;
     margin-left: 32px;
     justify-content: start;
-    flex-basis: 80%;
+    flex-basis: 85%;
   }
 }
 
 @media (min-width: 1045px) {
-  .o-map {
-    flex-basis: 45%;
-  }
-
 
   .o-dashboard {
     margin-right: 0;
     margin-left: 32px;
     flex-basis: 50%;
-    overflow-x: unset;
   }
 }
 
 @media (min-width: 1200px) {
-  .o-map {
-    flex-basis: 40%;
-  }
 
 
   .o-dashboard {
     margin-right: 0;
     margin-left: 32px;
+    height: 280px;
+    /* width: 80%; */
     justify-content: start;
-    flex-basis: 55%;
+    flex-basis: 85%;
+    overflow-x: scroll;
   }
 }
 
 
 @media (min-width: 1300px) {
   .o-dashboard {
-    flex-basis: 60%;
     margin-left: 0px;
     margin-top: 124px;
-    flex-basis: 50%;
+
+    overflow-x: unset;
   }
 
   .o-map {
     justify-content: start;
-    flex-basis: 45%;
     margin-top: 32px 0px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .o-dashboard {
+    flex-basis: 50% !important;
+  }
+
+  .o-map {
+    justify-content: start;
+    margin-top: 32px 0px;
+    flex-basis: 50% !important;
+  }
+}
+
+@media (min-width: 1800px) {
+  .o-dashboard {
+    flex-basis: 40% !important;
+  }
+
+  .o-map {
+    justify-content: start;
+    margin-top: 32px 0px;
+    flex-basis: 60% !important;
   }
 }
 
@@ -414,7 +444,7 @@ body.u-active {
 }
 
 .c-info_block {
-  margin: 8px;
+  margin: 16px;
   /* margin-right: 16px; */
   margin-top: 0px;
   margin-bottom: 32px;
@@ -429,7 +459,7 @@ body.u-active {
 }
 
 .c-info_block-map {
-  flex-basis: 100%;
+  flex-basis: 80%;
   margin: 0px;
   margin-left: 8px;
   margin-bottom: 32px;
@@ -438,7 +468,6 @@ body.u-active {
   background: #DDE;
   padding: 16px;
   border-radius: var(--border-radius);
-  width: 85%;
   height: 490px;
   /* background-color: blue; */
 }
@@ -474,8 +503,8 @@ body.u-active {
   flex-direction: column;
   height: 320px;
   width: 100%;
-  overflow-y: scroll;
-  /* overflow-x: scroll; */
+  /* overflow-y: scroll; */
+  overflow-x: scroll;
 }
 
 .c-color-background {
@@ -617,7 +646,7 @@ body.u-active {
 
   .c-info_block-map {
     margin: 48px;
-    width: 80%;
+    /* width: 80%; */
   }
 }
 
@@ -629,23 +658,21 @@ body.u-active {
   }
 
   .c-info_block-map {
-    flex-basis: 75%;
-    margin: 144px 0px;
-    width: 100%;
-    margin-bottom: 0;
+    margin: 24px 48px;
+    width: 82%;
   }
 }
 
 @media (min-width: 1200px) {
   .c-info_block-map {
-    margin: 144px 32px;
-    width: 100%;
-    margin-bottom: 0;
+    margin: 24px 32px;
+    margin-bottom: 24px;
   }
 
   .c-info_block {
     margin-left: 0px;
-    margin-bottom: 32px;
+    margin-right: 32px;
+    /* margin-bottom: 32px; */
   }
 
   .o-nav .c-title {
@@ -678,13 +705,14 @@ body.u-active {
   }
 
   .c-big_block {
-    flex-basis: 85%;
+    flex-basis: 90%;
     width: 998px;
     margin-left: 0;
   }
 
   .c-info_block-map {
     margin: 124px 0px;
+    margin-right: 64px;
     margin-bottom: 0;
     width: 100%
   }
