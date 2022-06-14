@@ -44,6 +44,11 @@ const setColor = function () {
     document.querySelector('.c-curr_color').style.background = `hsl(${Math.round(((slider.value)/255)*360)}, 100%, 50%)`
     socketio.emit("F2B_set_color", {"hue": slider.value})
     console.log("new slider value sent")
+    const presets = document.querySelectorAll(".js-preset")
+    for (const color of presets){
+      color.classList.remove('c-selected_color')
+    }
+
   })
 
 }
@@ -75,13 +80,40 @@ const listenToSidenav = function() {
       btn.addEventListener("click", function () {
       displaySidenav(buttons)
     })}
+}
+
+const listenToPresets = function () {
+  const presets = document.querySelectorAll(".js-preset")
+  // console.log(presets)
+  for (const color of presets){
+    color.addEventListener('click', function () {
+      for (const color of presets){
+        color.classList.remove('c-selected_color')
+      }
+      // presets.classList.remove('c-selected_color');
+      color.classList.add('c-selected_color');
+      const kleurId = color.getAttribute("kleur-id")
+      console.log(kleurId)
+      switch (kleurId){
+        case '0':
+          document.querySelector('.c-curr_color').style.background = 'linear-gradient(to bottom right, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D)'
+          console.log("pride!!")
+          break
+        case '1':
+          document.querySelector('.c-curr_color').style.background = 'white'
+          console.log("white!!")
+          break
+      }
+    })
   }
+}
 
 const listenToUI = function () {
   setColor();
   listenToPwr();
   listenToCenterDog();
   listenToSidenav();
+  listenToPresets();
 };
 
 const listenToSocket = function () {
@@ -174,7 +206,6 @@ const listenToSocket = function () {
     const statusLed = jsonObject.status;
     document.querySelector(".js-status").innerHTML = statusLed;
   })
-   
 };
 
 // #region graphs

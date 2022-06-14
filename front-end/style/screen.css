@@ -544,16 +544,10 @@ body.u-active {
   flex-wrap: wrap;
   justify-content: center;
   flex-direction: row;
-  height: 248px;
+  height: 232px;
   overflow-y: scroll;
-}
+  padding: 8px;
 
-.c-color-preset {
-  margin: 24px;
-  width: 184px;
-  height: 234px;
-  border-radius: 0px 19px;
-  padding: 16px;
 }
 
 .c-selected_color {
@@ -825,6 +819,13 @@ input[type="range"]::-webkit-slider-thumb {
   box-shadow: none;
 }
 
+/* #region preset colors */
 .rainbow {
-  background-image: linear-gradient(to bottom right, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D);
+  background: linear-gradient(to bottom right, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D);
 }
+
+.white {
+  background: white;
+}
+
+/* #endregion */
