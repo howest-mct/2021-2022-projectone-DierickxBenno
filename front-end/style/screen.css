@@ -467,8 +467,9 @@ body.u-active {
 
 .c-graph-holder {
   display: flex;
-  /* flex-wrap: wrap;s */
-  flex-direction: row;
+  flex-wrap: wrap;
+  flex-direction: column;
+  overflow-x: scroll;
   height: 100%;
   width: 100%
 }
@@ -604,10 +605,9 @@ body.u-active {
 
 }
 
-
 @media (min-width: 920px) {
   .c-color-background {
-    width: 360px;
+    width: 45%;
     margin-bottom: 0;
   }
 
@@ -620,7 +620,7 @@ body.u-active {
 
 @media (min-width: 1045px) {
   .c-color-background {
-    width: 360px;
+    /* width: 360px; */
     margin-bottom: 0;
   }
 
@@ -656,11 +656,6 @@ body.u-active {
     margin-left: 32px;
     height: 482px;
   }
-
-  .c-color-background {
-    width: 360px;
-  }
-
 }
 
 @media (min-width: 1300px) {
