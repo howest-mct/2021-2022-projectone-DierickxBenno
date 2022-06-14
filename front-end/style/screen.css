@@ -519,12 +519,59 @@ body.u-active {
 
 .c-curr_color {
   margin: auto;
-  width: 255px;
-  height: 255px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 32px;
+  width: 100px;
+  height: 100px;
   /* background-color: black; */
   border-radius: 19px 0px;
   background: hsl(360, 100%, 50%);
   box-shadow: 0 0 4px 2px #333;
+}
+
+@media (min-width: 510px) {
+  .c-curr_color {
+    width: 255px;
+    height: 255px;
+  }
+}
+
+.c-color-preset-group {
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: row;
+  height: 248px;
+  overflow-y: scroll;
+}
+
+.c-color-preset {
+  margin: 24px;
+  width: 184px;
+  height: 234px;
+  border-radius: 0px 19px;
+  padding: 16px;
+}
+
+.c-selected_color {
+  box-shadow: 0 0 4px 2px #333;
+}
+
+.c-color_holder {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 19px 0px;
+  margin: auto;
+}
+
+.c-color-name {
+  border-radius: 19px 0px !important;
+  margin: 16px;
+  width: 100%;
 }
 
 .c-room__name {
@@ -776,4 +823,8 @@ input[type="range"]::-webkit-slider-thumb {
 
 .remove_boxshadow {
   box-shadow: none;
+}
+
+.rainbow {
+  background-image: linear-gradient(to bottom right, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D);
 }
