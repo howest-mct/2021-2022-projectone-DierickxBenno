@@ -5,7 +5,7 @@ const lanIP = `${window.location.hostname}:5000`;
 const socketio = io(`http://${lanIP}`);
 const provider = "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
 // zo kunnen we options aanpassen via socketio
-var options;
+var options_hr, options_spd, option_temp, options_steps;
 // const copyright= '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>';
 
 let map, layergroup;
@@ -196,170 +196,64 @@ const listenToSocket = function () {
 };
 
 const show_graph_hr = function () { // heartrate
-     
-  options = {
-    series: [{
-    name: 'speed',
-    type: 'area',
-    data: []
-
-  }, {
-    name: 'stappen',
-    type: 'column',
-    data: []
-  }, {
-    name: 'heartrate',
-    type: 'line',
-    data: []
-   
-  }, {
-    name: 'temperature',
-    type: 'line',
-    data: []
-  }],
+  var options_hr = {
     chart: {
-    height: '350px',
-    type: 'line',
-    stacked: false,
-  },
-  stroke: {
-    width: [0, 2, 5],
-    curve: 'smooth'
-  },
-  
-responsive: [{
-  breakpoint: undefined,
-  options: {},
-}],
-  plotOptions: {
-    bar: {
-      columnWidth: '100%'
-    }
-  },
-  fill: {
-    opacity: [0.85, 0.25, 1],
-    gradient: {
-      inverseColors: false, 
-      shade: 'light',
-      type: "vertical",
-      opacityFrom: 0.85,
-      opacityTo: 0.55,
-      stops: [0, 100, 100, 100]
-    }
-  },
-  labels: [],
-  markers: {
-    size: 0
-  },
-  xaxis: {
-    type: 'datetime'
-  },
-  yaxis: {
-    title: {
-      text: '',
+      type: 'line'
     },
-    min: 0
-  },
-  tooltip: {
-    shared: false,
-    intersect: false,
-    y: {
-      formatter: function (y) {
-        if (typeof y !== "undefined") {
-          return y.toFixed(0) + "";
+    series: [{
+      name: 'heartrate',
+      data: [[1, 130], [2, 120], [3, 90], [4, 85], [5, 40], [6, 132], [7, 112]],
+    }],
+    xaxis: {
+      type: 'datetime',
+      // categories: []
+    },
+    tooltip: {
+      shared: false,
+      intersect: false,
+      y: {
+        formatter: function (y) {
+          if (typeof y !== "undefined") {
+            return y.toFixed(0) + "";
+          }
+          return y;
         }
-        return y;
-  
       }
     }
   }
-  };
-  
-  var chart = new ApexCharts(document.querySelector(".g-heartrate"), options);
-  chart.render();
+
+  var chart_hr = new ApexCharts(document.querySelector(".g-heartrate"), options_hr);
+  chart_hr.render();
 }
 const show_graph_spd = function () { //speed
      
-  options = {
-    series: [{
-    name: 'speed',
-    type: 'area',
-    data: []
-
-  }, {
-    name: 'stappen',
-    type: 'column',
-    data: []
-  }, {
-    name: 'heartrate',
-    type: 'line',
-    data: []
-   
-  }, {
-    name: 'temperature',
-    type: 'line',
-    data: []
-  }],
+    var options_spd = {
     chart: {
-    height: '350px',
-    type: 'line',
-    stacked: false,
-  },
-  stroke: {
-    width: [0, 2, 5],
-    curve: 'smooth'
-  },
-  
-responsive: [{
-  breakpoint: undefined,
-  options: {},
-}],
-  plotOptions: {
-    bar: {
-      columnWidth: '100%'
-    }
-  },
-  fill: {
-    opacity: [0.85, 0.25, 1],
-    gradient: {
-      inverseColors: false, 
-      shade: 'light',
-      type: "vertical",
-      opacityFrom: 0.85,
-      opacityTo: 0.55,
-      stops: [0, 100, 100, 100]
-    }
-  },
-  labels: [],
-  markers: {
-    size: 0
-  },
-  xaxis: {
-    type: 'datetime'
-  },
-  yaxis: {
-    title: {
-      text: '',
+      type: 'area'
     },
-    min: 0
-  },
-  tooltip: {
-    shared: false,
-    intersect: false,
-    y: {
-      formatter: function (y) {
-        if (typeof y !== "undefined") {
-          return y.toFixed(0) + "";
+    series: [{
+      name: 'speed',
+      data: [[1, 30],[2, 32],[3, 23],[4, 21],[5, 15],[6, 13]],
+    }],
+    xaxis: {
+      type: 'datetime',
+      // categories: []
+    },
+    tooltip: {
+      shared: false,
+      intersect: false,
+      y: {
+        formatter: function (y) {
+          if (typeof y !== "undefined") {
+            return y.toFixed(0) + " km/h";
+          }
+          return y;
         }
-        return y;
-  
       }
     }
   }
-  };
-  
-  var chart = new ApexCharts(document.querySelector(".c-graph"), options);
-  chart.render();
+  var chart_spd = new ApexCharts(document.querySelector(".g-speed"), options_spd);
+  chart_spd.render();
 }
 const show_graph_temp = function () { //temperature
      
@@ -528,11 +422,18 @@ responsive: [{
   chart.render();
 }
 
+const show_graphs = function () {
+  show_graph_hr();
+  show_graph_spd();
+  // show_graph_temp();
+  // show_graph_steps();
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   console.info("DOM geladen");
   listenToUI();
   init_map();
   listenToSocket();
-  show_graph();
+  show_graphs();
 });
 
