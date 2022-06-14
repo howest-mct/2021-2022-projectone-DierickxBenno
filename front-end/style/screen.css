@@ -432,7 +432,7 @@ body.u-active {
   flex-basis: 100%;
   margin: 0px;
   margin-left: 8px;
-  margin-bottom: 13px;
+  margin-bottom: 32px;
   display: flex;
   flex-direction: column;
   background: #DDE;
@@ -617,8 +617,7 @@ body.u-active {
 
   .c-info_block-map {
     margin: 48px;
-    width: 100%;
-    margin-bottom: 0;
+    width: 80%;
   }
 }
 
