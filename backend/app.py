@@ -97,6 +97,7 @@ def poweroff(par):
 
 def get_data():
     while True:
+        global status_led
         # receive
         data = (DogBit.recv())
         if data != None:
@@ -142,9 +143,7 @@ def get_data():
                 
                 elif (licht_intensiteit < 75 and (status_led == 0 or status_led == 'start')):
                     socketio.emit("B2F_status_led", {"status": "status: on"})
-                    status_led = 1
-                
-                
+                    status_led = 1       
             
             elif 'pulse' in data:
                 pulse = float(data[7:])
