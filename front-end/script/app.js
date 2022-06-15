@@ -163,21 +163,37 @@
     socketio.on("B2F_curr_hue", function (jsonObject) {
       // console.log(jsonObject.hue)
       const presets = ['pride', 'white']
-      if (jsonObject.hue in presets){
+      console.log(presets.includes(jsonObject.hue))
+      if (presets.includes(jsonObject.hue)){
         switch (jsonObject.hue){
           case 'pride':
-            document.querySelector('.rainbow').classList.add('c-selected_color')
+            for (const el of document.querySelectorAll('.js-preset')) {
+              el.classList.remove("c-selected_color")
+              if (el.getAttribute('kleur-id') == 0){
+                el.classList.add("c-selected_color")
+              }
+            }
             document.querySelector('.c-curr_color').style.background = 'linear-gradient(to bottom right, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D)'
             break
 
           case 'white':
-            document.querySelector('.white').classList.add('c-selected_color')
+            for (const el of document.querySelectorAll('.js-preset')) {
+              el.classList.remove("c-selected_color")
+              if (el.getAttribute('kleur-id') == 1){
+                console.log(el)
+                el.classList.add("c-selected_color")
+              }
+            }         
             document.querySelector('.c-curr_color').style.background = 'white'
             break
         }
       }
       else{
-      document.querySelector(".c-slider").value = jsonObject.hue
+        for (const el of document.querySelectorAll('.js-preset')) {
+          el.classList.remove("c-selected_color")          
+          }
+        document.querySelector(".c-slider").value = jsonObject.hue
+        document.querySelector('.c-curr_color').style.background = `hsl(${Math.round(((document.querySelector(".c-slider").value)/255)*360)}, 100%, 50%)`
       }
     })
 
@@ -401,7 +417,6 @@
     chart_steps.render();
   }
   // #endregion
-
 
   const getHistory = function (jsonObject) {
     // console.log('history: ',jsonObject)

@@ -68,7 +68,7 @@ def hallo():
 
 @app.route(endpoint+'/historiek/day/', methods=['GET'])
 def dag_historiek():
-    return jsonify(DataRepository.get_historiek_day())
+    return jsonify(DataRepository.get_historiek_day(le))
 
 
 @app.route(endpoint+'/historiek/week/', methods=['GET'])
