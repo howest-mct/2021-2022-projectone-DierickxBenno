@@ -66,11 +66,28 @@ class DataRepository:
 
     #get historiek waarden
     @staticmethod
-    def get_historiek(p_interval):
+    def get_historiek_day():
         sql = """SELECT h.eenheidid, waarde as `y`, unix_timestamp(tijdstip)*1000 as `x`, eenheid FROM historiek h
         join eenheden e on e.eenheidid = h.eenheidid
-        where h.eenheidid in (1,2,5,6,7) and tijdstip between date_sub(now(),INTERVAL 1 %s) and now()
+        where h.eenheidid in (1,2,5,6,7) and tijdstip between date_sub(now(),INTERVAL 1 day) and now()
         order by historiekid asc"""
-        params=(p_interval)
+        data = Database.get_rows(sql)
+        return data
+
+    @staticmethod
+    def get_historiek_week():
+        sql = """SELECT h.eenheidid, waarde as `y`, unix_timestamp(tijdstip)*1000 as `x`, eenheid FROM historiek h
+        join eenheden e on e.eenheidid = h.eenheidid
+        where h.eenheidid in (1,2,5,6,7) and tijdstip between date_sub(now(),INTERVAL 1 week) and now()
+        order by historiekid asc"""
+        data = Database.get_rows(sql)
+        return data
+
+    @staticmethod
+    def get_historiek_month():
+        sql = """SELECT h.eenheidid, waarde as `y`, unix_timestamp(tijdstip)*1000 as `x`, eenheid FROM historiek h
+        join eenheden e on e.eenheidid = h.eenheidid
+        where h.eenheidid in (1,2,5,6,7) and tijdstip between date_sub(now(),INTERVAL 1 month) and now()
+        order by historiekid asc"""
         data = Database.get_rows(sql)
         return data

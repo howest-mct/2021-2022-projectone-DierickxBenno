@@ -66,9 +66,19 @@ endpoint = '/api/v1/'
 def hallo():
     return "Server is running, er zijn momenteel geen API endpoints beschikbaar."
 
-@app.route(endpoint+'/historiek/<interval>/', methods=['GET'])
-def dag_historiek(interval):
-    return jsonify(DataRepository.get_historiek(interval))
+@app.route(endpoint+'/historiek/day/', methods=['GET'])
+def dag_historiek():
+    return jsonify(DataRepository.get_historiek_day())
+
+
+@app.route(endpoint+'/historiek/week/', methods=['GET'])
+def week_historiek():
+    return jsonify(DataRepository.get_historiek_week())
+
+
+@app.route(endpoint+'/historiek/month/', methods=['GET'])
+def month_historiek():
+    return jsonify(DataRepository.get_historiek_month())
 
 
 # socketio
