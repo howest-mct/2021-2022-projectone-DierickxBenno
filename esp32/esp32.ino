@@ -4,7 +4,7 @@
 #include <BluetoothSerial.h>
 #include <FastLED.h>
 
-#define numLeds 8
+#define numLeds 12
 
 CRGBArray<numLeds> leds;
 
@@ -74,6 +74,8 @@ void setup()
   delay(20);
 
   GPSSerial.begin(9600);
+  sendTemperature();
+  getGPSdata();
 }
 
 void loop()
@@ -90,6 +92,9 @@ void loop()
     sendTemperature();
     pasteventTemp = millis();
     getLightIntensity();
+    stappen = 0;
+    Serial.println(stappen);
+    getGPSdata();
   }
   // elke 50 stappen wordt de gps data doorgestuurd
   if (stappen >= 50)
@@ -239,16 +244,11 @@ void setLedIntensity()
 
   if (lightValue <= 75)
   {
-    if (abs(lightValue - pastLightValue) > 10)
+    if (abs(lightValue - pastLightValue) > 15)
     {
       pastLightValue = lightValue * 1.0; // *1.0 zodat het zeker float blijft
       i = ((100 - lightValue) / 100) * 255;
-      for (byte j = 0; j < numLeds; j++)
-      {
-        Serial.println(hue);
-        leds[j] = CHSV(hue, 255, i);
-      }
-      FastLED.show();
+      setRainbow(i);
       ledStatus = 1;
     }
   }
@@ -322,4 +322,28 @@ void measureECG()
       startTime = millis();
     }
   }
+}
+
+void setRainbow(int p_sat)
+{
+  int rainbowColors[numLeds] = {354, 354, 34, 34, 60, 60, 131, 131, 240, 240, 304, 304};
+  float subcalc;
+  int hueColor;
+  for (byte j = 0; j < numLeds; j++)
+  {
+    subcalc = rainbowColors[j] / 360.0;
+    hueColor = subcalc * 255;
+    Serial.println(hueColor);
+    leds[j] = CHSV(hueColor, 255, p_sat);
+  }
+  FastLED.show();
+}
+
+void setSingleColor(int p_sat)
+{
+  for (byte j = 0; j < numLeds; j++)
+  {
+    leds[j] = CHSV(hue, 255, p_sat);
+  }
+  FastLED.show();
 }
