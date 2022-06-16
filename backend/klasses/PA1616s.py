@@ -106,8 +106,10 @@ class PA1616s:
 				
 			datum = PA1616s.cdf(data[9])
 
-			if len(data[12]) > 0:
+			try:
 				mode = data[12][0]
+			except:
+				mode=None
 
 			tot_data = {
 				"data-id": data[0],

@@ -119,7 +119,8 @@ class LCDcontrol:
 			self.send_instruction(0b1<<7|p_position)
 
 	def show_ip(self):
-		self.send_message(p_message='Ip-adress: ')
 		self.kies_cursor_opties(p_position=0x40)
 		ips = str(check_output(['hostname', '-I']))
+		self.send_message(p_message= ips[18:32])
+		print(f"{ips[18:32]}\n{ips[2:17]}")
 		self.send_message(p_message= ips[2:17])

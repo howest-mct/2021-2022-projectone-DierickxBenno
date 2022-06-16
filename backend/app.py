@@ -29,6 +29,7 @@ mac = "78:21:84:7D:85:BE"
     
 
 def connect_to_esp32():
+    global DogBit
     print('connecting to BT...')
     BT = BTconfig(channel, mac)
     time.sleep(2)
@@ -41,10 +42,9 @@ def connect_to_esp32():
             
         except:
             pass
-    return DogBit
+    # return DogBit
 
-DogBit = connect_to_esp32()
-
+DogBit = None
 status_led = 'start'
 fix = 0
 
@@ -152,21 +152,26 @@ def initial_connection():
     socketio.emit('B2F_stap', {'stap': total_steps}, broadcast=True)
 
     hue = DataRepository.get_hue()
-    socketio.emit('B2F_curr_hue', {"hue": hue})
+    socketio.emit('B2F_curr_hue', {"hue": hue}, broadcast=True)
+    print('test')
 
 @socketio.on('F2B_set_color')
 def send_hue(jsonObject):
     data = DataRepository.set_hue(jsonObject['hue'])
     print(jsonObject)
-    DogBit.sendBT(f"hue: {jsonObject['hue']}")
-    socketio.emit('B2F_curr_hue', {"hue": jsonObject['hue']}, broadcast=True)
+    if DogBit != None:
+        DogBit.sendBT(f"hue: {jsonObject['hue']}")
+        socketio.emit('B2F_curr_hue', {"hue": jsonObject['hue']}, broadcast=True)
 
 @socketio.on('F2B_poweroff')
 def poweroff(par):
     return os.system("sudo poweroff")
 
 def get_data():
-    global fix
+    global fix, DogBit
+    connect_to_esp32()
+    # DogBit = 
+
     while True:
         global status_led
         # receive
