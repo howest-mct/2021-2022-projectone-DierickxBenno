@@ -338,7 +338,12 @@ const show_graph_temp = function () { //temperature
       type: 'line',
       height: '100%',
       width: '100%',
+      // style: smooth,
     },
+    stroke: {
+      show: true,
+      curve: 'smooth',
+  },
     series: [{
       name: 'temp',
       data: [],

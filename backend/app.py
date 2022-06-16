@@ -41,6 +41,7 @@ def connect_to_esp32():
             break
             
         except:
+            print('.')
             pass
     # return DogBit
 
@@ -153,7 +154,6 @@ def initial_connection():
 
     hue = DataRepository.get_hue()
     socketio.emit('B2F_curr_hue', {"hue": hue}, broadcast=True)
-    print('test')
 
 @socketio.on('F2B_set_color')
 def send_hue(jsonObject):
@@ -202,7 +202,8 @@ def get_data():
                             fix = gps_data['fix']
                         
                         if fix:
-                            DataRepository.add_location(longi, lat)
+                            if (longi and lat):
+                                DataRepository.add_location(longi, lat)
 
 
                         if gps_data["data-id"] == "$GPRMC" and fix == 1:
@@ -219,11 +220,11 @@ def get_data():
                 DataRepository.insert_data(licht_intensiteit, 6)
                 print(licht_intensiteit)
                 if (licht_intensiteit > 90 and (status_led == 1 or status_led == 'start')):
-                    socketio.emit("B2F_status_led", {"status": "status: off"})
+                    socketio.emit("B2F_status_led", {"status": "status: off"}, broadcast=True)
                     status_led = 0
                 
                 elif (licht_intensiteit < 75 and (status_led == 0 or status_led == 'start')):
-                    socketio.emit("B2F_status_led", {"status": "status: on"})
+                    socketio.emit("B2F_status_led", {"status": "status: on"}, broadcast=True)
                     status_led = 1       
             
             elif 'pulse' in data:
