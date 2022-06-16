@@ -14,6 +14,7 @@ from klasses.PA1616s import PA1616s
 from klasses.LCD import LCDcontrol
 
 from selenium import webdriver
+from datetime import datetime
 import os
 
 # from selenium import webdriver
@@ -25,7 +26,7 @@ scherm.show_ip()
 channel = "hci0"
 mac = "78:21:84:7D:85:BE"
 
-
+    
 
 def connect_to_esp32():
     print('connecting to BT...')
@@ -45,6 +46,7 @@ def connect_to_esp32():
 DogBit = connect_to_esp32()
 
 status_led = 'start'
+fix = 0
 
 
 # Code voor Flask
@@ -66,20 +68,77 @@ endpoint = '/api/v1/'
 def hallo():
     return "Server is running, er zijn momenteel geen API endpoints beschikbaar."
 
+
+
 @app.route(endpoint+'/historiek/day/', methods=['GET'])
 def dag_historiek():
-    return jsonify(DataRepository.get_historiek_day(le))
+    data = DataRepository.get_historiek_day()
+    data_to_send = []
+    
+    stappen = {}
+    speed = {}
+    temp = {}
+    heartrate = {}
+    print('sending data to client')
+    for eenheid in data:
+        e_id = eenheid['eenheidid']
+        x = datetime.fromtimestamp(eenheid['x']/1000)
+        x = x.strftime('%x %H')
 
+
+        if (e_id == 1):
+            if (x in speed.keys()):
+                speed[x].append(float(eenheid['y']))
+
+            elif (x not in speed.keys()): 
+                speed[x] = [float(eenheid['y'])]
+
+        #grouping steps per hour
+        elif (e_id == 2):
+            if (x in stappen.keys()):
+                stappen[x] += int(eenheid['y'])
+
+            elif (x not in stappen.keys()): 
+                stappen[x] = int(eenheid['y'])
+
+        elif (e_id == 7):
+            if (x in temp.keys()):
+                temp[x].append(float(eenheid['y']))
+
+            elif (x not in temp.keys()): 
+                temp[x] = [float(eenheid['y'])]
+
+    # making viable data
+    print('...')
+    for i in stappen:
+        x = datetime.timestamp(datetime.strptime(i+':00:00', '%x %X'))*1000
+        data_to_send.append({'eenheidid': 2, 'x':x, 'y': stappen[i]})   
+    
+    for i in temp:
+        # print('temp', i)
+        x = datetime.timestamp(datetime.strptime(i+':00:00', '%x %X'))*1000
+        data_to_send.append({'eenheidid': 7, 'x':x, 'y': sum(temp[i])/len(temp[i])}) 
+
+    for i in speed:
+        x = datetime.timestamp(datetime.strptime(i+':00:00', '%x %X'))*1000
+        data_to_send.append({'eenheidid': 1, 'x':x, 'y': sum(speed[i])/len(speed[i])})   
+    
+    for i in heartrate:
+        x = datetime.timestamp(datetime.strptime(i+':00:00', '%x %X'))*1000
+        data_to_send.append({'eenheidid': 1, 'x':x, 'y': sum(heartrate[i])/len(heartrate[i])})   
+    
+    print(jsonify(data_to_send))        
+
+    print('data sent to client')
+    return jsonify(data_to_send)
 
 @app.route(endpoint+'/historiek/week/', methods=['GET'])
 def week_historiek():
     return jsonify(DataRepository.get_historiek_week())
 
-
 @app.route(endpoint+'/historiek/month/', methods=['GET'])
 def month_historiek():
     return jsonify(DataRepository.get_historiek_month())
-
 
 # socketio
 @socketio.on('connect')
@@ -90,7 +149,7 @@ def initial_connection():
     socketio.emit('B2F_meest_recente_data', {'data': most_recent_data}, broadcast=True)
     #totaal aantal stappen, vandaag doorsturen
     total_steps = DataRepository.get_total_steps()
-    socketio.emit('B2F_stap', {'stap': total_steps})
+    socketio.emit('B2F_stap', {'stap': total_steps}, broadcast=True)
 
     hue = DataRepository.get_hue()
     socketio.emit('B2F_curr_hue', {"hue": hue})
@@ -98,14 +157,16 @@ def initial_connection():
 @socketio.on('F2B_set_color')
 def send_hue(jsonObject):
     data = DataRepository.set_hue(jsonObject['hue'])
+    print(jsonObject)
     DogBit.sendBT(f"hue: {jsonObject['hue']}")
-    socketio.emit('B2F_curr_hue', {"hue": jsonObject['hue']})
+    socketio.emit('B2F_curr_hue', {"hue": jsonObject['hue']}, broadcast=True)
 
 @socketio.on('F2B_poweroff')
 def poweroff(par):
     return os.system("sudo poweroff")
 
 def get_data():
+    global fix
     while True:
         global status_led
         # receive
@@ -115,33 +176,38 @@ def get_data():
                 print('temp measured')
                 temperatuur = float(data[-5:])
                 DataRepository.insert_data(temperatuur, 7)
-                socketio.emit('B2F_temperatuur', {'temperatuur': temperatuur})
+                print(temperatuur)
+                socketio.emit('B2F_temperatuur', {'temperatuur': temperatuur}, broadcast=True)
             
             elif 'stappen +' in data:
                 print('step taken')
                 stappen = int(data[9:])
                 DataRepository.insert_data(stappen, 2)
                 total_steps = DataRepository.get_total_steps()
-                socketio.emit('B2F_stap', {'stap': total_steps})
+                socketio.emit('B2F_stap', {'stap': total_steps}, broadcast=True)
 
             elif '$GP' in data:
                 gps_data = PA1616s.getInfo(data)
                 print('GPS data received')
-                
                 if gps_data is not None:
                     if gps_data["data-id"] == "$GPGGA" or gps_data["data-id"] == "$GPRMC":
                         longi = gps_data["longitude"]
                         lat = gps_data["latitude"]
-                        DataRepository.add_location(longi, lat)
+                        if gps_data["data-id"] == '$GPGGA':
+                            fix = gps_data['fix']
+                        
+                        if fix:
+                            DataRepository.add_location(longi, lat)
 
-                        if gps_data["data-id"] == "$GPRMC":
+
+                        if gps_data["data-id"] == "$GPRMC" and fix == 1:
                             if gps_data["validity"] == "A": # A betekent valid
                                 snelheid = gps_data["speed"]
                                 DataRepository.insert_data(snelheid, 1)
 
 
 
-                    socketio.emit('B2F_GPS', {'GPS': gps_data})
+                    socketio.emit('B2F_GPS', {'GPS': gps_data}, broadcast=True)
 
             elif 'LI' in data:
                 licht_intensiteit = float(data[3:])

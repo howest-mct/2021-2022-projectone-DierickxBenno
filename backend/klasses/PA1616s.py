@@ -51,42 +51,63 @@ class PA1616s:
 
 		# data verwerken op basis van id
 		if "$GPGGA" == msg_id and len(data) >= 15:
-				time = PA1616s.ctf(data[1])
-
+			time = PA1616s.ctf(data[1])
+			if (type(data[2]) is not str) and (type(data[2]) != type(data[4])):
 				lat = float(data[2])/100
 				lat_NS = data[3] # N or S
 
 				longi = float(data[4])/100
 				longi_EW = data[5] # E or W
+
+			else:
+				lat = None
+				lat_NS = None
+
+				longi = None
+				longi_EW = None
 				
-				pfi = data[6] # 0: Fix not available, 1: GPS FIX, 2: diffrential GPS fix (pfi = position fix indicator)
-				HDOP = data[7] # Horizontal Dilution of Precision
-				alt = data[8] #altitude to sea level
-				tot_data = {
-					"data-id": data[0],
-					"time": time,
-					"latitude": lat,
-					"longitude": longi,
-					"altitude": alt,
-					"fix": pfi,
-					"Horizontal Dilution of Precision": HDOP,
-				}
-				return tot_data
+			pfi = data[6] # 0: Fix not available, 1: GPS FIX, 2: diffrential GPS fix (pfi = position fix indicator)
+			HDOP = data[7] # Horizontal Dilution of Precision
+			alt = data[8] #altitude to sea level
+			tot_data = {
+				"data-id": data[0],
+				"time": time,
+				"latitude": lat,
+				"longitude": longi,
+				"altitude": alt,
+				"fix": pfi,
+				"Horizontal Dilution of Precision": HDOP,
+			}
+			return tot_data
 
 		elif "$GPRMC" == msg_id and len(data)>=13:
 			time = PA1616s.ctf(data[1])
 
 			status = data[2] # A=data valid or V=data not valid
 
-			lat = float(data[3])/100
-			lat_NS = data[4] # N or S
+			if (type(data[3]) is not str) and (type(data[3]) != type(data[5])):
+				lat = float(data[3])/100
+				lat_NS = data[4] # N or S
 
-			longi = float(data[5])/100
-			longi_EW = data[6] # E or W
+				longi = float(data[5])/100
+				longi_EW = data[6] # E or W
 			
-			speed = round(float(data[7])*1.852, 0)
+			else:
+				lat = None
+				lat_NS = None
+
+				longi = None
+				longi_EW = None
+
+			try:
+				speed = round(float(data[7])*1.852, 0)
+			except:
+				speed = None
+				
 			datum = PA1616s.cdf(data[9])
-			mode = data[12][0]
+
+			if len(data[12]) > 0:
+				mode = data[12][0]
 
 			tot_data = {
 				"data-id": data[0],

@@ -118,6 +118,11 @@
   };
 
   const listenToSocket = function () {
+    socketio.on('connect', function (){
+      console.log('connected')
+      handleHistory();
+    })
+
     socketio.on("B2F_temperatuur", function (jsonObject) {
       document.querySelector(
         ".c-temperatuur"
@@ -161,7 +166,7 @@
     })
 
     socketio.on("B2F_curr_hue", function (jsonObject) {
-      // console.log(jsonObject.hue)
+      console.log(jsonObject.hue)
       const presets = ['pride', 'white']
       console.log(presets.includes(jsonObject.hue))
       if (presets.includes(jsonObject.hue)){
@@ -465,6 +470,4 @@
     init_map();
     listenToSocket();
     show_graphs();
-    handleHistory();
-    
   });
