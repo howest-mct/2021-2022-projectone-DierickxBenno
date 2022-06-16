@@ -41,7 +41,7 @@ def connect_to_esp32():
             break
             
         except:
-            print('.')
+            # print('.')
             pass
     # return DogBit
 
@@ -94,7 +94,7 @@ def dag_historiek():
             elif (x not in speed.keys()): 
                 speed[x] = [float(eenheid['y'])]
 
-        #grouping steps per hour
+        
         elif (e_id == 2):
             if (x in stappen.keys()):
                 stappen[x] += int(eenheid['y'])
@@ -102,13 +102,19 @@ def dag_historiek():
             elif (x not in stappen.keys()): 
                 stappen[x] = int(eenheid['y'])
 
+        elif (e_id == 5):
+            if (x in heartrate.keys()):
+                heartrate[x].append(float(eenheid['y']))
+
+            elif (x not in heartrate.keys()): 
+                heartrate[x] = [float(eenheid['y'])]
+        
         elif (e_id == 7):
             if (x in temp.keys()):
                 temp[x].append(float(eenheid['y']))
 
             elif (x not in temp.keys()): 
                 temp[x] = [float(eenheid['y'])]
-
     # making viable data
     print('...')
     for i in stappen:
@@ -135,11 +141,140 @@ def dag_historiek():
 
 @app.route(endpoint+'/historiek/week/', methods=['GET'])
 def week_historiek():
-    return jsonify(DataRepository.get_historiek_week())
+    data = DataRepository.get_historiek_week()
+    data_to_send = []
+    
+    stappen = {}
+    speed = {}
+    temp = {}
+    heartrate = {}
+    print('sending data to client')
+    for eenheid in data:
+        e_id = eenheid['eenheidid']
+        x = datetime.fromtimestamp(eenheid['x']/1000)
+        x = x.strftime('%x')
+
+
+        if (e_id == 1):
+            if (x in speed.keys()):
+                speed[x].append(float(eenheid['y']))
+
+            elif (x not in speed.keys()): 
+                speed[x] = [float(eenheid['y'])]
+
+        
+        elif (e_id == 2):
+            if (x in stappen.keys()):
+                stappen[x] += int(eenheid['y'])
+
+            elif (x not in stappen.keys()): 
+                stappen[x] = int(eenheid['y'])
+
+        elif (e_id == 5):
+            if (x in heartrate.keys()):
+                heartrate[x].append(float(eenheid['y']))
+
+            elif (x not in heartrate.keys()): 
+                heartrate[x] = [float(eenheid['y'])]
+        
+        elif (e_id == 7):
+            if (x in temp.keys()):
+                temp[x].append(float(eenheid['y']))
+
+            elif (x not in temp.keys()): 
+                temp[x] = [float(eenheid['y'])]
+
+    # making viable data
+    print('...')
+    for i in stappen:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 2, 'x':x, 'y': stappen[i]})   
+    
+    for i in temp:
+        # print('temp', i)
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 7, 'x':x, 'y': sum(temp[i])/len(temp[i])}) 
+
+    for i in speed:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 1, 'x':x, 'y': sum(speed[i])/len(speed[i])})   
+    
+    for i in heartrate:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 5, 'x':x, 'y': sum(heartrate[i])/len(heartrate[i])})   
+    
+    print(jsonify(data_to_send))        
+
+    print('data sent to client')
+    return jsonify(data_to_send)
 
 @app.route(endpoint+'/historiek/month/', methods=['GET'])
 def month_historiek():
-    return jsonify(DataRepository.get_historiek_month())
+    data = DataRepository.get_historiek_month()
+    data_to_send = []
+    
+    stappen = {}
+    speed = {}
+    temp = {}
+    heartrate = {}
+    print('sending data to client')
+    for eenheid in data:
+        e_id = eenheid['eenheidid']
+        x = datetime.fromtimestamp(eenheid['x']/1000)
+        x = x.strftime('%x')
+
+
+        if (e_id == 1):
+            if (x in speed.keys()):
+                speed[x].append(float(eenheid['y']))
+
+            elif (x not in speed.keys()): 
+                speed[x] = [float(eenheid['y'])]
+
+        
+        elif (e_id == 2):
+            if (x in stappen.keys()):
+                stappen[x] += int(eenheid['y'])
+
+            elif (x not in stappen.keys()): 
+                stappen[x] = int(eenheid['y'])
+
+        elif (e_id == 5):
+            if (x in heartrate.keys()):
+                heartrate[x].append(float(eenheid['y']))
+
+            elif (x not in heartrate.keys()): 
+                heartrate[x] = [float(eenheid['y'])]
+        
+        elif (e_id == 7):
+            if (x in temp.keys()):
+                temp[x].append(float(eenheid['y']))
+
+            elif (x not in temp.keys()): 
+                temp[x] = [float(eenheid['y'])]
+    # making viable data
+    print('...')
+    for i in stappen:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 2, 'x':x, 'y': stappen[i]})   
+    
+    for i in temp:
+        # print('temp', i)
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 7, 'x':x, 'y': sum(temp[i])/len(temp[i])}) 
+
+    for i in speed:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 1, 'x':x, 'y': sum(speed[i])/len(speed[i])})   
+    
+    for i in heartrate:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 5, 'x':x, 'y': sum(heartrate[i])/len(heartrate[i])})   
+    
+    print((data_to_send))        
+
+    print('data sent to client')
+    return jsonify(data_to_send)
 
 # socketio
 @socketio.on('connect')

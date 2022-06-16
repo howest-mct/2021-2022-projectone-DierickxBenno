@@ -109,12 +109,35 @@ const listenToPresets = function () {
   }
 }
 
+const listenToInterval = function () {
+  const knoppen = document.querySelectorAll('.js-knop-interval')
+  for (const knop of knoppen){
+    knop.addEventListener('click', function () {
+      let interval = knop.getAttribute('interval')
+      switch (interval){
+        case '1d':
+          handleHistoryDay();
+          break
+
+        case '7d':
+          handleHistoryWeek();
+          break
+
+        case '1m':
+          handleHistoryMonth();
+          break
+      }
+    })
+  }
+}
+
 const listenToUI = function () {
   setColor();
   listenToPwr();
   listenToCenterDog();
   listenToSidenav();
   listenToPresets();
+  listenToInterval();
 };
 
 const listenToSocket = function () {
@@ -254,6 +277,7 @@ const listenToSocket = function () {
 const show_graph_hr = function () { // heartrate
   options_hr = {
     chart: {
+      id: 'mychart',
       type: 'line',
       height: '100%',
       width: '100%',
@@ -424,13 +448,45 @@ const show_graphs = function () {
   show_graph_steps();
 }
 
-const renderGraphs = function () {
-  chart_hr.render();
-  chart_spd.render();
-  chart_temp.render();
-  chart_steps.render();
-}
+
 // #endregion
+const updateHistory = function (jsonObject) {
+    // console.log('history: ',jsonObject)
+    const historiek = jsonObject
+    // console.log(jsonObject)
+    // console.log('options ', options_hr)
+    // console.log(options_hr)
+    const dataSerie_hr = {'data':[]}
+    const dataSerie_spd = {'data':[]}
+    const dataSerie_temp = {'data':[]}
+    const dataSerie_steps = {'data':[]}
+    for (const el of historiek){ 
+      // time sorting properties
+      const date = new Date(el.x);
+      const dateTimestamp = date.getTime();
+  
+      switch (el.eenheidid){
+        case 1:
+          dataSerie_spd.data.push([el.x, el.y])
+          break;
+        case 2:
+          dataSerie_steps.data.push([dateTimestamp, el.y])
+          break;
+        case 5:
+          dataSerie_hr.data.push([el.x, el.y])
+          break;
+        case 7:
+          console.log(dataSerie_temp)
+          dataSerie_temp.data.push([el.x, el.y])
+          break;
+      }
+    }
+  
+  chart_hr.updateSeries([dataSerie_hr]);
+  chart_spd.updateSeries([dataSerie_spd]);
+  chart_temp.updateSeries([dataSerie_temp]);
+  chart_steps.updateSeries([dataSerie_steps]);
+}
 
 const getHistory = function (jsonObject) {
   // console.log('history: ',jsonObject)
@@ -438,6 +494,7 @@ const getHistory = function (jsonObject) {
   console.log(jsonObject)
   // console.log('options ', options_hr)
   console.log(options_hr)
+  
   const dataSerie_hr = options_hr.series[0]
   const dataSerie_spd = options_spd.series[0]
   const dataSerie_temp = options_temp.series[0]
@@ -463,21 +520,38 @@ const getHistory = function (jsonObject) {
         break;
     }
   }
-  renderGraphs();
-  // console.log('route returned',historiek)
+  chart_hr.render();
+  chart_spd.render();
+  chart_temp.render();
+  chart_steps.render();
 }
 
-const handleHistory = function () {
+const loadHistory = function () {
   const url = `http://${lanIP}/api/v1/historiek/day/`;
   handleData(url, getHistory);
+  
+}
+const handleHistoryDay = function () {
+  const url = `http://${lanIP}/api/v1/historiek/day/`;
+  handleData(url, updateHistory);
+  
+}
+const handleHistoryWeek = function () {
+  const url = `http://${lanIP}/api/v1/historiek/week/`;
+  handleData(url, updateHistory);
+  
+}
+const handleHistoryMonth = function () {
+  const url = `http://${lanIP}/api/v1/historiek/month/`;
+  handleData(url, updateHistory);
   
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   console.info("DOM geladen");
-    listenToUI();
-    init_map();
-    listenToSocket();
-    show_graphs();
-    handleHistory();
+  listenToUI();
+  init_map();
+  listenToSocket();
+  show_graphs();
+  loadHistory();
 });

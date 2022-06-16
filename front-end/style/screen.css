@@ -67,7 +67,7 @@ body.u-active {
 }
 
 .u-1-of-2 {
-  flex-basis: calc(100%/2);
+  flex-basis: calc(100%/2) !important;
 }
 
 .u-1-of-3 {
@@ -86,7 +86,7 @@ body.u-active {
   flex-basis: calc(100%/4);
 }
 
-.u-5-of-6 {
+.u-4-of-5 {
   flex-basis: calc((100%/5)*4);
 }
 
@@ -769,7 +769,14 @@ body.u-active {
 
 }
 
+.c-interval {
+  margin: 0 !important;
+  text-decoration: underline;
+}
 
+.c-interval .c-knop-interval:hover{
+  color: var(--darkestBlue);
+}
 /* clear ... */
 /* .c-mt-clear {
   margin-top: 0;
