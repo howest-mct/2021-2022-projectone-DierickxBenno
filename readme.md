@@ -13,13 +13,37 @@ Op github vind je verschillende voorbeelden hoe je een readme.md bestand kan str
 - [Voorbeeld 4](https://www.makeareadme.com/)
 
 ## Inhoud
-Zoals je kan zien is er geen "vaste" structuur voor zo'n document. Je bepaalt zelf hoe je het bestand via markdown structureert. Zorg ervoor dat het document minimaal op volgende vragen een antwoord biedt.
+We will start out with setting up our pi, this ensures we have a workable environment.
 
-- Wat is de structuur van het project?
-- Wat moet er gebeuren met de database? Hoe krijgt de persoon dit up and running?
-- Moeten er settings worden veranderd in de backend code voor de database? 
-- Runt de back- en front-end code direct? Of moeten er nog commando's worden ingegeven?
-- Zijn er poorten die extra aandacht vereisen in de back- en/of front-end code?
-  
-## Instructables
-Plaats zeker een link naar de Instructables zodat het project kan nagebouwd worden!
+Before we do anything else. Let's use this command to get admin rights so we don't have to type "sudo" every time we want to execute a command
+sudo -i
+to exit this mode use
+
+exit
+Next we will connect to our local WiFi connection. We can use this command to do that.
+fill in your SSID (network name) and your password in the correct places
+
+wpa_passphrase 'SSID' 'passphrase' >> /etc/wpa_supplicant/wpa_supplicant.conf
+to avoid anyone can just see your SSID we will clear our history there are two ways to do it,
+
+the first way, !this will clear your ENTIRE history:
+            history -c
+the second way, slightly slower but is more precise:
+first we want to view our history
+
+  history
+this will return a list of commands you executed, they all have an index.
+
+  history -d index
+You can also find the passphrase in the wpa_supplicant fil and, it should be commented.
+
+nano /etc/wpa_supplicant/wpa-supplicant.conf
+use ctrl+X, Y, enter to save and quit the file
+
+to check if we are connected to the internet we will use the following command
+
+wget www.google.com
+
+
+## instructables
+https://www.instructables.com/member/BennoDi/instructables/
