@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
   <title>DogBit</title>
@@ -21,89 +21,213 @@
     crossorigin=""></script>
   <!-- #endregion -->
 
+  <link rel="stylesheet" href="https://use.typekit.net/ecu2cwh.css">
   <link rel="stylesheet" href="style/screen.css" />
 
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"
     integrity="sha384-LzhRnpGmQP+lOvWruF/lgkcqD+WDVt9fU3H4BWmwP5u5LTmkUGafMcpZKNObVMLU"
     crossorigin="anonymous"></script>
 
+  <script src="script/datahandler.js"></script>
   <script src="script/app.js"></script>
 
 
 </head>
 
 <body>
-  <div class="o-container">
-    <article class="c-room js-room">
-      <div class="c-room__name">
-        Temperatuur
-      </div>
-      <div class="c-room__icon">
-        <div class="c-thermometer">
-          <img src=".\img\icons8-temperature-96.png">
-        </div>
-        <a target="_blank" href="https://icons8.com/icon/12997/temperature">Temperature icon by Icons8</a>
-      </div>
-      <div class="c-room__control">
-        <div class="c-power-btn js-power-btn c-temperatuur" data-statuslamp="0">
-          36,6 C
-        </div>
-      </div>
-    </article>
-    <article class="c-room js-room">
-      <div class="c-room__name">
-        stappen
-      </div>
-      <div class="c-room__icon">
-        <div class="c-thermometer">
-          <img src=".\img\icons8-dog-jump-96.png" alt="">
-        </div>
-        <a target="_blank" href="https://icons8.com/icon/121336/dog-jump">Dog Jump</a> icon by <a target="_blank"
-          href="https://icons8.com">Icons8</a>
-      </div>
-      <div class="c-room__control">
-        <div class="c-power-btn js-power-btn c-stappen" data-statuslamp="0">
-          1000000
-        </div>
-      </div>
-    </article>
-    <article class="c-room js-room">
-      <div class="c-room__name">
-        snelheid
-      </div>
-      <div class="c-room__icon">
-        <div class="c-thermometer">
-          <img src=".\img\icons8-running-away-96.png" alt="">
-        </div>
-        <a target="_blank" href="https://icons8.com/icon/B25oSPrRc3OS/running-away">Running Away</a> icon by <a
-          target="_blank" href="https://icons8.com">Icons8</a>
-      </div>
-      <div class="c-room__control">
-        <div class="c-power-btn js-power-btn c-snelheid" data-statuslamp="0">
-          100 km/h
-        </div>
-      </div>
-    </article>
-    <article class="c-room js-room">
-      <div class="c-room__name">
-        hartslag
-      </div>
-      <div class="c-room__icon">
-        <div class="c-thermometer">
-          <img src=".\img\icons8-heartbeat-96.png">
-        </div>
-        <a target="_blank" href="https://icons8.com/icon/2g9z5XU1rTyg/heartbeat">Heartbeat</a> icon by <atarget="_blank"
-          href="https://icons8.com">Icons8</a>
-      </div>
-      <div class="c-room__control">
-        <div class="c-power-btn js-power-btn c-hartslag" data-statuslamp="0">
-          999 bpm
-        </div>
-      </div>
-    </article>
-  </div>
-  <div id="mapid"></div>
+  <!-- side nav -->
+  <div class="o-layout">
+    <div class="o-layout__item o-layout--align-start o-nav o-layout--column">
+      <div class="o-layout c-title">
+        <p>DogBit
+        </p>
 
+        <svg class="c-nav-icon js-toggle-nav" xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 24 24"
+          width="36px" fill="#FFFFFF">
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+        </svg>
+
+
+      </div>
+      <a class="c-button c-button-top" href="#dashboard">dashboard</a>
+      <a class="c-button" href="#map">map</a>
+      <a class="c-button" href="#statistics">statistics</a>
+      <a class="c-button" href="#color-picker">light</a>
+      <div class="c-button c-button-last c-shutdown-button">
+        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 24 24" width="36px" fill="#fff">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path class="c-power-icon"
+            d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z" />
+        </svg>
+        <div class="c-power-text">shutdown</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- content -->
+  <div class="o-container o-layout o-layout--justify-start">
+    <!-- dashboard -->
+    <div class="o-layout">
+      <div class="o-dashboard c-content-row-one o-layout" id="dashboard">
+        <article class="c-info_block js-room">
+          <div class="c-room__name">
+            temperature
+          </div>
+          <div class="c-room__icon">
+            <div class="c-icon">
+              <img src="./img/icons8-temperature-96.png">
+            </div>
+
+          </div>
+          <div class="c-room__control">
+            <div class="c-waarde_holder js-power-btn c-temperatuur" eenheid-id="7">
+              36,6 C
+            </div>
+          </div>
+        </article>
+        <article class="c-info_block js-room">
+          <div class="c-room__name">
+            steps
+          </div>
+          <div class="c-room__icon">
+            <div class="c-icon">
+              <img src=".\img\icons8-dog-jump-96.png" alt="">
+            </div>
+          </div>
+          <div class="c-room__control">
+            <div class="c-waarde_holder js-power-btn c-stappen" eenheid-id="2">
+              1000000
+            </div>
+          </div>
+        </article>
+        <article class="c-info_block js-room ">
+          <div class="c-room__name">
+            speed
+          </div>
+          <div class="c-room__icon">
+            <div class="c-icon">
+              <img src=".\img\icons8-running-away-96.png" alt="">
+            </div>
+
+          </div>
+          <div class="c-room__control">
+            <div class="c-waarde_holder js-power-btn c-snelheid" eenheid-id="1">
+
+              99 km/h
+
+            </div>
+          </div>
+        </article>
+        <article class="c-info_block js-room c-mr-clear">
+          <div class="c-room__name">
+            heartrate
+          </div>
+          <div class="c-room__icon">
+            <div class="c-icon">
+              <img src=".\img\icons8-heartbeat-96.png">
+            </div>
+
+          </div>
+          <div class="c-room__control">
+            <div class="c-waarde_holder js-power-btn c-hartslag" eenheid-id="5">
+              999 bpm
+            </div>
+          </div>
+        </article>
+
+      </div>
+      <!-- map -->
+      <div class="o-layout o-map" id="map" z-index="1000">
+        <article class=" js-map c-info_block-map">
+          <div class="c-room__name">
+            location
+          </div>
+          <div class="c-room__icon ">
+            <div class="c-icon">
+              <div id="mapid"></div>
+            </div>
+            <div class="c-waarde_holder c-button-dog js-find-dog ">
+              to dog
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+    <!-- graph -->
+    <div class="c-big_block" id="statistics">
+
+      <div class="c-room__name c-block-title u-4-of-5">statistics</div>
+      <div class="o-layout o-layout--justify-space-evenly c-interval">
+        <div class="c-knop-interval js-knop-interval" interval="1m">1m</div>
+        <div class="c-knop-interval js-knop-interval" interval="7d">7d</div>
+        <div class="c-knop-interval js-knop-interval" interval="1d">1d</div>
+      </div>
+
+      <div class="c-graph-holder">
+        <div class="c-graph-background">
+          <div class="c-graph g-heartrate"></div>
+        </div>
+        <div class="c-graph-background">
+          <div class="c-graph g-speed"></div>
+        </div>
+        <div class="c-graph-background">
+          <div class="c-graph g-temperature"></div>
+        </div>
+        <div class="c-graph-background">
+          <div class="c-graph g-steps"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- color picker -->
+    <div class="c-big_block" id="color-picker">
+      <div class="c-room__name c-block-title">light</div>
+      <div class=" o-layout o-layout--row ">
+        <div class="c-color-background o-layout--align-content-start">
+          <div class="c-color c-pick-color-title o-layout o-layout--align-content-center">
+            pick color
+          </div>
+          <div class="c-color">
+            <input type="range" class="c-slider" min="0" max="255">
+          </div>
+          <div class="c-color-preset-group">
+            <div class="c-info_block c-color-preset js-preset" kleur-id="0">
+              <div class="c-color_holder rainbow"></div>
+              <div class="c-waarde_holder">pride</div>
+            </div>
+            <div class="c-info_block c-color-preset js-preset" kleur-id="1">
+              <div class="c-color_holder white"></div>
+              <div class="c-waarde_holder">white</div>
+            </div>
+          </div>
+        </div>
+        <div class="c-color-background">
+          <div class="c-color c-pick-color-title o-layout o-layout--align-content-center js-status">
+            status: on
+          </div>
+
+          <div class="c-curr_color o-layout--align-end"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <!-- <div class="o-footer">
+      <p>about:</p>
+      <p><a target="_blank" href="https://icons8.com/icon/32690/temperature">Temperature</a></p>
+      <p><a target="_blank" href="https://icons8.com/icon/121336/dog-jump">Dog Jump</a></p>
+      <p><a target="_blank" href="https://icons8.com/icon/B25oSPrRc3OS/running-away">Running Away</a></p>
+      <p><a target="_blank" href="https://icons8.com/icon/2g9z5XU1rTyg/heartbeat">Heartbeat</a></p>
+      <p>Icons By <a target="_blank" href="https://icons8.com">Icons8</a></p>
+      <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a
+        href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a
+        href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>
+    </div> -->
+
+  </div>
 
 </body>
 
