@@ -247,9 +247,6 @@ void setLedIntensity()
     {
       pastLightValue = lightValue * 1.0; // *1.0 zodat het zeker float blijft
       i = ((100 - lightValue) / 100) * 255;
-      Serial.println(strHue);
-      Serial.print("test");
-      Serial.println("white" == "white");
       if (strHue == "white")
       {
         setWhite(i);
@@ -262,9 +259,11 @@ void setLedIntensity()
       {
         setSingleColor(i);
       }
+      SerialBT.println("LEDSTATUS=ON");
     }
   }
-  else
+  
+  else if(ledStatus)
   {
     pastLightValue = 85.0;
     for (byte j = 0; j < numLeds; j++)
@@ -273,6 +272,7 @@ void setLedIntensity()
       ;
     }
     FastLED.show();
+    SerialBT.println("LEDSTATUS=OFF");
     ledStatus = 0;
   }
 }
@@ -295,10 +295,10 @@ void setLedColor()
     {
       strHue += recvd_hue[i];
       hue = strHue.toInt();
-      Serial.println("strhue " + strHue);
-      Serial.println("hue " + String(hue));
-      Serial.println(recvd_hue[i]);
-      Serial.println(strHue);
+      // Serial.println("strhue " + strHue);
+      // Serial.println("hue " + String(hue));
+      // Serial.println(recvd_hue[i]);
+      // Serial.println(strHue);
     }
   }
   recvd_hue = "";
