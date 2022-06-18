@@ -96,7 +96,6 @@ void loop()
     Serial.println(stappen);
     getGPSdata();
   }
-  // elke 50 stappen wordt de gps data doorgestuurd
   if (stappen >= 50)
   {
     stappen = 0;
@@ -248,8 +247,21 @@ void setLedIntensity()
     {
       pastLightValue = lightValue * 1.0; // *1.0 zodat het zeker float blijft
       i = ((100 - lightValue) / 100) * 255;
-      setRainbow(i);
-      ledStatus = 1;
+      Serial.println(strHue);
+      Serial.print("test");
+      Serial.println("white" == "white");
+      if (strHue == "white")
+      {
+        setWhite(i);
+      }
+      else if (strHue == "pride")
+      {
+        setRainbow(i);
+      }
+      else
+      {
+        setSingleColor(i);
+      }
     }
   }
   else
@@ -267,7 +279,6 @@ void setLedIntensity()
 
 void setLedColor()
 {
-
   while (SerialBT.available())
   {
     // Serial.println("ontvangen");
@@ -284,9 +295,10 @@ void setLedColor()
     {
       strHue += recvd_hue[i];
       hue = strHue.toInt();
-      // Serial.println("strhue " + strHue);
-      // Serial.println("hue " + String(hue));
-      // Serial.println(recvd_hue[i]);
+      Serial.println("strhue " + strHue);
+      Serial.println("hue " + String(hue));
+      Serial.println(recvd_hue[i]);
+      Serial.println(strHue);
     }
   }
   recvd_hue = "";
@@ -344,6 +356,15 @@ void setSingleColor(int p_sat)
   for (byte j = 0; j < numLeds; j++)
   {
     leds[j] = CHSV(hue, 255, p_sat);
+  }
+  FastLED.show();
+}
+
+void setWhite(int p_bright)
+{
+  for (byte j = 0; j < numLeds; j++)
+  {
+    leds[j] = CRGB(p_bright, p_bright, p_bright);
   }
   FastLED.show();
 }
