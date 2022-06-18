@@ -269,6 +269,7 @@ const listenToSocket = function () {
 
   socketio.on("B2F_status_led", function (jsonObject) {
     const statusLed = jsonObject.status;
+    console.log('test')
     document.querySelector(".js-status").innerHTML = statusLed;
   })
 };

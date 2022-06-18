@@ -353,18 +353,20 @@ def get_data():
             elif 'LI' in data:
                 licht_intensiteit = float(data[3:])
                 DataRepository.insert_data(licht_intensiteit, 6)
-                print(licht_intensiteit)
-                if (licht_intensiteit > 90 and (status_led == 1 or status_led == 'start')):
-                    socketio.emit("B2F_status_led", {"status": "status: off"}, broadcast=True)
-                    status_led = 0
-                
-                elif (licht_intensiteit < 75 and (status_led == 0 or status_led == 'start')):
-                    socketio.emit("B2F_status_led", {"status": "status: on"}, broadcast=True)
-                    status_led = 1       
+                print(licht_intensiteit)    
             
             elif 'pulse' in data:
                 pulse = float(data[7:])
                 DataRepository.insert_data(pulse, 5)
+
+            elif 'LEDSTATUS' in data:
+                if ('OFF' in data and (status_led == 1 or status_led == 'start')):
+                    socketio.emit("B2F_status_led", {"status": "status: off"}, broadcast=True)
+                    status_led = 0
+                
+                elif ('ON' in data and (status_led == 0 or status_led == 'start')):
+                    socketio.emit("B2F_status_led", {"status": "status: on"}, broadcast=True)
+                    status_led = 1   
 
 def start_thread():
     print("**** Starting THREAD ****")
