@@ -280,7 +280,6 @@ const listenToSocket = function () {
 
   socketio.on("B2F_status_led", function (jsonObject) {
     const statusLed = jsonObject.status;
-    console.log('test')
     document.querySelector(".js-status").innerHTML = statusLed;
   })
 };
@@ -465,7 +464,7 @@ const show_graphs = function () {
 const updateHistory = function (jsonObject) {
     // console.log('history: ',jsonObject)
     const historiek = jsonObject
-    // console.log(jsonObject)
+    console.log(jsonObject)
     // console.log('options ', options_hr)
     // console.log(options_hr)
     const dataSerie_hr = {'data':[]}
