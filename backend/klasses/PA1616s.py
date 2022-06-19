@@ -13,10 +13,10 @@
 # Satellites: 7
 
 
-class PA1616s_convert_data:
+class PA1616s:
 	@staticmethod
 	def cdf(p_date): #conver date format (ddmmyy to yyyymmdd)
-		print(p_date)
+		# print(p_date)
 		dd = p_date[:2]
 		mm = p_date[2:4]
 		yy = p_date[4:6]
@@ -46,64 +46,88 @@ class PA1616s_convert_data:
 	@staticmethod
 	def getInfo(p_msg):
 		#data opsplitsen
-		data = seperate_data(p_msg)
+		data = PA1616s.seperate_data(p_msg)
 		msg_id = data[0]
 
 		# data verwerken op basis van id
-		if "$GPGGA" == msg_id:
-			#region data
-			time = ctf(data[1])
+		if "$GPGGA" == msg_id and len(data) >= 15:
+			time = PA1616s.ctf(data[1])
+			if (type(data[2]) is not str) and (type(data[2]) != type(data[4])):
+				lat = float(data[2])/100
+				lat_NS = data[3] # N or S
 
-			lat = data[2]
-			lat_NS = data[3] # N or S
+				longi = float(data[4])/100
+				longi_EW = data[5] # E or W
 
-			longi = data[4]
-			longi_EW = data[5] # E or W
-			
+			else:
+				lat = None
+				lat_NS = None
+
+				longi = None
+				longi_EW = None
+				
 			pfi = data[6] # 0: Fix not available, 1: GPS FIX, 2: diffrential GPS fix (pfi = position fix indicator)
 			HDOP = data[7] # Horizontal Dilution of Precision
 			alt = data[8] #altitude to sea level
 			tot_data = {
+				"data-id": data[0],
 				"time": time,
-				"latitude": lat+lat_NS,
-				"longitude": longi+longi_EW,
+				"latitude": lat,
+				"longitude": longi,
 				"altitude": alt,
 				"fix": pfi,
 				"Horizontal Dilution of Precision": HDOP,
 			}
-			#endregion
 			return tot_data
 
-		elif "$GPRMC" == msg_id:
-			#region data
-			time = ctf(data[1])
+		elif "$GPRMC" == msg_id and len(data)>=13:
+			time = PA1616s.ctf(data[1])
 
 			status = data[2] # A=data valid or V=data not valid
 
-			lat = data[3]
-			lat_NS = data[4] # N or S
+			if (type(data[3]) is not str) and (type(data[3]) != type(data[5])):
+				lat = float(data[3])/100
+				lat_NS = data[4] # N or S
 
-			longi = data[5]
-			longi_EW = data[6] # E or W
+				longi = float(data[5])/100
+				longi_EW = data[6] # E or W
 			
-			speed = float(data[7])*1.852
-			datum = cdf(data[9])
-			mode = data[12][0]
+			else:
+				lat = None
+				lat_NS = None
+
+				longi = None
+				longi_EW = None
+
+			try:
+				speed = round(float(data[7])*1.852, 0)
+			except:
+				speed = None
+				
+			datum = PA1616s.cdf(data[9])
+
+			try:
+				mode = data[12][0]
+			except:
+				mode=None
 
 			tot_data = {
+				"data-id": data[0],
 				"time": time,
 				"validity": status,
-				"latitude": lat+lat_NS,
-				"longitude": longi+longi_EW,
-				"speed km/h": speed,
+				"latitude": lat,
+				"longitude": longi,
+				"speed": speed,
 				"datum": datum,
 				"mode": mode
 			}
-			#endregion
 			# print(tot_data)
 			return tot_data
 
-		elif "$GPGSA" == msg_id:
+		elif "$GPGSA" == msg_id and len(data)>=18:
 			PDOP = data[7]
-			tot_data = {"PDOP": PDOP}
+			tot_data = {"data-id": data[0],"PDOP": PDOP}
 			return tot_data
+
+
+

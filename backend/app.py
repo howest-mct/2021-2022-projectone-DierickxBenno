@@ -2,7 +2,7 @@ import time
 from RPi import GPIO
 from helpers.klasseknop import Button
 import threading
-print("zit just")
+# print(__name__, time.now())
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, send
 from flask import Flask, jsonify
@@ -10,45 +10,47 @@ from repositories.DataRepository import DataRepository
 
 from klasses.SerCom import SerCom
 from klasses.BTconfig import BTconfig
+from klasses.PA1616s import PA1616s
+from klasses.LCD import LCDcontrol
 
 from selenium import webdriver
+from datetime import datetime
+import os
 
 # from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
+scherm = LCDcontrol(17, 5, 6, 13, 19, 26, 21, 20, 27, 22)
+scherm.init_screen([1,1,0], [1,0,0])
+scherm.show_ip()
 
 channel = "hci0"
 mac = "78:21:84:7D:85:BE"
 
-BT = BTconfig(channel, mac)
-BT.open_connection()
+    
 
-time.sleep(1)
-DogBit = SerCom("rfcomm0")
+def connect_to_esp32():
+    global DogBit
+    print('connecting to BT...')
+    BT = BTconfig(channel, mac)
+    time.sleep(2)
+    while 1:
+        try:
+            BT.open_connection()
+            time.sleep(2)
+            DogBit = SerCom("rfcomm0")
+            break
+            
+        except:
+            # print('.')
+            pass
+    # return DogBit
 
-# Code voor Hardware
-# def setup_gpio():
-#    GPIO.setwarnings(False)
-#    GPIO.setmode(GPIO.BCM)
-
-#    GPIO.setup(ledPin, GPIO.OUT)
-#    GPIO.output(ledPin, GPIO.LOW)
-        
-#    btnPin.on_press(lees_knop)
-
-
-# def lees_knop(pin):
-#    if btnPin.pressed:
-#       print("**** button pressed ****")
-#       if GPIO.input(ledPin) == 1:
-#          switch_light({'lamp_id': '3', 'new_status': 0})
-#       else:
-#          switch_light({'lamp_id': '3', 'new_status': 1})
-
-
+DogBit = None
+status_led = 'start'
+fix = 0
 
 
 # Code voor Flask
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'geheim!'
 socketio = SocketIO(app, cors_allowed_origins="*", logger=False,
@@ -59,115 +61,329 @@ CORS(app)
 
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):
-    print(e)
-
-
+    print("error: ", e)
 
 # API ENDPOINTS
-
-
+endpoint = '/api/v1/'
 @app.route('/')
 def hallo():
-    print("test")
     return "Server is running, er zijn momenteel geen API endpoints beschikbaar."
 
 
+
+@app.route(endpoint+'/historiek/day/', methods=['GET'])
+def dag_historiek():
+    data = DataRepository.get_historiek_day()
+    data_to_send = []
+    
+    stappen = {}
+    speed = {}
+    temp = {}
+    heartrate = {}
+    print('sending data to client')
+    for eenheid in data:
+        e_id = eenheid['eenheidid']
+        x = datetime.fromtimestamp(eenheid['x']/1000)
+        x = x.strftime('%x %H')
+
+
+        if (e_id == 1):
+            if (x in speed.keys()):
+                speed[x].append(float(eenheid['y']))
+
+            elif (x not in speed.keys()): 
+                speed[x] = [float(eenheid['y'])]
+
+        
+        elif (e_id == 2):
+            if (x in stappen.keys()):
+                stappen[x] += int(eenheid['y'])
+
+            elif (x not in stappen.keys()): 
+                stappen[x] = int(eenheid['y'])
+
+        elif (e_id == 5):
+            if (x in heartrate.keys()):
+                heartrate[x].append(float(eenheid['y']))
+
+            elif (x not in heartrate.keys()): 
+                heartrate[x] = [float(eenheid['y'])]
+        
+        elif (e_id == 7):
+            if (x in temp.keys()):
+                temp[x].append(float(eenheid['y']))
+
+            elif (x not in temp.keys()): 
+                temp[x] = [float(eenheid['y'])]
+    # making viable data
+    print('...')
+    for i in stappen:
+        x = datetime.timestamp(datetime.strptime(i+':00:00', '%x %X'))*1000
+        data_to_send.append({'eenheidid': 2, 'x':x, 'y': stappen[i]})   
+    
+    for i in temp:
+        # print('temp', i)
+        x = datetime.timestamp(datetime.strptime(i+':00:00', '%x %X'))*1000
+        data_to_send.append({'eenheidid': 7, 'x':x, 'y': sum(temp[i])/len(temp[i])}) 
+
+    for i in speed:
+        x = datetime.timestamp(datetime.strptime(i+':00:00', '%x %X'))*1000
+        data_to_send.append({'eenheidid': 1, 'x':x, 'y': sum(speed[i])/len(speed[i])})   
+    
+    for i in heartrate:
+        x = datetime.timestamp(datetime.strptime(i+':00:00', '%x %X'))*1000
+        data_to_send.append({'eenheidid': 1, 'x':x, 'y': sum(heartrate[i])/len(heartrate[i])})   
+    
+    print(jsonify(data_to_send))        
+
+    print('data sent to client')
+    return jsonify(data_to_send)
+
+@app.route(endpoint+'/historiek/week/', methods=['GET'])
+def week_historiek():
+    data = DataRepository.get_historiek_week()
+    data_to_send = []
+    
+    stappen = {}
+    speed = {}
+    temp = {}
+    heartrate = {}
+    print('sending data to client')
+    for eenheid in data:
+        e_id = eenheid['eenheidid']
+        x = datetime.fromtimestamp(eenheid['x']/1000)
+        x = x.strftime('%x')
+
+
+        if (e_id == 1):
+            if (x in speed.keys()):
+                speed[x].append(float(eenheid['y']))
+
+            elif (x not in speed.keys()): 
+                speed[x] = [float(eenheid['y'])]
+
+        
+        elif (e_id == 2):
+            if (x in stappen.keys()):
+                stappen[x] += int(eenheid['y'])
+
+            elif (x not in stappen.keys()): 
+                stappen[x] = int(eenheid['y'])
+
+        elif (e_id == 5):
+            if (x in heartrate.keys()):
+                heartrate[x].append(float(eenheid['y']))
+
+            elif (x not in heartrate.keys()): 
+                heartrate[x] = [float(eenheid['y'])]
+        
+        elif (e_id == 7):
+            if (x in temp.keys()):
+                temp[x].append(float(eenheid['y']))
+
+            elif (x not in temp.keys()): 
+                temp[x] = [float(eenheid['y'])]
+
+    # making viable data
+    print('...')
+    for i in stappen:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 2, 'x':x, 'y': stappen[i]})   
+    
+    for i in temp:
+        # print('temp', i)
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 7, 'x':x, 'y': sum(temp[i])/len(temp[i])}) 
+
+    for i in speed:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 1, 'x':x, 'y': sum(speed[i])/len(speed[i])})   
+    
+    for i in heartrate:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 5, 'x':x, 'y': sum(heartrate[i])/len(heartrate[i])})   
+    
+    print(jsonify(data_to_send))        
+
+    print('data sent to client')
+    return jsonify(data_to_send)
+
+@app.route(endpoint+'/historiek/month/', methods=['GET'])
+def month_historiek():
+    data = DataRepository.get_historiek_month()
+    data_to_send = []
+    
+    stappen = {}
+    speed = {}
+    temp = {}
+    heartrate = {}
+    print('sending data to client')
+    for eenheid in data:
+        e_id = eenheid['eenheidid']
+        x = datetime.fromtimestamp(eenheid['x']/1000)
+        x = x.strftime('%x')
+
+
+        if (e_id == 1):
+            if (x in speed.keys()):
+                speed[x].append(float(eenheid['y']))
+
+            elif (x not in speed.keys()): 
+                speed[x] = [float(eenheid['y'])]
+
+        
+        elif (e_id == 2):
+            if (x in stappen.keys()):
+                stappen[x] += int(eenheid['y'])
+
+            elif (x not in stappen.keys()): 
+                stappen[x] = int(eenheid['y'])
+
+        elif (e_id == 5):
+            if (x in heartrate.keys()):
+                heartrate[x].append(float(eenheid['y']))
+
+            elif (x not in heartrate.keys()): 
+                heartrate[x] = [float(eenheid['y'])]
+        
+        elif (e_id == 7):
+            if (x in temp.keys()):
+                temp[x].append(float(eenheid['y']))
+
+            elif (x not in temp.keys()): 
+                temp[x] = [float(eenheid['y'])]
+    # making viable data
+    print('...')
+    for i in stappen:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 2, 'x':x, 'y': stappen[i]})   
+    
+    for i in temp:
+        # print('temp', i)
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 7, 'x':x, 'y': sum(temp[i])/len(temp[i])}) 
+
+    for i in speed:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 1, 'x':x, 'y': sum(speed[i])/len(speed[i])})   
+    
+    for i in heartrate:
+        x = datetime.timestamp(datetime.strptime(i, '%x'))*1000
+        data_to_send.append({'eenheidid': 5, 'x':x, 'y': sum(heartrate[i])/len(heartrate[i])})   
+    
+    print((data_to_send))        
+
+    print('data sent to client')
+    return jsonify(data_to_send)
+
+# socketio
 @socketio.on('connect')
 def initial_connection():
-    print('A new client connect')
-    # # Send to the client!
-    # vraag de status op van de lampen uit de DB
-    status = DataRepository.read_status_lampen()
-    emit('B2F_status_lampen', {'lampen': status}, broadcast=True)
+    print('A new client connected')
+    #meestrecente data doorsturen
+    most_recent_data = DataRepository.get_most_recent_data() #most recent data
+    socketio.emit('B2F_meest_recente_data', {'data': most_recent_data}, broadcast=True)
+    #totaal aantal stappen, vandaag doorsturen
+    total_steps = DataRepository.get_total_steps()
+    socketio.emit('B2F_stap', {'stap': total_steps}, broadcast=True)
 
+    hue = DataRepository.get_hue()
+    socketio.emit('B2F_curr_hue', {"hue": hue}, broadcast=True)
 
-@socketio.on('F2B_switch_light')
-def switch_light(data):
-    # Ophalen van de data
-    lamp_id = data['lamp_id']
-    new_status = data['new_status']
-    print(f"Lamp {lamp_id} wordt geswitcht naar {new_status}")
+@socketio.on('F2B_set_color')
+def send_hue(jsonObject):
+    data = DataRepository.set_hue(jsonObject['hue'])
+    print(jsonObject)
+    if DogBit != None:
+        DogBit.sendBT(f"hue: {jsonObject['hue']}")
+        socketio.emit('B2F_curr_hue', {"hue": jsonObject['hue']}, broadcast=True)
 
-    # Stel de status in op de DB
-    res = DataRepository.update_status_lamp(lamp_id, new_status)
+@socketio.on('F2B_poweroff')
+def poweroff(par):
+    return os.system("sudo poweroff")
 
-    # Vraag de (nieuwe) status op van de lamp en stuur deze naar de frontend.
-    data = DataRepository.read_status_lamp_by_id(lamp_id)
-    socketio.emit('B2F_verandering_lamp', {'lamp': data}, broadcast=True)
+def get_data():
+    global fix, DogBit
+    connect_to_esp32()
+    # DogBit = 
 
-    # Indien het om de lamp van de TV kamer gaat, dan moeten we ook de hardware aansturen.
-    if lamp_id == '3':
-        print(f"TV kamer moet switchen naar {new_status} !")
-        GPIO.output(ledPin, new_status)
-
-
-
-# START een thread op. Belangrijk!!! Debugging moet UIT staan op start van de server, anders start de thread dubbel op
-# werk enkel met de packages gevent en gevent-websocket.
-def all_out():
     while True:
-        time.sleep(1)
+        global status_led
+        # receive
         data = (DogBit.recv())
-        print(data)
-        if 'temperatuur' in data:
-            temperatuur = float(data[-5:])
-            DataRepository.insert_data(temperatuur, 1, 1)
-            socketio.emit('B2F_temperatuur', {'temperatuur': temperatuur})
+        if data != None:
+            if 'temperatuur' in data:
+                print('temp measured')
+                temperatuur = float(data[-5:])
+                DataRepository.insert_data(temperatuur, 7)
+                print(temperatuur)
+                socketio.emit('B2F_temperatuur', {'temperatuur': temperatuur}, broadcast=True)
+            
+            elif 'stappen +' in data:
+                print('step taken')
+                stappen = int(data[9:])
+                DataRepository.insert_data(stappen, 2)
+                total_steps = DataRepository.get_total_steps()
+                socketio.emit('B2F_stap', {'stap': total_steps}, broadcast=True)
+
+            elif '$GP' in data:
+                gps_data = PA1616s.getInfo(data)
+                print('GPS data received')
+                if gps_data is not None:
+                    if gps_data["data-id"] == "$GPGGA" or gps_data["data-id"] == "$GPRMC":
+                        longi = gps_data["longitude"]
+                        lat = gps_data["latitude"]
+                        if gps_data["data-id"] == '$GPGGA':
+                            fix = gps_data['fix']
+                        
+                        if fix:
+                            if (longi and lat):
+                                DataRepository.add_location(longi, lat)
+
+
+                        if gps_data["data-id"] == "$GPRMC" and fix == 1:
+                            if gps_data["validity"] == "A": # A betekent valid
+                                snelheid = gps_data["speed"]
+                                DataRepository.insert_data(snelheid, 1)
+
+
+
+                    socketio.emit('B2F_GPS', {'GPS': gps_data}, broadcast=True)
+
+            elif 'LI' in data:
+                licht_intensiteit = float(data[3:])
+                DataRepository.insert_data(licht_intensiteit, 6)
+                print(licht_intensiteit)    
+            
+            elif 'pulse' in data:
+                pulse = float(data[7:])
+                DataRepository.insert_data(pulse, 5)
+
+            elif 'LEDSTATUS' in data:
+                if ('OFF' in data and (status_led == 1 or status_led == 'start')):
+                    socketio.emit("B2F_status_led", {"status": "status: off"}, broadcast=True)
+                    status_led = 0
+                    DataRepository.set_led_status_off()
+                
+                elif ('ON' in data and (status_led == 0 or status_led == 'start')):
+                    socketio.emit("B2F_status_led", {"status": "status: on"}, broadcast=True)
+                    status_led = 1   
+                    DataRepository.set_led_status_on()
 
 
 def start_thread():
     print("**** Starting THREAD ****")
-    thread = threading.Thread(target=all_out, args=(), daemon=True)
+    thread = threading.Thread(target=get_data, args=(), daemon=True)
     thread.start()
-
-
-def start_chrome_kiosk():
-    import os
-
-    os.environ['DISPLAY'] = ':0.0'
-    options = webdriver.ChromeOptions()
-    # options.headless = True
-    # options.add_argument("--window-size=1920,1080")
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36")
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--allow-running-insecure-content')
-    options.add_argument("--disable-extensions")
-    # options.add_argument("--proxy-server='direct://'")
-    options.add_argument("--proxy-bypass-list=*")
-    options.add_argument("--start-maximized")
-    options.add_argument('--disable-gpu')
-    # options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--kiosk')
-    # chrome_options.add_argument('--no-sandbox')       
-    # options.add_argument("disable-infobars")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option('useAutomationExtension', False)
-
-    driver = webdriver.Chrome(options=options)
-    driver.get("http://localhost")
-    while True:
-        pass
-
-
-def start_chrome_thread():
-    print("**** Starting CHROME ****")
-    chromeThread = threading.Thread(target=start_chrome_kiosk, args=(), daemon=True)
-    chromeThread.start()
-
-
-
-# ANDERE FUNCTIES
-
 
 if __name__ == '__main__':
     try:
-        # setup_gpio()
         start_thread()
-        start_chrome_thread()
         print("**** Starting APP ****")
         socketio.run(app, debug=False, host='0.0.0.0')
+
     except KeyboardInterrupt:
         print ('KeyboardInterrupt exception is caught')
+
     finally:
         GPIO.cleanup()
