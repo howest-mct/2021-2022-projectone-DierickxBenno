@@ -22,6 +22,7 @@ import os
 scherm = LCDcontrol(17, 5, 6, 13, 19, 26, 21, 20, 27, 22)
 scherm.init_screen([1,1,0], [1,0,0])
 scherm.show_ip()
+scherm.kies_cursor_opties(0,0)
 
 channel = "hci0"
 mac = "78:21:84:7D:85:BE"
@@ -363,10 +364,13 @@ def get_data():
                 if ('OFF' in data and (status_led == 1 or status_led == 'start')):
                     socketio.emit("B2F_status_led", {"status": "status: off"}, broadcast=True)
                     status_led = 0
+                    DataRepository.set_led_status_off()
                 
                 elif ('ON' in data and (status_led == 0 or status_led == 'start')):
                     socketio.emit("B2F_status_led", {"status": "status: on"}, broadcast=True)
                     status_led = 1   
+                    DataRepository.set_led_status_on()
+
 
 def start_thread():
     print("**** Starting THREAD ****")

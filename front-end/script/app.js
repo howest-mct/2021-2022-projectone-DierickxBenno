@@ -5,11 +5,12 @@ const lanIP = `${window.location.hostname}:5000`;
 const socketio = io(`http://${lanIP}`);
 const provider = "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
 // zo kunnen we options aanpassen via socketio
-var options_hr, options_spd, options_temp, options_steps;
-var chart_hr, chart_spd, chart_steps, chart_temp;
+let options_hr, options_spd, options_temp, options_steps;
+let chart_hr, chart_spd, chart_steps, chart_temp;
 // const copyright= '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>';
 
 let map, layergroup;
+let marker
 
 const listenToPwr = function () {
   const pwrBtn = document.querySelector(".c-shutdown-button")
@@ -114,17 +115,23 @@ const listenToInterval = function () {
   for (const knop of knoppen){
     knop.addEventListener('click', function () {
       let interval = knop.getAttribute('interval')
+      for (const knop of knoppen){
+        knop.classList.remove("c-current-interval")
+      }
       switch (interval){
         case '1d':
           handleHistoryDay();
+          knop.classList.add("c-current-interval")
           break
 
         case '7d':
           handleHistoryWeek();
+          knop.classList.add("c-current-interval")
           break
 
         case '1m':
           handleHistoryMonth();
+          knop.classList.add("c-current-interval")
           break
       }
     })
@@ -159,7 +166,8 @@ const listenToSocket = function () {
         lat = data.latitude
         longi = data.longitude
         const speed = data.speed
-        var marker = L.marker([lat, longi]).addTo(map);
+        marker.remove()
+        marker = L.marker([lat, longi]).addTo(map);
         const waardeHolders = document.querySelectorAll(".c-waarde_holder")
         for (const waarde of waardeHolders){
           if (waarde.getAttribute("eenheid-id") == 1){
@@ -171,9 +179,11 @@ const listenToSocket = function () {
       else if(dataId == "$GPGGA"){
         lat = data.latitude
         longi = data.longitude
-        console.log(lat, longi, lat != null && longi != null)
-        if (lat != null && longi != null)
-        var marker = L.marker([lat, longi]).addTo(map);
+        // console.log(lat, longi, lat != null && longi != null)
+        if (lat != null && longi != null){
+          marker.remove()
+          marker = L.marker([lat, longi]).addTo(map);
+      }
       }
     
   }})
@@ -260,16 +270,16 @@ const listenToSocket = function () {
         // set location
     }
     }
-    console.log(lat, longi, lat != null && longi != null)
+    // console.log(lat, longi, lat != null && longi != null)
     if (lat != null && longi != null) {
-    map.panTo(new L.LatLng(lat, longi));
-    var marker = L.marker([lat, longi]).addTo(map);
+      // marker.remove()
+      marker = L.marker([lat, longi]).addTo(map);
+      map.panTo(new L.LatLng(lat, longi));
   }
   })
 
   socketio.on("B2F_status_led", function (jsonObject) {
     const statusLed = jsonObject.status;
-    console.log('test')
     document.querySelector(".js-status").innerHTML = statusLed;
   })
 };
@@ -454,7 +464,7 @@ const show_graphs = function () {
 const updateHistory = function (jsonObject) {
     // console.log('history: ',jsonObject)
     const historiek = jsonObject
-    // console.log(jsonObject)
+    console.log(jsonObject)
     // console.log('options ', options_hr)
     // console.log(options_hr)
     const dataSerie_hr = {'data':[]}

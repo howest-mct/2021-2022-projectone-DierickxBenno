@@ -91,3 +91,15 @@ class DataRepository:
         order by historiekid asc"""
         data = Database.get_rows(sql)
         return data
+
+    @staticmethod
+    def set_led_status_on():
+        sql = "INSERT INTO historiek (actieid, tijdstip) VALUES (2, NOW())"
+        data = Database.execute_sql(sql)
+        return data
+
+    @staticmethod
+    def set_led_status_off():
+        sql = "INSERT INTO historiek (actieid, tijdstip) VALUES (3, NOW())"
+        data = Database.execute_sql(sql)
+        return data

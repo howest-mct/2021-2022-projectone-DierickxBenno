@@ -777,6 +777,20 @@ body.u-active {
 .c-interval .c-knop-interval:hover{
   color: var(--darkestBlue);
 }
+.c-current-interval{
+  color: var(--darkestBlue);
+  text-decoration: var(--darkestBlue);
+}
+
+.c-error-prevention{
+  display: block;
+  margin: auto;
+  z-index: 1000000000;
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+  box-shadow: 0 0 100px 10px #000;
+}
 /* clear ... */
 /* .c-mt-clear {
   margin-top: 0;
