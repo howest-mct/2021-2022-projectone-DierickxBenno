@@ -22,6 +22,7 @@ import os
 scherm = LCDcontrol(17, 5, 6, 13, 19, 26, 21, 20, 27, 22)
 scherm.init_screen([1,1,0], [1,0,0])
 scherm.show_ip()
+scherm.kies_cursor_opties(0,0)
 
 channel = "hci0"
 mac = "78:21:84:7D:85:BE"
