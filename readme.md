@@ -22,4 +22,4 @@ Zoals je kan zien is er geen "vaste" structuur voor zo'n document. Je bepaalt ze
 - Zijn er poorten die extra aandacht vereisen in de back- en/of front-end code?
   
 ## Instructables
-Plaats zeker een link naar de Instructables zodat het project kan nagebouwd worden!
+https://www.instructables.com/Dog-Health-Tracking-Device-the-DogBit/ 
