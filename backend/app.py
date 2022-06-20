@@ -16,13 +16,11 @@ from klasses.LCD import LCDcontrol
 from selenium import webdriver
 from datetime import datetime
 import os
+from subprocess import check_output
 
 # from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
-scherm = LCDcontrol(17, 5, 6, 13, 19, 26, 21, 20, 27, 22)
-scherm.init_screen([1,1,0], [1,0,0])
-scherm.show_ip()
-scherm.kies_cursor_opties(0,0)
+
 
 channel = "hci0"
 mac = "78:21:84:7D:85:BE"
@@ -307,8 +305,16 @@ def get_data():
     global fix, DogBit
     connect_to_esp32()
     # DogBit = 
-
+    
+    not_passed=1
     while True:
+        if ('192' in str(check_output(['hostname', '-I'])) and not_passed):
+            not_passed = 0
+            scherm = LCDcontrol(17, 5, 6, 13, 19, 26, 21, 20, 27, 22)
+            scherm.init_screen([1,1,0], [1,0,0])
+            scherm.show_ip()
+            scherm.kies_cursor_opties(0,0)
+
         global status_led
         # receive
         data = (DogBit.recv())

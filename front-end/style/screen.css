@@ -623,16 +623,40 @@ body.u-active {
   justify-content: left;
   text-align: left;
   text-decoration: none;
-  line-height: 65px;
-  height: 65px;
+  line-height: 30px;
+  height: 30px;
   letter-spacing: 0.2px;
-  font-size: 30px;
+  font-size: 20px;
   width: 192px;
   color: white;
   margin-left: 16px;
   padding-left: 16px;
   border-radius: 0 19px;
   transition: all 0.3s;
+}
+
+@media (min-height: 350px) {
+  .c-button {
+    font-size: 25px;
+    height: 40px;
+    line-height: 45px;
+  }
+}
+
+@media (min-height: 400px) {
+  .c-button {
+    font-size: 25px;
+    height: 45px;
+    line-height: 45px;
+  }
+}
+
+@media (min-height: 500px) {
+  .c-button {
+    font-size: 30px;
+    height: 65px;
+    line-height: 65px;
+  }
 }
 
 .c-button-top {
