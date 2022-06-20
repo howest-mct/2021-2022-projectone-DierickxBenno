@@ -301,23 +301,33 @@ def send_hue(jsonObject):
 def poweroff(par):
     return os.system("sudo poweroff")
 
+def get_ip(p_cntn):
+    eth0 = str(check_output(['ifconfig']))
+    eth0 = eth0[eth0.find(p_cntn):]
+    eth0 = eth0[eth0.find('inet')+5:]
+    eth0 = eth0[:eth0.find(' ')]
+    return eth0
+
 def get_data():
+    print('.')
     global fix, DogBit
-    connect_to_esp32()
+   
     # DogBit = 
     
-    not_passed=1
+    connect_to_esp32()
+    not_passed = 1
+    
+    # receive
+    data = (DogBit.recv())
     while True:
-        if ('192' in str(check_output(['hostname', '-I'])) and not_passed):
-            not_passed = 0
+        global status_led
+        if (not_passed and str(get_ip('eth0'))):
+            not_passed=0
             scherm = LCDcontrol(17, 5, 6, 13, 19, 26, 21, 20, 27, 22)
             scherm.init_screen([1,1,0], [1,0,0])
             scherm.show_ip()
             scherm.kies_cursor_opties(0,0)
 
-        global status_led
-        # receive
-        data = (DogBit.recv())
         if data != None:
             if 'temperatuur' in data:
                 print('temp measured')
@@ -377,7 +387,6 @@ def get_data():
                     status_led = 1   
                     DataRepository.set_led_status_on()
 
-
 def start_thread():
     print("**** Starting THREAD ****")
     thread = threading.Thread(target=get_data, args=(), daemon=True)
@@ -385,6 +394,7 @@ def start_thread():
 
 if __name__ == '__main__':
     try:
+        
         start_thread()
         print("**** Starting APP ****")
         socketio.run(app, debug=False, host='0.0.0.0')

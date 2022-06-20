@@ -118,12 +118,19 @@ class LCDcontrol:
 		if p_position is not None:
 			self.send_instruction(0b1<<7|p_position)
 
+	@staticmethod
+	def get_ip(p_cntn):
+		eth0 = str(check_output(['ifconfig']))
+		eth0 = eth0[eth0.find(p_cntn):]
+		eth0 = eth0[eth0.find('inet')+5:]
+		eth0 = eth0[:eth0.find(' ')]
+		return eth0
+
 	def show_ip(self):
 		ips = str(check_output(['hostname', '-I']))
 		first_space = ips.find(' ')
 		self.kies_cursor_opties(p_position=0x00)
-		self.send_message(p_message = ips[2:first_space])
+		self.send_message(p_message = self.get_ip('wlan0'))
 		self.kies_cursor_opties(p_position=0x40)
 		str_after = ips[first_space+1:]
-		self.send_message(p_message = str_after[:str_after.find(' ')])
-		print(f"{str_after[:str_after.find(' ')]}\n{ips[2:first_space]}")
+		self.send_message(p_message = self.get_ip('eth0'))

@@ -3,7 +3,7 @@ Description=ProjectOne Project
 After=network.target
 [Service]
 ExecStart=/usr/bin/python3 -u /home/student/2021-2022-projectone-DierickxBenno/backend/app.py
-WorkingDirectory=/home/student/2021-2022-projectone-DierickxBenno/backend
+WorkingDirectory=/home/student/2021-2022-projectone-DierickxBenno/backend/
 StandardOutput=inherit
 StandardError=inherit
 Restart=always
