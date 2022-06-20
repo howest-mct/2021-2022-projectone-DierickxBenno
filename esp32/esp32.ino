@@ -247,11 +247,11 @@ void setLedIntensity()
     {
       pastLightValue = lightValue * 1.0; // *1.0 zodat het zeker float blijft
       i = ((100 - lightValue) / 100) * 255;
-      if (strHue == "white")
+      if (strHue == "pride")
       {
         setWhite(i);
       }
-      else if (strHue == "pride")
+      else if (strHue == "white")
       {
         setRainbow(i);
       }

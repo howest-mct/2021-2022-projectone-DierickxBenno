@@ -294,7 +294,10 @@ def send_hue(jsonObject):
     data = DataRepository.set_hue(jsonObject['hue'])
     print(jsonObject)
     if DogBit != None:
-        DogBit.sendBT(f"hue: {jsonObject['hue']}")
+        if jsonObject['hue'] = '998':
+            DogBit.sendBT(f"hue: pride")
+        elif jsonObject['hue'] = '998':
+            DogBit.sendBT(f"hue: white")
         socketio.emit('B2F_curr_hue', {"hue": jsonObject['hue']}, broadcast=True)
 
 @socketio.on('F2B_poweroff')
