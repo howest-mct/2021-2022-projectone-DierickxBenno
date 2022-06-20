@@ -291,12 +291,12 @@ def initial_connection():
 
 @socketio.on('F2B_set_color')
 def send_hue(jsonObject):
-    data = DataRepository.set_hue(jsonObject['hue'])
+    data = DataRepository.set_hue(int(jsonObject['hue']))
     print(jsonObject)
     if DogBit != None:
-        if jsonObject['hue'] = '998':
+        if jsonObject['hue'] == '998':
             DogBit.sendBT(f"hue: pride")
-        elif jsonObject['hue'] = '998':
+        elif jsonObject['hue'] == '998':
             DogBit.sendBT(f"hue: white")
         socketio.emit('B2F_curr_hue', {"hue": jsonObject['hue']}, broadcast=True)
 
@@ -313,16 +313,16 @@ def get_ip(p_cntn):
 
 def get_data():
     print('.')
-    global fix, DogBit
-   
-    # DogBit = 
-    
+    global fix, DogBit   
     connect_to_esp32()
     not_passed = 1
     
     # receive
-    data = (DogBit.recv())
     while True:
+        data = (DogBit.recv())
+        print(data)
+        if ('connected: no' in str(check_output(['bluetoothctl', 'info']))):
+            connect_to_esp32()
         global status_led
         if (not_passed and str(get_ip('eth0'))):
             not_passed=0
@@ -397,7 +397,6 @@ def start_thread():
 
 if __name__ == '__main__':
     try:
-        
         start_thread()
         print("**** Starting APP ****")
         socketio.run(app, debug=False, host='0.0.0.0')
