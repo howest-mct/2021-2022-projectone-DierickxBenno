@@ -322,12 +322,15 @@ def get_data():
     
     # receive
     while True:
+        global status_led
         data = (DogBit.recv())
         print(data)
-        if ('connected: no' in str(check_output(['bluetoothctl', 'info']))):
+        try:
+            check_output(['bluetoothctl', 'info'])
+        except:
             connect_to_esp32()
-        global status_led
-        if (not_passed and str(get_ip('eth0'))):
+            
+        if (not_passed and '192.168.168.169' in str(get_ip('eth0'))):
             not_passed=0
             scherm = LCDcontrol(17, 5, 6, 13, 19, 26, 21, 20, 27, 22)
             scherm.init_screen([1,1,0], [1,0,0])
